@@ -34,7 +34,6 @@
     -webkit-font-smoothing:antialiased;
   }
 
-  /* MARCA DE AGUA CORPORATIVA SUAVE EN TEMA CLARO */
   body::before {
     content: "";
     position: fixed;
@@ -52,7 +51,6 @@
 
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
 
-  /* CORTE BAR STICKY */
   .corte-bar{
     position:sticky; top:0; z-index:50;
     background:linear-gradient(90deg, #641024, var(--wine), #641024);
@@ -70,34 +68,16 @@
     font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; 
     border-radius:100px; cursor:pointer; transition:background 0.2s;
   }
-  .btn-print:hover{ background:var(--gold-dim); }
 
-  /* HERO */
-  .hero{ 
-    padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; 
-  }
-  .logo-header { 
-    height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block;
-    filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08));
-  }
-  .eyebrow{ 
-    font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; 
-    font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; 
-  }
-  h1{ 
-    font-family:'Fraunces', serif; font-weight:700; font-size:30px; line-height:1.2; 
-    margin:0 0 10px; color:var(--text); 
-  }
+  .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
+  .logo-header { height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
+  .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
+  h1{ font-family:'Fraunces', serif; font-weight:700; font-size:30px; line-height:1.2; margin:0 0 10px; color:var(--text); }
   h1 em{ font-style:italic; color:var(--wine); }
   .hero-sub{ color:var(--muted); font-size:13.5px; line-height:1.5; margin:0 0 16px; }
-  .corte-pill{ 
-    display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; 
-    color:var(--wine); background:var(--card); border:1px solid var(--line); 
-    padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03);
-  }
+  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
   .corte-pill b{ color:var(--gold-dim); }
 
-  /* PANEL DE CONTROLES (ZONA Y MODO) */
   .control-grid{
     display:grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -118,29 +98,24 @@
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
   .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
   .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:6px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    touch-action: manipulation;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
   }
 
-  /* SECCIONES Y TITULOS */
   .section-box{ margin-bottom:34px; }
   .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
   .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
 
-  /* KPIS GRID */
   .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:24px; }
-  .kpi-card{ 
-    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; 
-    border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03);
-  }
+  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
   .kpi-card.neg{ border-left-color:var(--warn); }
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  /* RANKING */
   .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
   .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
   .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
@@ -149,7 +124,6 @@
   .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
-  /* TABLA DETALLE */
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
   table{ width:100%; border-collapse:collapse; min-width:620px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
@@ -174,7 +148,6 @@
 
 <div class="wrap">
 
-  <!-- HERO -->
   <section class="hero">
     <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
     <p class="eyebrow">Seguimiento de presupuesto</p>
@@ -183,28 +156,24 @@
     <div class="corte-pill">◆ Corte al <b>23 de julio, 2026</b></div>
   </section>
 
-  <!-- FILTROS Y CONTROLES -->
   <div class="control-grid">
-    <!-- FILTRO DE ZONA -->
     <div class="ctrl-box">
       <span class="ctrl-title">Zona Comercial</span>
       <div class="toggle-group" id="groupZone">
-        <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
-        <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
-        <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+        <button class="toggle-btn active" data-zone="todas">Todas</button>
+        <button class="toggle-btn" data-zone="este">Zona Este</button>
+        <button class="toggle-btn" data-zone="oeste">Zona Oeste</button>
       </div>
     </div>
-    <!-- FILTRO DE MODO (VALOR / UNIDADES) -->
     <div class="ctrl-box">
       <span class="ctrl-title">Métrica</span>
       <div class="toggle-group" id="groupMode">
-        <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
-        <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+        <button class="toggle-btn active" data-mode="valor">Valor $</button>
+        <button class="toggle-btn" data-mode="unidades">Unidades</button>
       </div>
     </div>
   </div>
 
-  <!-- RESUMEN DE KPIS -->
   <div class="section-box">
     <h2 class="sec-title">Resumen del mes</h2>
     <span class="sec-sub">Totales consolidados a la fecha de corte</span>
@@ -238,7 +207,6 @@
     </div>
   </div>
 
-  <!-- RANKING -->
   <div class="section-box">
     <h2 class="sec-title">Ranking por sucursal</h2>
     <span class="sec-sub">Cumplimiento de mayor a menor</span>
@@ -255,7 +223,6 @@
     <div class="rank-row" data-zone="este"><span class="rank-num">10</span><span class="rank-name">Llanito</span><div class="bar-bg"><div class="bar-fill" style="width:65.15%;" data-v="65.15" data-u="66.17"></div></div><span class="rank-pct">65,15%</span></div>
   </div>
 
-  <!-- TABLA COMPLETA -->
   <div class="section-box">
     <h2 class="sec-title">Detalle completo</h2>
     <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
@@ -319,15 +286,28 @@
 var currentZone = 'todas';
 var currentMode = 'valor';
 
-function setZone(z, btn) {
-  currentZone = z;
-  var btns = document.querySelectorAll('#groupZone .toggle-btn');
-  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
-  btn.classList.add('active');
-  updateView();
-}
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // Asignar listeners a botones de Zona
+  var zoneBtns = document.querySelectorAll('#groupZone .toggle-btn');
+  for (var i = 0; i < zoneBtns.length; i++) {
+    zoneBtns[i].addEventListener('click', function(e) {
+      e.preventDefault();
+      for (var j = 0; j < zoneBtns.length; j++) { zoneBtns[j].classList.remove('active'); }
+      this.classList.add('active');
+      currentZone = this.getAttribute('data-zone');
+      updateView();
+    });
+  }
 
-function setMode(m, btn) {
-  currentMode = m;
-  var btns = document.querySelectorAll('#groupMode .toggle-btn');
-  for (var i = 0; i < btns.length;
+  // Asignar listeners a botones de Métrica
+  var modeBtns = document.querySelectorAll('#groupMode .toggle-btn');
+  for (var k = 0; k < modeBtns.length; k++) {
+    modeBtns[k].addEventListener('click', function(e) {
+      e.preventDefault();
+      for (var l = 0; l < modeBtns.length; l++) { modeBtns[l].classList.remove('active'); }
+      this.classList.add('active');
+      currentMode = this.getAttribute('data-mode');
+      updateView();
+    });
+  
