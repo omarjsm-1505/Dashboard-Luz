@@ -154,6 +154,13 @@
   .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
+  /* BARRAS DE TICKET PROMEDIO */
+  .ticket-row{ display:grid; grid-template-columns: 120px 1fr 65px; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); }
+  .ticket-name{ font-weight:600; font-size:12.5px; color:var(--text); }
+  .ticket-bar-bg{ position:relative; height:18px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
+  .ticket-bar-fill{ height:100%; background:linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius:5px; transition:width 0.3s ease; }
+  .ticket-val{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
+
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
   table{ width:100%; border-collapse:collapse; min-width:620px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
@@ -226,11 +233,18 @@
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
-    <!-- RANKING -->
+    <!-- RANKING DE CUMPLIMIENTO -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
       <span class="sec-sub">Cumplimiento de mayor a menor</span>
       <div id="rankingList"></div>
+    </div>
+
+    <!-- CINTA DE BARRAS DE TICKET PROMEDIO -->
+    <div class="section-box">
+      <h2 class="sec-title">Ticket Promedio por Sucursal</h2>
+      <span class="sec-sub">Relación Cumplido Valor $ / Cumplido Unidades (Promedio Red: $2,11)</span>
+      <div id="ticketBarList"></div>
     </div>
 
     <!-- TABLA -->
@@ -376,6 +390,30 @@ function renderRanking(){
   }).join('');
 }
 
+function renderTicketBars(){
+  const filtered = getFilteredData();
+  // Calcular Ticket Promedio por sucursal y ordenar de mayor a menor
+  const withTickets = filtered.map(d => ({
+    name: d.n,
+    ticket: d.uc ? (d.vc / d.uc) : 0
+  })).sort((a,b) => b.ticket - a.ticket);
+
+  // Escala para ajustar el ancho relativo (tomando como máximo $2,50)
+  const maxVal = 2.50;
+
+  document.getElementById('ticketBarList').innerHTML = withTickets.map(d => {
+    const barWidth = Math.min((d.ticket / maxVal) * 100, 100);
+    return `
+    <div class="ticket-row">
+      <span class="ticket-name">${d.name}</span>
+      <div class="ticket-bar-bg">
+        <div class="ticket-bar-fill" style="width:${barWidth.toFixed(1)}%;"></div>
+      </div>
+      <span class="ticket-val">$${d.ticket.toFixed(2).replace('.', ',')}</span>
+    </div>`;
+  }).join('');
+}
+
 function renderTable(){
   const filtered = getFilteredData();
   const unit = mode === 'valor' ? '$' : '';
@@ -407,41 +445,3 @@ function renderTable(){
     <tr class="total-row">
       <td>TOTAL CONSOLIDADO</td>
       <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
-      <td>${unit}${fmt(t.p)}${sfx}</td>
-      <td>${unit}${fmt(t.c)}${sfx}</td>
-      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(t.proy)}${sfx}</td>
-      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
-    </tr>`;
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
-}
-
-function renderAll(){
-  renderKPIs();
-  renderRanking();
-  renderTable();
-}
-
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-function setMode(m, btn){
-  mode = m;
-  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-// VERIFICAR AUTENTICACIÓN INICIAL
-if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
-</script>
-
-</body>
-</html>
