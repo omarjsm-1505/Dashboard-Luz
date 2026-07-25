@@ -50,7 +50,7 @@
     pointer-events: none;
   }
 
-  /* PANTALLA DE ACCESO RESTRENGIDO */
+  /* ACCESO RESTRINGIDO */
   #authOverlay {
     position: fixed; inset: 0; z-index: 99999;
     background: var(--bg);
@@ -79,7 +79,7 @@
   .auth-btn:hover { background: var(--wine-light); }
   .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
 
-  /* CONTENIDO PRINCIPAL */
+  /* CONTENIDO DASHBOARD */
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
 
   .corte-bar{
@@ -154,7 +154,6 @@
   .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
-  /* BARRAS DE TICKET PROMEDIO */
   .ticket-row{ display:grid; grid-template-columns: 120px 1fr 65px; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); }
   .ticket-name{ font-weight:600; font-size:12.5px; color:var(--text); }
   .ticket-bar-bg{ position:relative; height:18px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
@@ -178,14 +177,16 @@
 </head>
 <body>
 
-<!-- OVERLAY DE BLOQUEO POR CLAVE -->
+<!-- PANTALLA DE AUTENTICACIÓN -->
 <div id="authOverlay">
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
     <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso">
-    <button type="button" class="auth-btn" id="submitBtn">Ingresar al Dashboard</button>
+    <form onsubmit="event.preventDefault(); validateAccess();">
+      <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso">
+      <button type="submit" class="auth-btn" onclick="validateAccess()">Ingresar al Dashboard</button>
+    </form>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
@@ -275,9 +276,9 @@
 </div>
 
 <script>
-// FUNCION DE ACCESO
 function validateAccess() {
-  var pass = document.getElementById('passInput').value.trim().toUpperCase();
+  var input = document.getElementById('passInput');
+  var pass = input ? input.value.trim().toUpperCase() : '';
   if (pass === "L2026") {
     document.getElementById('authOverlay').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
@@ -287,12 +288,6 @@ function validateAccess() {
   }
 }
 
-document.getElementById('submitBtn').onclick = validateAccess;
-document.getElementById('passInput').onkeydown = function(e) {
-  if (e.key === 'Enter') validateAccess();
-};
-
-// DATA Y RENDER
 var EXPECTED_PCT = 74.19;
 
 var data = [
@@ -413,4 +408,7 @@ function renderTable(){
   var t = getTotals(filtered);
   var totalRow = '<tr class="total-row">' +
     '<td>TOTAL CONSOLIDADO</td>' +
-    '<td style="text-align:center;"><span class
+    '<td style="text-align:center;"><span class="badge obs">Obs.</span></td>' +
+    '<td>' + unit + fmt(t.p) + sfx + '</td>' +
+    '<td>' + unit + fmt(t.c) + sfx + '</td>' +
+    '<t
