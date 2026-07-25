@@ -127,9 +127,9 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
   .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
@@ -146,7 +146,7 @@
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 70px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
   .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
   .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
   .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
@@ -186,7 +186,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
+    <span>◆ SEGUIMIENTO LUZ · 24 DE JULIO DE 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
@@ -197,7 +197,7 @@
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
       <p class="hero-sub">Unidades - Valor $</p>
-      <div class="corte-pill">◆ Corte al <b>23 de julio, 2026</b></div>
+      <div class="corte-pill">◆ Corte al <b>24 de julio, 2026</b></div>
     </section>
 
     <!-- CONTROLES -->
@@ -211,10 +211,11 @@
         </div>
       </div>
       <div class="ctrl-box">
-        <span class="ctrl-title">Métrica</span>
+        <span class="ctrl-title">Métrica / Cinta</span>
         <div class="toggle-group" id="groupMode">
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Precio Vta. Prom. Por Artículo</button>
         </div>
       </div>
     </div>
@@ -229,7 +230,7 @@
     <!-- RANKING -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Cumplimiento de mayor a menor</span>
+      <span class="sec-sub">Indicador consolidado</span>
       <div id="rankingList"></div>
     </div>
 
@@ -240,17 +241,7 @@
 
       <div class="tbl-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Sucursal</th>
-              <th style="text-align:center;">Estatus</th>
-              <th>Presupuesto</th>
-              <th>Cumplido</th>
-              <th>%</th>
-              <th>Proyección</th>
-              <th>Diferencia</th>
-            </tr>
-          </thead>
+          <thead id="tableHead"></thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
@@ -284,27 +275,29 @@ function unlockDashboard() {
   renderAll();
 }
 
-// LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 74.19;
+// LÓGICA DEL DASHBOARD (CORTE AL 24/07/2026)
+const EXPECTED_PCT = 77.42; // Meta teórica correspondiente al 24 de julio
 
 const data = [
-  {n:"Carlota", zone:"este", vp:1166881, vc:846283, vpct:72.53, vproy:1140642, vdiff:-26239, up:505094, uc:366866, upct:72.63, uproy:494472, udiff:-10622},
-  {n:"Chacao", zone:"oeste", vp:561736, vc:395590, vpct:70.42, vproy:533187, vdiff:-28549, up:281930, uc:201182, upct:71.36, uproy:271159, udiff:-10771},
-  {n:"Dos Caminos", zone:"oeste", vp:341109, vc:224190, vpct:65.72, vproy:302170, vdiff:-38939, up:165215, uc:113602, upct:68.76, uproy:153116, udiff:-12099},
-  {n:"Florida", zone:"oeste", vp:731985, vc:535528, vpct:73.16, vproy:721799, vdiff:-10186, up:336633, uc:251517, upct:74.72, uproy:339001, udiff:2368},
-  {n:"Luz Quick Rest", zone:"oeste", vp:195119, vc:128208, vpct:65.71, vproy:172802, vdiff:-22317, up:98828, uc:65314, upct:66.09, uproy:88033, udiff:-10796},
-  {n:"Llanito", zone:"este", vp:545671, vc:355502, vpct:65.15, vproy:479155, vdiff:-66516, up:257886, uc:170643, upct:66.17, uproy:229997, udiff:-27889},
-  {n:"Marques", zone:"este", vp:166498, vc:113436, vpct:68.13, vproy:152892, vdiff:-13606, up:83053, uc:57825, upct:69.62, uproy:77938, udiff:-5115},
-  {n:"Pedregal", zone:"oeste", vp:360241, vc:247643, vpct:68.74, vproy:333780, vdiff:-26461, up:179795, uc:126851, upct:70.55, uproy:170973, udiff:-8822},
-  {n:"San Antonio", zone:"este", vp:491697, vc:368046, vpct:74.85, vproy:496062, vdiff:4365, up:224427, uc:173100, upct:77.13, uproy:233308, udiff:8881},
-  {n:"Urbina", zone:"este", vp:691063, vc:478351, vpct:69.22, vproy:644734, vdiff:-46329, up:310139, uc:221263, upct:71.34, uproy:298224, udiff:-11915}
+  {n:"Carlota", zone:"este", vp:1166881, vc:884728, vpct:75.82, vproy:1142774, vdiff:-24107, up:505094, uc:384250, upct:76.07, uproy:496323, udiff:-90968},
+  {n:"Chacao", zone:"oeste", vp:561736, vc:412819, vpct:73.49, vproy:533225, vdiff:-28511, up:281930, uc:210144, upct:74.54, uproy:271436, udiff:-10494},
+  {n:"Dos Caminos", zone:"oeste", vp:341109, vc:234345, vpct:68.70, vproy:302695, vdiff:-38414, up:165215, uc:119105, upct:72.09, uproy:153844, udiff:-11371},
+  {n:"Florida", zone:"oeste", vp:731985, vc:561925, vpct:76.77, vproy:725819, vdiff:-6166, up:336633, uc:263708, upct:78.34, uproy:340623, udiff:705},
+  {n:"Luz Quick Rest", zone:"oeste", vp:195119, vc:133322, vpct:68.33, vproy:172208, vdiff:-22911, up:98828, uc:68155, upct:68.96, uproy:88033, udiff:-10795},
+  {n:"Llanito", zone:"este", vp:545671, vc:372203, vpct:68.21, vproy:480762, vdiff:-64909, up:257886, uc:178653, upct:69.28, uproy:230760, udiff:-27126},
+  {n:"Marques", zone:"este", vp:166498, vc:119274, vpct:71.64, vproy:154062, vdiff:12436, up:83053, uc:60878, upct:73.30, uproy:78635, udiff:-4418},
+  {n:"Pedregal", zone:"oeste", vp:360241, vc:258081, vpct:71.64, vproy:333354, vdiff:-26887, up:179795, uc:132401, upct:73.64, uproy:171018, udiff:-8778},
+  {n:"San Antonio", zone:"este", vp:491697, vc:387171, vpct:78.74, vproy:500095, vdiff:8398, up:224427, uc:181907, upct:81.05, uproy:234963, udiff:10536},
+  {n:"Urbina", zone:"este", vp:691063, vc:502087, vpct:72.65, vproy:648529, vdiff:-42534, up:310139, uc:232393, upct:74.93, uproy:300174, udiff:-9965}
 ];
 
 let mode = 'valor';
 let zone = 'todas';
 
-function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
-function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
+function fmt(n, decimals = 0){ 
+  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
+}
+function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + fmt(n); }
 
 function getFilteredData(){
   return zone === 'todas' ? data : data.filter(d => d.zone === zone);
@@ -312,19 +305,55 @@ function getFilteredData(){
 
 function getTotals(list){
   let p = 0, c = 0, proy = 0, diff = 0;
-  const isVal = (mode === 'valor');
+  let up = 0, uc = 0;
   list.forEach(d => {
-    p += isVal ? d.vp : d.up;
-    c += isVal ? d.vc : d.uc;
-    proy += isVal ? d.vproy : d.uproy;
-    diff += isVal ? d.vdiff : d.udiff;
+    p += d.vp;
+    c += d.vc;
+    proy += d.vproy;
+    diff += d.vdiff;
+    up += d.up;
+    uc += d.uc;
   });
   const pct = p ? (c / p * 100) : 0;
-  return { p, c, pct, proy, diff };
+  const costoPromedio = uc > 0 ? (c / uc) : 0;
+  const costoPromedioPpto = up > 0 ? (p / up) : 0;
+  return { p, c, pct, proy, diff, up, uc, costoPromedio, costoPromedioPpto };
 }
 
 function renderKPIs(){
   const t = getTotals(getFilteredData());
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Ppto</div>
+        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
+        <div class="kpi-sub">Presupuesto Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Real</div>
+        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+        <div class="kpi-sub">Cumplido Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Dólar</div>
+        <div class="kpi-value">$${fmt(t.c)}</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Unidades</div>
+        <div class="kpi-value">${fmt(t.uc)} u</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Valla Día 24</div>
+        <div class="kpi-value">77,42%</div>
+        <div class="kpi-sub">Meta teórica hoy</div>
+      </div>
+    `;
+    return;
+  }
+
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   
@@ -350,8 +379,8 @@ function renderKPIs(){
       <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Valla Día 23</div>
-      <div class="kpi-value">74,19%</div>
+      <div class="kpi-title">Valla Día 24</div>
+      <div class="kpi-value">77,42%</div>
       <div class="kpi-sub">Meta teórica hoy</div>
     </div>
   `;
@@ -359,6 +388,31 @@ function renderKPIs(){
 
 function renderRanking(){
   const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    const sorted = [...filtered].sort((a,b) => {
+      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
+      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
+      return cpB - cpA;
+    });
+    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
+    
+    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const barWidth = Math.min((cp / maxCp) * 100, 100);
+      return `
+      <div class="rank-row">
+        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="rank-name">${d.n}</span>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${barWidth}%;"></div>
+        </div>
+        <span class="rank-pct">$${fmt(cp, 2)}</span>
+      </div>`;
+    }).join('');
+    return;
+  }
+
   const pctKey = mode === 'valor' ? 'vpct' : 'upct';
   const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
   
@@ -378,70 +432,30 @@ function renderRanking(){
 
 function renderTable(){
   const filtered = getFilteredData();
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
-  const pKey = mode === 'valor' ? 'vp' : 'up';
-  const cKey = mode === 'valor' ? 'vc' : 'uc';
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
-  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:center;">Estatus</th>
+        <th>Cumplido Dólar</th>
+        <th>Cumplido Unidades</th>
+        <th>Precio Vta. Prom. (Real)</th>
+        <th>Precio Vta. Prom. (Ppto)</th>
+        <th>Variación Precio</th>
+      </tr>
+    `;
 
-  const rows = filtered.map(d => {
-    const pct = d[pctKey];
-    const diff = d[diffKey];
-    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td style="text-align:center;">${badge}</td>
-      <td>${unit}${fmt(d[pKey])}${sfx}</td>
-      <td>${unit}${fmt(d[cKey])}${sfx}</td>
-      <td>${pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
-      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
-    </tr>`;
-  }).join('');
-
-  const t = getTotals(filtered);
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
-      <td>${unit}${fmt(t.p)}${sfx}</td>
-      <td>${unit}${fmt(t.c)}${sfx}</td>
-      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(t.proy)}${sfx}</td>
-      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
-    </tr>`;
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
-}
-
-function renderAll(){
-  renderKPIs();
-  renderRanking();
-  renderTable();
-}
-
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-function setMode(m, btn){
-  mode = m;
-  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-// VERIFICAR AUTENTICACIÓN INICIAL
-if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
-</script>
-
-</body>
-</html>
+    const rows = filtered.map(d => {
+      const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
+      const varCosto = cpReal - cpPpto;
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
+        <td>$${fmt(d.vc)}</td>
+        <td>${fmt(d.uc)} u</td>
+        <td>$${fmt(cpReal, 2)}</td>
+        <td>$${fmt(cpPpto, 2)}</td>
+        <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(va
