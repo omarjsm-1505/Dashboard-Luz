@@ -10,9 +10,9 @@
   :root{
     --bg:#1B1316;
     --bg-deep:#140D0F;
-    --card: rgba(37, 26, 30, 0.88);
-    --card-hi: rgba(46, 32, 36, 0.95);
-    --line: rgba(212,175,106,0.16);
+    --card: rgba(37, 26, 30, 0.92);
+    --card-hi: rgba(46, 32, 36, 0.98);
+    --line: rgba(212,175,106,0.2);
     --wine:#8C1D40;
     --wine-light:#C1466E;
     --gold:#D4AF6A;
@@ -20,7 +20,6 @@
     --cream:#F4EDE4;
     --muted:#A8949A;
     --good:#5FA372;
-    --good-glow: rgba(95,163,114,0.35);
     --warn:#D97A46;
     --danger:#C14646;
   }
@@ -36,7 +35,7 @@
     min-height: 100vh;
   }
 
-  /* MARCA DE AGUA CORPORATIVA */
+  /* MARCA DE AGUA CORPORATIVA CON FALLBACK */
   body::before {
     content: "";
     position: fixed;
@@ -46,13 +45,13 @@
       url('1275044.jpg');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 650px auto;
+    background-size: 600px auto;
     opacity: 0.28;
     z-index: -1;
     pointer-events: none;
   }
 
-  .wrap{max-width:1180px; margin:0 auto; padding:0 28px 80px;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px 80px;}
 
   /* CORTE BAR STICKY */
   .corte-bar{
@@ -63,13 +62,12 @@
     font-family:'JetBrains Mono', monospace;
     font-size:11.5px;
     letter-spacing:0.5px;
-    text-align:center;
-    padding:8px 12px;
-    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 20px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
   }
   .corte-bar b{ color:var(--gold);}
   .btn-print{
-    background:var(--gold); color:var(--bg-deep); border:none; padding:4px 12px;
+    background:var(--gold); color:var(--bg-deep); border:none; padding:5px 14px;
     font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:700;
     border-radius:100px; cursor:pointer; transition:all 0.2s;
   }
@@ -91,19 +89,19 @@
   }
   .mark-text { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; color: var(--gold); margin-bottom: 10px; }
   .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2.5px; font-size:11px; color:var(--gold); margin:0 0 10px; }
-  h1{ font-family:'Fraunces', serif; font-weight:600; font-size:clamp(26px,3.8vw,42px); line-height:1.08; margin:0 0 14px; letter-spacing:-0.5px; }
+  h1{ font-family:'Fraunces', serif; font-weight:600; font-size:clamp(26px,3.8vw,42px); line-height:1.1; margin:0 0 14px; letter-spacing:-0.5px; }
   h1 em{ font-style:italic; color:var(--wine-light); font-weight:500;}
   .hero-sub{ color:var(--muted); font-size:13.5px; line-height:1.5; max-width:46ch; margin:0 0 18px; }
   .corte-pill{ display:inline-flex; gap:10px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--cream); background:var(--card); border:1px solid var(--line); padding:6px 12px; border-radius:100px; }
   .corte-pill b{color:var(--gold); font-weight:600;}
 
-  /* GAUGE */
+  /* GAUGE VELOCÍMETRO */
   .gauge-box{ display:flex; flex-direction:column; align-items:center; gap:8px;}
-  .gauge-wrap{ position:relative; width:200px; height:200px;}
+  .gauge-wrap{ position:relative; width:190px; height:190px;}
   .gauge-wrap svg{ transform:rotate(-90deg); width:100%; height:100%;}
   .gauge-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .gauge-center .big{ font-family:'Fraunces', serif; font-size:38px; font-weight:600; color:var(--cream); line-height:1;}
-  .gauge-center .lbl{ font-family:'JetBrains Mono', monospace; font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-top:4px;}
+  .gauge-center .big{ font-family:'Fraunces', serif; font-size:36px; font-weight:600; color:var(--cream); line-height:1;}
+  .gauge-center .lbl{ font-family:'JetBrains Mono', monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-top:4px;}
   .gauge-legend{ display:flex; gap:14px; font-size:11.5px; color:var(--muted);}
   .gauge-legend span{display:inline-flex; align-items:center; gap:5px;}
   .dot{width:7px; height:7px; border-radius:50%; display:inline-block;}
@@ -115,10 +113,19 @@
   .panel-box{
     background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px;
   }
-  .panel-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--gold); margin:0 0 10px; display:flex; justify-size:space-between; align-items:center;}
+  .panel-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--gold); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center;}
   .sim-slider{ width:100%; accent-color:var(--gold); margin-top:8px;}
 
-  /* TOGGLES */
+  /* ESTRUCTURA CORREGIDA DE ENCABEZADOS (TÍTULO Y SUBTÍTULO EN BLOQUE) */
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:20px;
+    margin-bottom:20px; flex-wrap:wrap;
+  }
+  .section-title{ display:flex; flex-direction:column; gap:4px; margin:0; }
+  .section-title h2{ font-family:'Fraunces', serif; font-size:22px; font-weight:600; margin:0; color:var(--cream); }
+  .section-title span{ color:var(--muted); font-size:13px; font-family:'Inter'; font-weight:400; }
+
+  /* TOGGLE BUTTONS */
   .toggle{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
   .toggle button{ border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:6px 14px; border-radius:100px; cursor:pointer; transition:all .25s ease; }
   .toggle button.active{ background:linear-gradient(135deg, var(--wine), var(--wine-light)); color:var(--cream); box-shadow:0 3px 10px rgba(140,29,64,0.4); }
@@ -136,10 +143,10 @@
   /* RANKING */
   .ranking{ margin-bottom:48px;}
   .row{ display:grid; grid-template-columns: 24px 140px 1fr 85px 110px; align-items:center; gap:12px; padding:10px 8px; border-bottom:1px solid var(--line); cursor:pointer; transition:background 0.2s; border-radius:6px;}
-  .row:hover{ background:rgba(212,175,106,0.08);}
+  .row:hover{ background:rgba(212,175,106,0.12);}
   .row.head{ cursor:default; font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--line); padding-bottom:8px; }
   .row .rank{ font-family:'JetBrains Mono', monospace; color:var(--gold-dim); font-size:12px;}
-  .row .name{ font-weight:600; font-size:13px; }
+  .row .name{ font-weight:600; font-size:13px; color:var(--cream); }
   .bar-track{ position:relative; height:22px; background:rgba(20, 13, 15, 0.8); border-radius:6px; overflow:hidden; border:1px solid var(--line); }
   .bar-fill{ position:absolute; top:0; left:0; height:100%; border-radius:5px; background:linear-gradient(90deg, var(--wine), var(--wine-light)); transition:width 0.6s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
   .bar-fill.meets{ background:linear-gradient(90deg, #3E7A54, var(--good)); }
@@ -152,16 +159,16 @@
 
   /* TABLA CON BÚSQUEDA */
   .table-section{ margin-bottom:40px;}
-  .table-tools{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:12px; flex-wrap:wrap;}
-  .search-input{ background:var(--card); border:1px solid var(--line); border-radius:100px; padding:6px 14px; color:var(--cream); font-family:'Inter'; font-size:12px; width:220px; outline:none;}
+  .table-tools{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:12px; flex-wrap:wrap;}
+  .search-input{ background:var(--card); border:1px solid var(--line); border-radius:100px; padding:8px 16px; color:var(--cream); font-family:'Inter'; font-size:12px; width:220px; outline:none;}
   .search-input:focus{ border-color:var(--gold);}
   .tbl-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:14px;}
   table{ width:100%; border-collapse:collapse; min-width:720px; background:var(--card);}
   thead th{ text-align:right; font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--gold); padding:12px 14px; border-bottom:1px solid var(--line); white-space:nowrap; background:var(--card-hi); cursor:pointer;}
   thead th:first-child{ text-align:left;}
   tbody tr{ cursor:pointer; transition:background 0.2s;}
-  tbody tr:hover{ background:rgba(212,175,106,0.08);}
-  tbody td{ text-align:right; padding:10px 14px; font-size:12px; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--cream);}
+  tbody tr:hover{ background:rgba(212,175,106,0.12);}
+  tbody td{ text-align:right; padding:12px 14px; font-size:12.5px; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--cream);}
   tbody td:first-child{ text-align:left; font-family:'Inter'; font-weight:600;}
   tbody tr.total{ cursor:default;}
   tbody tr.total td{ background:var(--card-hi); font-weight:700; color:var(--gold);}
@@ -172,7 +179,7 @@
   .badge.obs{ background:rgba(217,122,70,0.15); color:var(--warn); border:1px solid var(--warn);}
   .badge.riesgo{ background:rgba(193,70,70,0.15); color:var(--danger); border:1px solid var(--danger);}
 
-  /* MODAL FICHA CLÍNICA */
+  /* MODAL FICHA CLÍNICA SUCURSAL */
   .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(5px); display:none; justify-content:center; align-items:center; z-index:100; padding:20px;}
   .modal-overlay.active{ display:flex;}
   .modal-card{ background:var(--card-hi); border:1px solid var(--gold); border-radius:18px; width:100%; max-width:480px; padding:24px; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.6);}
@@ -193,7 +200,7 @@
     body::before{ display:none !important; }
     .wrap{ padding:0 !important; max-width:100% !important; }
     .kpi, table, .bar-track, .row{ border-color:#ccc !important; background:#fff !important; color:#000 !important; }
-    tbody td, .kpi .k-val, h1, .section-title{ color:#000 !important; }
+    tbody td, .kpi .k-val, h1, .section-title h2{ color:#000 !important; }
   }
 
   @media (max-width:860px){
@@ -208,7 +215,7 @@
 <body>
 
 <div class="corte-bar">
-  <span id="corteBarText">◆ SEGUIMIENTO LUZ · CORTE AL 23 DE JULIO</span>
+  <span id="corteBarText">◆ SEGUIMIENTO LUZ · CORTE AL 23 DE JULIO DE 2026</span>
   <button class="btn-print" onclick="window.print()">🖨️ Exportar Reporte</button>
 </div>
 
@@ -269,7 +276,10 @@
 
   <!-- KPIS -->
   <div class="section-head">
-    <h2 class="section-title">Resumen del mes<span>Totales consolidados a la fecha de corte</span></h2>
+    <div class="section-title">
+      <h2>Resumen del mes</h2>
+      <span>Totales consolidados a la fecha de corte</span>
+    </div>
     <div class="toggle" id="toggleTop">
       <button data-mode="valor" class="active">Valor $</button>
       <button data-mode="unidades">Unidades</button>
@@ -280,7 +290,10 @@
   <!-- RANKING -->
   <section class="ranking">
     <div class="section-head">
-      <h2 class="section-title">Ranking por sucursal<span>Haz clic en una tienda para ver su Ficha Clínica</span></h2>
+      <div class="section-title">
+        <h2>Ranking por sucursal</h2>
+        <span>Haz clic en una tienda para ver su Ficha Clínica</span>
+      </div>
     </div>
     <div class="row head">
       <span>#</span><span>Sucursal</span><span>Cumplimiento vs. Meta</span><span style="text-align:right">%</span><span style="text-align:right">vs. presupuesto</span>
@@ -291,7 +304,10 @@
   <!-- TABLE -->
   <section class="table-section">
     <div class="table-tools">
-      <h2 class="section-title" style="margin:0;">Detalle completo</h2>
+      <div class="section-title">
+        <h2>Detalle completo</h2>
+        <span>Desglose por tienda</span>
+      </div>
       <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar sucursal...">
     </div>
     <div class="tbl-scroll">
@@ -330,7 +346,7 @@
       <div class="m-kpi"><div class="m-lbl">Ticket Promedio</div><div class="m-val" id="mTicket">$0,00</div></div>
       <div class="m-kpi"><div class="m-lbl">Proyección Cierre</div><div class="m-val" id="mProy">$0</div></div>
     </div>
-    <div class="m-kpi" style="margin-bottom:12px;">
+    <div class="m-kpi">
       <div class="m-lbl">Cuota Diaria Requerida (Días Restantes)</div>
       <div class="m-val" id="mDailyReq" style="color:var(--gold);">$0 / día</div>
     </div>
@@ -338,7 +354,6 @@
 </div>
 
 <script>
-const CORTE_DATE = new Date(2026, 6, 23);
 const DIA_CORTE = 23, DIAS_MES = 31, DIAS_RESTANTES = 8;
 const EXPECTED_PCT = (DIA_CORTE / DIAS_MES) * 100;
 
@@ -350,9 +365,4 @@ const data = [
   {n:"Luz Quick Rest & Market", zone:"oeste", vp:195119, vc:128208, vpct:65.71, vpart:3.47, vproy:172802, vdiff:-22317, up:98828, uc:65314, upct:66.09, upart:3.74, uproy:88033, udiff:-10796},
   {n:"Llanito", zone:"este", vp:545671, vc:355502, vpct:65.15, vpart:9.63, vproy:479155, vdiff:-66516, up:257886, uc:170643, upct:66.17, upart:9.76, uproy:229997, udiff:-27889},
   {n:"Marques", zone:"este", vp:166498, vc:113436, vpct:68.13, vpart:3.07, vproy:152892, vdiff:-13606, up:83053, uc:57825, upct:69.62, upart:3.31, uproy:77938, udiff:-5115},
-  {n:"Pedregal", zone:"oeste", vp:360241, vc:247643, vpct:68.74, vpart:6.71, vproy:333780, vdiff:-26461, up:179795, uc:126851, upct:70.55, upart:7.26, uproy:170973, udiff:-8822},
-  {n:"San Antonio", zone:"este", vp:491697, vc:368046, vpct:74.85, vpart:9.97, vproy:496062, vdiff:4365, up:224427, uc:173100, upct:77.13, upart:9.90, uproy:233308, udiff:8881},
-  {n:"Urbina", zone:"este", vp:691063, vc:478351, vpct:69.22, vpart:12.95, vproy:644734, vdiff:-46329, up:310139, uc:221263, upct:71.34, upart:12.66, uproy:298224, udiff:-11915},
-];
-
-let mode = 'valor', zone = 'todas', simFactor = 1.0, searchFilter = ''
+  {n:"Pedregal", 
