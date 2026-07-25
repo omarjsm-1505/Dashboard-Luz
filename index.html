@@ -276,10 +276,10 @@
 
 <script>
 // CLAVE DE ACCESO
-const SECRET_KEY = "Luz2026";
+const SECRET_KEY = "L2026";
 
 function checkAuth() {
-  const pass = document.getElementById('passInput').value;
+  const pass = document.getElementById('passInput').value.trim();
   if (pass === SECRET_KEY) {
     sessionStorage.setItem('luz_authenticated', 'true');
     unlockDashboard();
@@ -392,13 +392,11 @@ function renderRanking(){
 
 function renderTicketBars(){
   const filtered = getFilteredData();
-  // Calcular Ticket Promedio por sucursal y ordenar de mayor a menor
   const withTickets = filtered.map(d => ({
     name: d.n,
     ticket: d.uc ? (d.vc / d.uc) : 0
   })).sort((a,b) => b.ticket - a.ticket);
 
-  // Escala para ajustar el ancho relativo (tomando como máximo $2,50)
   const maxVal = 2.50;
 
   document.getElementById('ticketBarList').innerHTML = withTickets.map(d => {
@@ -445,3 +443,7 @@ function renderTable(){
     <tr class="total-row">
       <td>TOTAL CONSOLIDADO</td>
       <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
+      <td>${unit}${fmt(t.p)}${sfx}</td>
+      <td>${unit}${fmt(t.c)}${sfx}</td>
+      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
+ 
