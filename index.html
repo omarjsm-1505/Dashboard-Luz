@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Luz · Dashboard Ejecutivo de Presupuesto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -50,7 +50,7 @@
     pointer-events: none;
   }
 
-  /* PANTALLA DE BLOQUEO */
+  /* PANTALLA DE ACCESO */
   #authOverlay {
     position: fixed; inset: 0; z-index: 99999;
     background: var(--bg);
@@ -67,19 +67,19 @@
   .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
   .auth-input {
     width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
-    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
+    border-radius: 10px; font-size: 16px; text-align: center; font-family: 'JetBrains Mono', monospace;
     background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
   }
   .auth-input:focus { border-color: var(--wine); }
   .auth-btn {
-    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
-    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
+    width: 100%; padding: 14px; background: var(--wine); color: #FFFFFF;
+    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 15px;
     cursor: pointer; transition: background 0.2s; touch-action: manipulation;
   }
-  .auth-btn:hover { background: var(--wine-light); }
+  .auth-btn:active { background: var(--wine-light); }
   .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
 
-  /* CONTENIDO PRINCIPAL */
+  /* DASHBOARD */
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
 
   .corte-bar{
@@ -177,21 +177,19 @@
 </head>
 <body>
 
-<!-- OVERLAY DE AUTENTICACIÓN -->
+<!-- PANTALLA DE ACCESO -->
 <div id="authOverlay">
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
     <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <div style="width:100%;">
-      <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeyup="checkEnterKey(event)">
-      <button type="button" class="auth-btn" onclick="validateAccess()">Ingresar al Dashboard</button>
-    </div>
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off">
+    <button type="button" class="auth-btn" id="btnIngresar">Ingresar al Dashboard</button>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
 
-<!-- CONTENIDO DASHBOARD -->
+<!-- CONTENIDO DEL DASHBOARD -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
     <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
@@ -276,39 +274,10 @@
 </div>
 
 <script>
-function checkEnterKey(e) {
-  if (e.key === 'Enter' || e.keyCode === 13) {
-    validateAccess();
-  }
-}
-
-function validateAccess() {
-  var input = document.getElementById('passInput');
-  var pass = input ? input.value.trim().toUpperCase() : '';
-  
-  if (pass === "L2026" || pass === "2026") {
-    try {
-      localStorage.setItem('luz_unlocked', 'true');
-    } catch(e) {}
-    
-    document.getElementById('authOverlay').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-    renderAll();
-  } else {
-    document.getElementById('authError').style.display = 'block';
-  }
-}
-
-// COMPROBACIÓN AUTOMÁTICA SI YA SE HABÍA DESBLOQUEADO ANTES
-try {
-  if (localStorage.getItem('luz_unlocked') === 'true') {
-    document.getElementById('authOverlay').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-    setTimeout(renderAll, 100);
-  }
-} catch(e) {}
-
+// 1. DATOS OFICIALES Y VARIABLES GLOBALES
 var EXPECTED_PCT = 74.19;
+var mode = 'valor';
+var zone = 'todas';
 
 var data = [
   {n:"Carlota", zone:"este", vp:1166881, vc:846283, vpct:72.53, vproy:1140642, vdiff:-26239, up:505094, uc:366866, upct:72.63, uproy:494472, udiff:-10622},
@@ -323,9 +292,7 @@ var data = [
   {n:"Urbina", zone:"este", vp:691063, vc:478351, vpct:69.22, vproy:644734, vdiff:-46329, up:310139, uc:221263, upct:71.34, uproy:298224, udiff:-11915}
 ];
 
-var mode = 'valor';
-var zone = 'todas';
-
+// 2. FUNCIONES DE FORMATO Y RENDERIZADO
 function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
 function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
 
@@ -420,4 +387,27 @@ function renderTable(){
       '<td>' + unit + fmt(d[pKey]) + sfx + '</td>' +
       '<td>' + unit + fmt(d[cKey]) + sfx + '</td>' +
       '<td>' + pct.toFixed(2).replace('.', ',') + '%</td>' +
-      '<td
+      '<td>' + unit + fmt(d[proyKey]) + sfx + '</td>' +
+      '<td style="color:' + (diff >= 0 ? 'var(--good)' : 'var(--warn)') + ';">' + unit + fmtSigned(diff) + sfx + '</td>' +
+    '</tr>';
+  }
+
+  var t = getTotals(filtered);
+  var totalRow = '<tr class="total-row">' +
+    '<td>TOTAL CONSOLIDADO</td>' +
+    '<td style="text-align:center;"><span class="badge obs">Obs.</span></td>' +
+    '<td>' + unit + fmt(t.p) + sfx + '</td>' +
+    '<td>' + unit + fmt(t.c) + sfx + '</td>' +
+    '<td>' + t.pct.toFixed(2).replace('.', ',') + '%</td>' +
+    '<td>' + unit + fmt(t.proy) + sfx + '</td>' +
+    '<td style="color:' + (t.diff >= 0 ? 'var(--good)' : 'var(--warn)') + ';">' + unit + fmtSigned(t.diff) + sfx + '</td>' +
+  '</tr>';
+
+  document.getElementById('tableBody').innerHTML = rows + totalRow;
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRanking();
+  renderTicketBars();
+  renderTable
