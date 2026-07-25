@@ -154,10 +154,11 @@
   .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
+  /* BARRAS DE TICKET PROMEDIO */
   .ticket-row{ display:grid; grid-template-columns: 120px 1fr 65px; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); }
   .ticket-name{ font-weight:600; font-size:12.5px; color:var(--text); }
   .ticket-bar-bg{ position:relative; height:18px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
-  .ticket-bar-fill{ height:100%; background:linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius:5px; transition:width 0.3s ease; }
+  .ticket-bar-fill{ height:100%; background:linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius:5px; }
   .ticket-val{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
@@ -189,7 +190,7 @@
   </div>
 </div>
 
-<!-- CONTENIDO DEL DASHBOARD -->
+<!-- CONTENIDO DASHBOARD -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
     <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
@@ -229,24 +230,55 @@
     <div class="section-box">
       <h2 class="sec-title">Resumen del mes</h2>
       <span class="sec-sub">Totales consolidados a la fecha de corte</span>
-      <div class="kpis-grid" id="kpiGrid"></div>
+      
+      <div class="kpis-grid">
+        <div class="kpi-card"><div class="kpi-title">Presupuesto</div><div class="kpi-value" id="kpiPpto">$5.252.000</div><div class="kpi-sub">Meta del mes</div></div>
+        <div class="kpi-card"><div class="kpi-title">Cumplido</div><div class="kpi-value" id="kpiReal">$3.692.778</div><div class="kpi-sub" id="kpiPct">70,31% de la meta</div></div>
+        <div class="kpi-card"><div class="kpi-title">Proyección Cierre</div><div class="kpi-value" id="kpiProy">$4.977.222</div><div class="kpi-sub">Cierra bajo ppto</div></div>
+        <div class="kpi-card neg"><div class="kpi-title">Diferencia</div><div class="kpi-value" id="kpiDiff">-$274.778</div><div class="kpi-sub">Brecha proyectada</div></div>
+        <div class="kpi-card"><div class="kpi-title">Valla Día 23</div><div class="kpi-value">74,19%</div><div class="kpi-sub">Meta teórica hoy</div></div>
+      </div>
     </div>
 
-    <!-- RANKING -->
+    <!-- RANKING DE CUMPLIMIENTO -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
       <span class="sec-sub">Cumplimiento de mayor a menor</span>
-      <div id="rankingList"></div>
+
+      <div id="rankingList">
+        <div class="rank-row" data-zone="este"><span class="rank-num">01</span><span class="rank-name">San Antonio</span><div class="bar-bg"><div class="bar-fill top" style="width:74.85%;" data-v="74.85" data-u="77.13"></div></div><span class="rank-pct">74,85%</span></div>
+        <div class="rank-row" data-zone="oeste"><span class="rank-num">02</span><span class="rank-name">Florida</span><div class="bar-bg"><div class="bar-fill" style="width:73.16%;" data-v="73.16" data-u="74.72"></div></div><span class="rank-pct">73,16%</span></div>
+        <div class="rank-row" data-zone="este"><span class="rank-num">03</span><span class="rank-name">Carlota</span><div class="bar-bg"><div class="bar-fill" style="width:72.53%;" data-v="72.53" data-u="72.63"></div></div><span class="rank-pct">72,53%</span></div>
+        <div class="rank-row" data-zone="oeste"><span class="rank-num">04</span><span class="rank-name">Chacao</span><div class="bar-bg"><div class="bar-fill" style="width:70.42%;" data-v="70.42" data-u="71.36"></div></div><span class="rank-pct">70,42%</span></div>
+        <div class="rank-row" data-zone="este"><span class="rank-num">05</span><span class="rank-name">Urbina</span><div class="bar-bg"><div class="bar-fill" style="width:69.22%;" data-v="69.22" data-u="71.34"></div></div><span class="rank-pct">69,22%</span></div>
+        <div class="rank-row" data-zone="oeste"><span class="rank-num">06</span><span class="rank-name">Pedregal</span><div class="bar-bg"><div class="bar-fill" style="width:68.74%;" data-v="68.74" data-u="70.55"></div></div><span class="rank-pct">68,74%</span></div>
+        <div class="rank-row" data-zone="este"><span class="rank-num">07</span><span class="rank-name">Marques</span><div class="bar-bg"><div class="bar-fill" style="width:68.13%;" data-v="68.13" data-u="69.62"></div></div><span class="rank-pct">68,13%</span></div>
+        <div class="rank-row" data-zone="oeste"><span class="rank-num">08</span><span class="rank-name">Dos Caminos</span><div class="bar-bg"><div class="bar-fill" style="width:65.72%;" data-v="65.72" data-u="68.76"></div></div><span class="rank-pct">65,72%</span></div>
+        <div class="rank-row" data-zone="oeste"><span class="rank-num">09</span><span class="rank-name">Luz Quick Rest</span><div class="bar-bg"><div class="bar-fill" style="width:65.71%;" data-v="65.71" data-u="66.09"></div></div><span class="rank-pct">65,71%</span></div>
+        <div class="rank-row" data-zone="este"><span class="rank-num">10</span><span class="rank-name">Llanito</span><div class="bar-bg"><div class="bar-fill" style="width:65.15%;" data-v="65.15" data-u="66.17"></div></div><span class="rank-pct">65,15%</span></div>
+      </div>
     </div>
 
     <!-- TICKET PROMEDIO -->
     <div class="section-box">
       <h2 class="sec-title">Ticket Promedio por Sucursal</h2>
       <span class="sec-sub">Relación Cumplido Valor $ / Cumplido Unidades (Promedio Red: $2,11)</span>
-      <div id="ticketBarList"></div>
+
+      <div id="ticketBarList">
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Carlota</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:92,4%;"></div></div><span class="ticket-val">$2,31</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Urbina</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:86,4%;"></div></div><span class="ticket-val">$2,16</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">San Antonio</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85,2%;"></div></div><span class="ticket-val">$2,13</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Florida</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85,2%;"></div></div><span class="ticket-val">$2,13</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Llanito</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:83,2%;"></div></div><span class="ticket-val">$2,08</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Chacao</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,8%;"></div></div><span class="ticket-val">$1,97</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Dos Caminos</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,8%;"></div></div><span class="ticket-val">$1,97</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Marques</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,4%;"></div></div><span class="ticket-val">$1,96</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Luz Quick Rest</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,4%;"></div></div><span class="ticket-val">$1,96</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Pedregal</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,0%;"></div></div><span class="ticket-val">$1,95</span></div>
+      </div>
     </div>
 
-    <!-- TABLA -->
+    <!-- TABLA DETALLE COMPLETO -->
     <div class="section-box">
       <h2 class="sec-title">Detalle completo</h2>
       <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
@@ -264,150 +296,7 @@
               <th>Diferencia</th>
             </tr>
           </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <footer>LUZ · SEGUIMIENTO_JULIO_2026</footer>
-  </div>
-</div>
-
-<script>
-// 1. DATOS OFICIALES Y VARIABLES GLOBALES
-var EXPECTED_PCT = 74.19;
-var mode = 'valor';
-var zone = 'todas';
-
-var data = [
-  {n:"Carlota", zone:"este", vp:1166881, vc:846283, vpct:72.53, vproy:1140642, vdiff:-26239, up:505094, uc:366866, upct:72.63, uproy:494472, udiff:-10622},
-  {n:"Chacao", zone:"oeste", vp:561736, vc:395590, vpct:70.42, vproy:533187, vdiff:-28549, up:281930, uc:201182, upct:71.36, uproy:271159, udiff:-10771},
-  {n:"Dos Caminos", zone:"oeste", vp:341109, vc:224190, vpct:65.72, vproy:302170, vdiff:-38939, up:165215, uc:113602, upct:68.76, uproy:153116, udiff:-12099},
-  {n:"Florida", zone:"oeste", vp:731985, vc:535528, vpct:73.16, vproy:721799, vdiff:-10186, up:336633, uc:251517, upct:74.72, uproy:339001, udiff:2368},
-  {n:"Luz Quick Rest", zone:"oeste", vp:195119, vc:128208, vpct:65.71, vproy:172802, vdiff:-22317, up:98828, uc:65314, upct:66.09, uproy:88033, udiff:-10796},
-  {n:"Llanito", zone:"este", vp:545671, vc:355502, vpct:65.15, vproy:479155, vdiff:-66516, up:257886, uc:170643, upct:66.17, uproy:229997, udiff:-27889},
-  {n:"Marques", zone:"este", vp:166498, vc:113436, vpct:68.13, vproy:152892, vdiff:-13606, up:83053, uc:57825, upct:69.62, uproy:77938, udiff:-5115},
-  {n:"Pedregal", zone:"oeste", vp:360241, vc:247643, vpct:68.74, vproy:333780, vdiff:-26461, up:179795, uc:126851, upct:70.55, uproy:170973, udiff:-8822},
-  {n:"San Antonio", zone:"este", vp:491697, vc:368046, vpct:74.85, vproy:496062, vdiff:4365, up:224427, uc:173100, upct:77.13, uproy:233308, udiff:8881},
-  {n:"Urbina", zone:"este", vp:691063, vc:478351, vpct:69.22, vproy:644734, vdiff:-46329, up:310139, uc:221263, upct:71.34, uproy:298224, udiff:-11915}
-];
-
-// 2. FUNCIONES DE FORMATO Y RENDERIZADO
-function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
-function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
-
-function getFilteredData(){
-  return zone === 'todas' ? data : data.filter(function(d){ return d.zone === zone; });
-}
-
-function getTotals(list){
-  var p = 0, c = 0, proy = 0, diff = 0;
-  var isVal = (mode === 'valor');
-  list.forEach(function(d){
-    p += isVal ? d.vp : d.up;
-    c += isVal ? d.vc : d.uc;
-    proy += isVal ? d.vproy : d.uproy;
-    diff += isVal ? d.vdiff : d.udiff;
-  });
-  var pct = p ? (c / p * 100) : 0;
-  return { p: p, c: c, pct: pct, proy: proy, diff: diff };
-}
-
-function renderKPIs(){
-  var t = getTotals(getFilteredData());
-  var unit = mode === 'valor' ? '$' : '';
-  var sfx = mode === 'unidades' ? ' u' : '';
-  
-  document.getElementById('kpiGrid').innerHTML = 
-    '<div class="kpi-card"><div class="kpi-title">Presupuesto</div><div class="kpi-value">' + unit + fmt(t.p) + sfx + '</div><div class="kpi-sub">Meta del mes</div></div>' +
-    '<div class="kpi-card"><div class="kpi-title">Cumplido</div><div class="kpi-value">' + unit + fmt(t.c) + sfx + '</div><div class="kpi-sub">' + t.pct.toFixed(2).replace('.', ',') + '% de la meta</div></div>' +
-    '<div class="kpi-card"><div class="kpi-title">Proyección Cierre</div><div class="kpi-value">' + unit + fmt(t.proy) + sfx + '</div><div class="kpi-sub">' + (t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto') + '</div></div>' +
-    '<div class="kpi-card ' + (t.diff < 0 ? 'neg' : '') + '"><div class="kpi-title">Diferencia</div><div class="kpi-value">' + unit + fmtSigned(t.diff) + sfx + '</div><div class="kpi-sub">' + (t.diff < 0 ? 'Brecha proyectada' : 'Superávit') + '</div></div>' +
-    '<div class="kpi-card"><div class="kpi-title">Valla Día 23</div><div class="kpi-value">74,19%</div><div class="kpi-sub">Meta teórica hoy</div></div>';
-}
-
-function renderRanking(){
-  var filtered = getFilteredData();
-  var pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  var sorted = filtered.slice().sort(function(a,b){ return b[pctKey] - a[pctKey]; });
-  
-  var html = '';
-  for(var i=0; i<sorted.length; i++){
-    var d = sorted[i];
-    var pct = d[pctKey];
-    html += '<div class="rank-row">' +
-      '<span class="rank-num">' + String(i+1).padStart(2,'0') + '</span>' +
-      '<span class="rank-name">' + d.n + '</span>' +
-      '<div class="bar-bg"><div class="bar-fill ' + (pct >= EXPECTED_PCT ? 'top' : '') + '" style="width:' + Math.min(pct, 100) + '%;"></div></div>' +
-      '<span class="rank-pct">' + pct.toFixed(2).replace('.', ',') + '%</span>' +
-    '</div>';
-  }
-  document.getElementById('rankingList').innerHTML = html;
-}
-
-function renderTicketBars(){
-  var filtered = getFilteredData();
-  var withTickets = filtered.map(function(d){
-    return { name: d.n, ticket: d.uc ? (d.vc / d.uc) : 0 };
-  }).sort(function(a,b){ return b.ticket - a.ticket; });
-
-  var maxVal = 2.50;
-  var html = '';
-  for(var i=0; i<withTickets.length; i++){
-    var d = withTickets[i];
-    var barWidth = Math.min((d.ticket / maxVal) * 100, 100);
-    html += '<div class="ticket-row">' +
-      '<span class="ticket-name">' + d.name + '</span>' +
-      '<div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:' + barWidth.toFixed(1) + '%;"></div></div>' +
-      '<span class="ticket-val">$' + d.ticket.toFixed(2).replace('.', ',') + '</span>' +
-    '</div>';
-  }
-  document.getElementById('ticketBarList').innerHTML = html;
-}
-
-function renderTable(){
-  var filtered = getFilteredData();
-  var unit = mode === 'valor' ? '$' : '';
-  var sfx = mode === 'unidades' ? ' u' : '';
-  var pKey = mode === 'valor' ? 'vp' : 'up';
-  var cKey = mode === 'valor' ? 'vc' : 'uc';
-  var pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  var proyKey = mode === 'valor' ? 'vproy' : 'uproy';
-  var diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
-
-  var rows = '';
-  for(var i=0; i<filtered.length; i++){
-    var d = filtered[i];
-    var pct = d[pctKey];
-    var diff = d[diffKey];
-    var badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
-    rows += '<tr>' +
-      '<td>' + d.n + '</td>' +
-      '<td style="text-align:center;">' + badge + '</td>' +
-      '<td>' + unit + fmt(d[pKey]) + sfx + '</td>' +
-      '<td>' + unit + fmt(d[cKey]) + sfx + '</td>' +
-      '<td>' + pct.toFixed(2).replace('.', ',') + '%</td>' +
-      '<td>' + unit + fmt(d[proyKey]) + sfx + '</td>' +
-      '<td style="color:' + (diff >= 0 ? 'var(--good)' : 'var(--warn)') + ';">' + unit + fmtSigned(diff) + sfx + '</td>' +
-    '</tr>';
-  }
-
-  var t = getTotals(filtered);
-  var totalRow = '<tr class="total-row">' +
-    '<td>TOTAL CONSOLIDADO</td>' +
-    '<td style="text-align:center;"><span class="badge obs">Obs.</span></td>' +
-    '<td>' + unit + fmt(t.p) + sfx + '</td>' +
-    '<td>' + unit + fmt(t.c) + sfx + '</td>' +
-    '<td>' + t.pct.toFixed(2).replace('.', ',') + '%</td>' +
-    '<td>' + unit + fmt(t.proy) + sfx + '</td>' +
-    '<td style="color:' + (t.diff >= 0 ? 'var(--good)' : 'var(--warn)') + ';">' + unit + fmtSigned(t.diff) + sfx + '</td>' +
-  '</tr>';
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
-}
-
-function renderAll(){
-  renderKPIs();
-  renderRanking();
-  renderTicketBars();
-  renderTable
+          <tbody>
+            <tr data-zone="este" data-vp="$1.166.881" data-vc="$846.283" data-vpct="72,53%" data-vproy="$1.140.642" data-vdiff="-$26.239" data-up="505.094" data-uc="366.866" data-upct="72,63%" data-uproy="494.472" data-udiff="-10.622"><td>Carlota</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td class="col-ppto">$1.166.881</td><td class="col-real">$846.283</td><td class="col-pct">72,53%</td><td class="col-proy">$1.140.642</td><td class="col-diff" style="color:var(--warn);">-$26.239</td></tr>
+            <tr data-zone="oeste" data-vp="$561.736" data-vc="$395.590" data-vpct="70,42%" data-vproy="$533.187" data-vdiff="-$28.549" data-up="281.930" data-uc="201.182" data-upct="71,36%" data-uproy="271.159" data-udiff="-10.771"><td>Chacao</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td class="col-ppto">$561.736</td><td class="col-real">$395.590</td><td class="col-pct">70,42%</td><td class="col-proy">$533.187</td><td class="col-diff" style="color:var(--warn);">-$28.549</td></tr>
+            <tr data-zone="oeste" data-vp="$341.109" data-vc="$224.190" data-vpct="65,72%" data-vproy="$302.170" data-vdiff="-$38.939" data-up="165.215" data-uc="113.602" data-upct="68,76%" data-uproy="153.116" data-udiff="-12.099"><td>Dos Caminos</td><td style="text-align:center;"><s
