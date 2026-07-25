@@ -23,6 +23,7 @@
     --good-bg: rgba(46,125,50,0.1);
     --warn:#D97A46;
     --warn-bg: rgba(217,122,70,0.12);
+    --danger:#C14646;
   }
   *{box-sizing:border-box;}
   body{
@@ -49,6 +50,36 @@
     pointer-events: none;
   }
 
+  /* PANTALLA DE ACCESO RESTRENGIDO */
+  .auth-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .auth-card {
+    background: var(--card); border: 1px solid var(--line);
+    padding: 36px 28px; border-radius: 20px; text-align: center;
+    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
+  }
+  .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
+  .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
+  .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
+  .auth-input {
+    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
+    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
+    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
+  }
+  .auth-input:focus { border-color: var(--wine); }
+  .auth-btn {
+    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
+    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .auth-btn:hover { background: var(--wine-light); }
+  .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
+
+  /* CONTENIDO PRINCIPAL */
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
 
   .corte-bar{
@@ -140,81 +171,120 @@
 </head>
 <body>
 
-<div class="corte-bar">
-  <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
-  <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
+<!-- OVERLAY DE BLOQUEO POR CLAVE -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
+    <h2 class="auth-title">Automercado Luz</h2>
+    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
+    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
+    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
+  </div>
 </div>
 
-<div class="wrap">
+<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
+<div id="mainContent" style="display:none;">
+  <div class="corte-bar">
+    <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
+    <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
+  </div>
 
-  <section class="hero">
-    <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-    <p class="eyebrow">Automercado Luz</p>
-    <h1>Seguimiento <em>presupuesto</em></h1>
-    <p class="hero-sub">Unidades - Valor $</p>
-    <div class="corte-pill">◆ Corte al <b>23 de julio, 2026</b></div>
-  </section>
+  <div class="wrap">
 
-  <!-- CONTROLES -->
-  <div class="control-grid">
-    <div class="ctrl-box">
-      <span class="ctrl-title">Zona Comercial</span>
-      <div class="toggle-group" id="groupZone">
-        <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
-        <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
-        <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+    <section class="hero">
+      <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
+      <p class="eyebrow">Automercado Luz</p>
+      <h1>Seguimiento <em>presupuesto</em></h1>
+      <p class="hero-sub">Unidades - Valor $</p>
+      <div class="corte-pill">◆ Corte al <b>23 de julio, 2026</b></div>
+    </section>
+
+    <!-- CONTROLES -->
+    <div class="control-grid">
+      <div class="ctrl-box">
+        <span class="ctrl-title">Zona Comercial</span>
+        <div class="toggle-group" id="groupZone">
+          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
+          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
+          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+        </div>
+      </div>
+      <div class="ctrl-box">
+        <span class="ctrl-title">Métrica</span>
+        <div class="toggle-group" id="groupMode">
+          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
+          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+        </div>
       </div>
     </div>
-    <div class="ctrl-box">
-      <span class="ctrl-title">Métrica</span>
-      <div class="toggle-group" id="groupMode">
-        <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
-        <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+
+    <!-- KPIS -->
+    <div class="section-box">
+      <h2 class="sec-title">Resumen del mes</h2>
+      <span class="sec-sub">Totales consolidados a la fecha de corte</span>
+      <div class="kpis-grid" id="kpiGrid"></div>
+    </div>
+
+    <!-- RANKING -->
+    <div class="section-box">
+      <h2 class="sec-title">Ranking por sucursal</h2>
+      <span class="sec-sub">Cumplimiento de mayor a menor</span>
+      <div id="rankingList"></div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="section-box">
+      <h2 class="sec-title">Detalle completo</h2>
+      <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Sucursal</th>
+              <th style="text-align:center;">Estatus</th>
+              <th>Presupuesto</th>
+              <th>Cumplido</th>
+              <th>%</th>
+              <th>Proyección</th>
+              <th>Diferencia</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
       </div>
     </div>
+
+    <footer>LUZ · SEGUIMIENTO_JULIO_2026</footer>
   </div>
-
-  <!-- KPIS -->
-  <div class="section-box">
-    <h2 class="sec-title">Resumen del mes</h2>
-    <span class="sec-sub">Totales consolidados a la fecha de corte</span>
-    <div class="kpis-grid" id="kpiGrid"></div>
-  </div>
-
-  <!-- RANKING -->
-  <div class="section-box">
-    <h2 class="sec-title">Ranking por sucursal</h2>
-    <span class="sec-sub">Cumplimiento de mayor a menor</span>
-    <div id="rankingList"></div>
-  </div>
-
-  <!-- TABLA -->
-  <div class="section-box">
-    <h2 class="sec-title">Detalle completo</h2>
-    <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Sucursal</th>
-            <th style="text-align:center;">Estatus</th>
-            <th>Presupuesto</th>
-            <th>Cumplido</th>
-            <th>%</th>
-            <th>Proyección</th>
-            <th>Diferencia</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer>LUZ · SEGUIMIENTO_JULIO_2026</footer>
 </div>
 
 <script>
+// CLAVE DE ACCESO
+const SECRET_KEY = "Luz2026";
+
+function checkAuth() {
+  const pass = document.getElementById('passInput').value;
+  if (pass === SECRET_KEY) {
+    sessionStorage.setItem('luz_authenticated', 'true');
+    unlockDashboard();
+  } else {
+    document.getElementById('authError').style.display = 'block';
+  }
+}
+
+function handleKeyPress(e) {
+  if (e.key === 'Enter') checkAuth();
+}
+
+function unlockDashboard() {
+  document.getElementById('authOverlay').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  renderAll();
+}
+
+// LÓGICA DEL DASHBOARD
 const EXPECTED_PCT = 74.19;
 
 const data = [
@@ -367,7 +437,10 @@ function setMode(m, btn){
   renderAll();
 }
 
-renderAll();
+// VERIFICAR AUTENTICACIÓN INICIAL
+if (sessionStorage.getItem('luz_authenticated') === 'true') {
+  unlockDashboard();
+}
 </script>
 
 </body>
