@@ -51,8 +51,8 @@
   }
 
   /* PANTALLA DE ACCESO RESTRENGIDO */
-  .auth-overlay {
-    position: fixed; inset: 0; z-index: 9999;
+  #authOverlay {
+    position: fixed; inset: 0; z-index: 99999;
     background: var(--bg);
     display: flex; align-items: center; justify-content: center;
     padding: 20px;
@@ -178,21 +178,19 @@
 </head>
 <body>
 
-<!-- OVERLAY DE BLOQUEO POR CLAVE CON FORMULARIO NATIVO -->
-<div class="auth-overlay" id="authOverlay">
+<!-- OVERLAY DE BLOQUEO POR CLAVE -->
+<div id="authOverlay">
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
     <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <form onsubmit="event.preventDefault(); checkAuth();">
-      <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="current-password">
-      <button type="submit" class="auth-btn">Ingresar al Dashboard</button>
-    </form>
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso">
+    <button type="button" class="auth-btn" id="submitBtn">Ingresar al Dashboard</button>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
 
-<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
+<!-- CONTENIDO DEL DASHBOARD -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
     <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
@@ -277,40 +275,27 @@
 </div>
 
 <script>
-// CLAVE DE ACCESO
-const SECRET_KEY = "L2026";
-
-function checkAuth() {
-  const inputEl = document.getElementById('passInput');
-  const errEl = document.getElementById('authError');
-  if (!inputEl) return;
-
-  const pass = inputEl.value.trim().toUpperCase();
-  
-  if (pass === SECRET_KEY) {
-    try {
-      sessionStorage.setItem('luz_authenticated', 'true');
-    } catch(e) {
-      console.warn("Storage bloqueado por el navegador:", e);
-    }
-    unlockDashboard();
+// FUNCION DE ACCESO
+function validateAccess() {
+  var pass = document.getElementById('passInput').value.trim().toUpperCase();
+  if (pass === "L2026") {
+    document.getElementById('authOverlay').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    renderAll();
   } else {
-    if (errEl) errEl.style.display = 'block';
+    document.getElementById('authError').style.display = 'block';
   }
 }
 
-function unlockDashboard() {
-  const overlay = document.getElementById('authOverlay');
-  const main = document.getElementById('mainContent');
-  if (overlay) overlay.style.display = 'none';
-  if (main) main.style.display = 'block';
-  renderAll();
-}
+document.getElementById('submitBtn').onclick = validateAccess;
+document.getElementById('passInput').onkeydown = function(e) {
+  if (e.key === 'Enter') validateAccess();
+};
 
-// LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 74.19;
+// DATA Y RENDER
+var EXPECTED_PCT = 74.19;
 
-const data = [
+var data = [
   {n:"Carlota", zone:"este", vp:1166881, vc:846283, vpct:72.53, vproy:1140642, vdiff:-26239, up:505094, uc:366866, upct:72.63, uproy:494472, udiff:-10622},
   {n:"Chacao", zone:"oeste", vp:561736, vc:395590, vpct:70.42, vproy:533187, vdiff:-28549, up:281930, uc:201182, upct:71.36, uproy:271159, udiff:-10771},
   {n:"Dos Caminos", zone:"oeste", vp:341109, vc:224190, vpct:65.72, vproy:302170, vdiff:-38939, up:165215, uc:113602, upct:68.76, uproy:153116, udiff:-12099},
@@ -323,132 +308,109 @@ const data = [
   {n:"Urbina", zone:"este", vp:691063, vc:478351, vpct:69.22, vproy:644734, vdiff:-46329, up:310139, uc:221263, upct:71.34, uproy:298224, udiff:-11915}
 ];
 
-let mode = 'valor';
-let zone = 'todas';
+var mode = 'valor';
+var zone = 'todas';
 
 function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
 function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
 
 function getFilteredData(){
-  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
+  return zone === 'todas' ? data : data.filter(function(d){ return d.zone === zone; });
 }
 
 function getTotals(list){
-  let p = 0, c = 0, proy = 0, diff = 0;
-  const isVal = (mode === 'valor');
-  list.forEach(d => {
+  var p = 0, c = 0, proy = 0, diff = 0;
+  var isVal = (mode === 'valor');
+  list.forEach(function(d){
     p += isVal ? d.vp : d.up;
     c += isVal ? d.vc : d.uc;
     proy += isVal ? d.vproy : d.uproy;
     diff += isVal ? d.vdiff : d.udiff;
   });
-  const pct = p ? (c / p * 100) : 0;
-  return { p, c, pct, proy, diff };
+  var pct = p ? (c / p * 100) : 0;
+  return { p: p, c: c, pct: pct, proy: proy, diff: diff };
 }
 
 function renderKPIs(){
-  const t = getTotals(getFilteredData());
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
+  var t = getTotals(getFilteredData());
+  var unit = mode === 'valor' ? '$' : '';
+  var sfx = mode === 'unidades' ? ' u' : '';
   
-  const el = document.getElementById('kpiGrid');
-  if(!el) return;
-  
-  el.innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-title">Presupuesto</div>
-      <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
-      <div class="kpi-sub">Meta del mes</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Cumplido</div>
-      <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
-      <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Proyección Cierre</div>
-      <div class="kpi-value">${unit}${fmt(t.proy)}${sfx}</div>
-      <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
-    </div>
-    <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
-      <div class="kpi-title">Diferencia</div>
-      <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
-      <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Valla Día 23</div>
-      <div class="kpi-value">74,19%</div>
-      <div class="kpi-sub">Meta teórica hoy</div>
-    </div>
-  `;
+  document.getElementById('kpiGrid').innerHTML = 
+    '<div class="kpi-card"><div class="kpi-title">Presupuesto</div><div class="kpi-value">' + unit + fmt(t.p) + sfx + '</div><div class="kpi-sub">Meta del mes</div></div>' +
+    '<div class="kpi-card"><div class="kpi-title">Cumplido</div><div class="kpi-value">' + unit + fmt(t.c) + sfx + '</div><div class="kpi-sub">' + t.pct.toFixed(2).replace('.', ',') + '% de la meta</div></div>' +
+    '<div class="kpi-card"><div class="kpi-title">Proyección Cierre</div><div class="kpi-value">' + unit + fmt(t.proy) + sfx + '</div><div class="kpi-sub">' + (t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto') + '</div></div>' +
+    '<div class="kpi-card ' + (t.diff < 0 ? 'neg' : '') + '"><div class="kpi-title">Diferencia</div><div class="kpi-value">' + unit + fmtSigned(t.diff) + sfx + '</div><div class="kpi-sub">' + (t.diff < 0 ? 'Brecha proyectada' : 'Superávit') + '</div></div>' +
+    '<div class="kpi-card"><div class="kpi-title">Valla Día 23</div><div class="kpi-value">74,19%</div><div class="kpi-sub">Meta teórica hoy</div></div>';
 }
 
 function renderRanking(){
-  const filtered = getFilteredData();
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
+  var filtered = getFilteredData();
+  var pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  var sorted = filtered.slice().sort(function(a,b){ return b[pctKey] - a[pctKey]; });
   
-  const el = document.getElementById('rankingList');
-  if(!el) return;
-
-  el.innerHTML = sorted.map((d, i) => {
-    const pct = d[pctKey];
-    return `
-    <div class="rank-row">
-      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-      <span class="rank-name">${d.n}</span>
-      <div class="bar-bg">
-        <div class="bar-fill ${pct >= EXPECTED_PCT ? 'top' : ''}" style="width:${Math.min(pct, 100)}%;"></div>
-      </div>
-      <span class="rank-pct">${pct.toFixed(2).replace('.', ',')}%</span>
-    </div>`;
-  }).join('');
+  var html = '';
+  for(var i=0; i<sorted.length; i++){
+    var d = sorted[i];
+    var pct = d[pctKey];
+    html += '<div class="rank-row">' +
+      '<span class="rank-num">' + String(i+1).padStart(2,'0') + '</span>' +
+      '<span class="rank-name">' + d.n + '</span>' +
+      '<div class="bar-bg"><div class="bar-fill ' + (pct >= EXPECTED_PCT ? 'top' : '') + '" style="width:' + Math.min(pct, 100) + '%;"></div></div>' +
+      '<span class="rank-pct">' + pct.toFixed(2).replace('.', ',') + '%</span>' +
+    '</div>';
+  }
+  document.getElementById('rankingList').innerHTML = html;
 }
 
 function renderTicketBars(){
-  const filtered = getFilteredData();
-  const withTickets = filtered.map(d => ({
-    name: d.n,
-    ticket: d.uc ? (d.vc / d.uc) : 0
-  })).sort((a,b) => b.ticket - a.ticket);
+  var filtered = getFilteredData();
+  var withTickets = filtered.map(function(d){
+    return { name: d.n, ticket: d.uc ? (d.vc / d.uc) : 0 };
+  }).sort(function(a,b){ return b.ticket - a.ticket; });
 
-  const maxVal = 2.50;
-  const el = document.getElementById('ticketBarList');
-  if(!el) return;
-
-  el.innerHTML = withTickets.map(d => {
-    const barWidth = Math.min((d.ticket / maxVal) * 100, 100);
-    return `
-    <div class="ticket-row">
-      <span class="ticket-name">${d.name}</span>
-      <div class="ticket-bar-bg">
-        <div class="ticket-bar-fill" style="width:${barWidth.toFixed(1)}%;"></div>
-      </div>
-      <span class="ticket-val">$${d.ticket.toFixed(2).replace('.', ',')}</span>
-    </div>`;
-  }).join('');
+  var maxVal = 2.50;
+  var html = '';
+  for(var i=0; i<withTickets.length; i++){
+    var d = withTickets[i];
+    var barWidth = Math.min((d.ticket / maxVal) * 100, 100);
+    html += '<div class="ticket-row">' +
+      '<span class="ticket-name">' + d.name + '</span>' +
+      '<div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:' + barWidth.toFixed(1) + '%;"></div></div>' +
+      '<span class="ticket-val">$' + d.ticket.toFixed(2).replace('.', ',') + '</span>' +
+    '</div>';
+  }
+  document.getElementById('ticketBarList').innerHTML = html;
 }
 
 function renderTable(){
-  const filtered = getFilteredData();
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
-  const pKey = mode === 'valor' ? 'vp' : 'up';
-  const cKey = mode === 'valor' ? 'vc' : 'uc';
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
-  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
+  var filtered = getFilteredData();
+  var unit = mode === 'valor' ? '$' : '';
+  var sfx = mode === 'unidades' ? ' u' : '';
+  var pKey = mode === 'valor' ? 'vp' : 'up';
+  var cKey = mode === 'valor' ? 'vc' : 'uc';
+  var pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  var proyKey = mode === 'valor' ? 'vproy' : 'uproy';
+  var diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
 
-  const rows = filtered.map(d => {
-    const pct = d[pctKey];
-    const diff = d[diffKey];
-    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td style="text-align:center;">${badge}</td>
-      <td>${unit}${fmt(d[pKey])}${sfx}</td>
-      <td>${unit}${fmt(d[cKey])}${sfx}</td>
-      <td>${pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
-      <td style="color:${diff >= 0 ? '
+  var rows = '';
+  for(var i=0; i<filtered.length; i++){
+    var d = filtered[i];
+    var pct = d[pctKey];
+    var diff = d[diffKey];
+    var badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    rows += '<tr>' +
+      '<td>' + d.n + '</td>' +
+      '<td style="text-align:center;">' + badge + '</td>' +
+      '<td>' + unit + fmt(d[pKey]) + sfx + '</td>' +
+      '<td>' + unit + fmt(d[cKey]) + sfx + '</td>' +
+      '<td>' + pct.toFixed(2).replace('.', ',') + '%</td>' +
+      '<td>' + unit + fmt(d[proyKey]) + sfx + '</td>' +
+      '<td style="color:' + (diff >= 0 ? 'var(--good)' : 'var(--warn)') + ';">' + unit + fmtSigned(diff) + sfx + '</td>' +
+    '</tr>';
+  }
+
+  var t = getTotals(filtered);
+  var totalRow = '<tr class="total-row">' +
+    '<td>TOTAL CONSOLIDADO</td>' +
+    '<td style="text-align:center;"><span class
