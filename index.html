@@ -35,7 +35,7 @@
     min-height: 100vh;
   }
 
-  /* MARCA DE AGUA CORPORATIVA CON FALLBACK */
+  /* MARCA DE AGUA CORPORATIVA */
   body::before {
     content: "";
     position: fixed;
@@ -116,14 +116,14 @@
   .panel-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--gold); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center;}
   .sim-slider{ width:100%; accent-color:var(--gold); margin-top:8px;}
 
-  /* ESTRUCTURA CORREGIDA DE ENCABEZADOS (TÍTULO Y SUBTÍTULO EN BLOQUE) */
+  /* ENCABEZADOS DE SECCIÓN CORREGIDOS */
   .section-head{
     display:flex; justify-content:space-between; align-items:flex-end; gap:20px;
     margin-bottom:20px; flex-wrap:wrap;
   }
-  .section-title{ display:flex; flex-direction:column; gap:4px; margin:0; }
-  .section-title h2{ font-family:'Fraunces', serif; font-size:22px; font-weight:600; margin:0; color:var(--cream); }
-  .section-title span{ color:var(--muted); font-size:13px; font-family:'Inter'; font-weight:400; }
+  .section-title{ display:block; margin:0; }
+  .section-title h2{ font-family:'Fraunces', serif; font-size:22px; font-weight:600; margin:0 0 4px 0; color:var(--cream); }
+  .section-title span{ color:var(--muted); font-size:13px; font-family:'Inter'; font-weight:400; display:block; }
 
   /* TOGGLE BUTTONS */
   .toggle{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
@@ -188,7 +188,7 @@
   .modal-title{ font-family:'Fraunces', serif; font-size:22px; color:var(--cream); margin:0;}
   .modal-sub{ font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--gold); margin-top:4px;}
   .modal-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;}
-  .m-kpi{ background:var(--card); padding:12px; border-radius:10px; border:1px solid var(--line);}
+  .m-kpi{ background:var(--card); padding:12px; border-radius:100px; border:1px solid var(--line); border-radius:10px;}
   .m-lbl{ font-family:'JetBrains Mono', monospace; font-size:9px; color:var(--muted); text-transform:uppercase;}
   .m-val{ font-family:'Fraunces', serif; font-size:18px; color:var(--cream); margin-top:4px;}
 
@@ -260,9 +260,9 @@
     <div class="panel-box">
       <div class="panel-title">Filtro de Zona Comercial</div>
       <div class="toggle" id="toggleZone">
-        <button data-zone="todas" class="active">Todas</button>
-        <button data-zone="este">Zona Este</button>
-        <button data-zone="oeste">Zona Oeste</button>
+        <button data-zone="todas" class="active" onclick="setZone('todas', this)">Todas</button>
+        <button data-zone="este" onclick="setZone('este', this)">Zona Este</button>
+        <button data-zone="oeste" onclick="setZone('oeste', this)">Zona Oeste</button>
       </div>
     </div>
     <div class="panel-box">
@@ -270,7 +270,7 @@
         <span>Simulador Ritmo de Cierre Restante</span>
         <b id="simVal" style="color:var(--gold)">100% (Normal)</b>
       </div>
-      <input type="range" id="simRange" class="sim-slider" min="80" max="120" value="100" step="5">
+      <input type="range" id="simRange" class="sim-slider" min="80" max="120" value="100" step="5" oninput="updateSim(this.value)">
     </div>
   </div>
 
@@ -281,8 +281,8 @@
       <span>Totales consolidados a la fecha de corte</span>
     </div>
     <div class="toggle" id="toggleTop">
-      <button data-mode="valor" class="active">Valor $</button>
-      <button data-mode="unidades">Unidades</button>
+      <button data-mode="valor" class="active" onclick="setMode('valor', this)">Valor $</button>
+      <button data-mode="unidades" onclick="setMode('unidades', this)">Unidades</button>
     </div>
   </div>
   <div class="kpis" id="kpiGrid"></div>
@@ -308,7 +308,7 @@
         <h2>Detalle completo</h2>
         <span>Desglose por tienda</span>
       </div>
-      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar sucursal...">
+      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar sucursal..." oninput="updateSearch(this.value)">
     </div>
     <div class="tbl-scroll">
       <table>
@@ -363,6 +363,4 @@ const data = [
   {n:"Dos Caminos", zone:"oeste", vp:341109, vc:224190, vpct:65.72, vpart:6.07, vproy:302170, vdiff:-38939, up:165215, uc:113602, upct:68.76, upart:6.50, uproy:153116, udiff:-12099},
   {n:"Florida", zone:"oeste", vp:731985, vc:535528, vpct:73.16, vpart:14.50, vproy:721799, vdiff:-10186, up:336633, uc:251517, upct:74.72, upart:14.39, uproy:339001, udiff:2368},
   {n:"Luz Quick Rest & Market", zone:"oeste", vp:195119, vc:128208, vpct:65.71, vpart:3.47, vproy:172802, vdiff:-22317, up:98828, uc:65314, upct:66.09, upart:3.74, uproy:88033, udiff:-10796},
-  {n:"Llanito", zone:"este", vp:545671, vc:355502, vpct:65.15, vpart:9.63, vproy:479155, vdiff:-66516, up:257886, uc:170643, upct:66.17, upart:9.76, uproy:229997, udiff:-27889},
-  {n:"Marques", zone:"este", vp:166498, vc:113436, vpct:68.13, vpart:3.07, vproy:152892, vdiff:-13606, up:83053, uc:57825, upct:69.62, upart:3.31, uproy:77938, udiff:-5115},
-  {n:"Pedregal", 
+  {n:"Llanito", zone:"este", vp:545671, vc:355502, vpct:65.15, vpart:9.63, vproy:479155, vdiff:-66516, up:257886, uc:170643, upct:66.17, upart:9.76, uproy:229997, udiff
