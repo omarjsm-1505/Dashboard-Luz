@@ -170,7 +170,6 @@
       <div class="toggle-group" id="groupMode">
         <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
         <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
-        <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Costo Promedio</button>
       </div>
     </div>
   </div>
@@ -196,7 +195,17 @@
 
     <div class="tbl-wrap">
       <table>
-        <thead id="tableHead"></thead>
+        <thead>
+          <tr>
+            <th>Sucursal</th>
+            <th style="text-align:center;">Estatus</th>
+            <th>Presupuesto</th>
+            <th>Cumplido</th>
+            <th>%</th>
+            <th>Proyección</th>
+            <th>Diferencia</th>
+          </tr>
+        </thead>
         <tbody id="tableBody"></tbody>
       </table>
     </div>
@@ -224,10 +233,8 @@ const data = [
 let mode = 'valor';
 let zone = 'todas';
 
-function fmt(n, decimals = 0){ 
-  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
-}
-function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + fmt(n); }
+function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
+function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
 
 function getFilteredData(){
   return zone === 'todas' ? data : data.filter(d => d.zone === zone);
@@ -235,55 +242,19 @@ function getFilteredData(){
 
 function getTotals(list){
   let p = 0, c = 0, proy = 0, diff = 0;
-  let up = 0, uc = 0;
+  const isVal = (mode === 'valor');
   list.forEach(d => {
-    p += d.vp;
-    c += d.vc;
-    proy += d.vproy;
-    diff += d.vdiff;
-    up += d.up;
-    uc += d.uc;
+    p += isVal ? d.vp : d.up;
+    c += isVal ? d.vc : d.uc;
+    proy += isVal ? d.vproy : d.uproy;
+    diff += isVal ? d.vdiff : d.udiff;
   });
   const pct = p ? (c / p * 100) : 0;
-  const costoPromedio = uc > 0 ? (c / uc) : 0;
-  const costoPromedioPpto = up > 0 ? (p / up) : 0;
-  return { p, c, pct, proy, diff, up, uc, costoPromedio, costoPromedioPpto };
+  return { p, c, pct, proy, diff };
 }
 
 function renderKPIs(){
   const t = getTotals(getFilteredData());
-  
-  if(mode === 'costoPromedio'){
-    document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card">
-        <div class="kpi-title">Costo Promedio Ppto</div>
-        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
-        <div class="kpi-sub">Presupuesto Dólar / Unidades</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Costo Promedio Real</div>
-        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-        <div class="kpi-sub">Cumplido Dólar / Unidades</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Total Cumplido Dólar</div>
-        <div class="kpi-value">$${fmt(t.c)}</div>
-        <div class="kpi-sub">Acumulado a la fecha</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Total Cumplido Unidades</div>
-        <div class="kpi-value">${fmt(t.uc)} u</div>
-        <div class="kpi-sub">Acumulado a la fecha</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Valla Día 23</div>
-        <div class="kpi-value">74,19%</div>
-        <div class="kpi-sub">Meta teórica hoy</div>
-      </div>
-    `;
-    return;
-  }
-
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   
@@ -318,31 +289,6 @@ function renderKPIs(){
 
 function renderRanking(){
   const filtered = getFilteredData();
-  
-  if(mode === 'costoPromedio'){
-    const sorted = [...filtered].sort((a,b) => {
-      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
-      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
-      return cpB - cpA;
-    });
-    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
-    
-    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
-      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
-      const barWidth = Math.min((cp / maxCp) * 100, 100);
-      return `
-      <div class="rank-row">
-        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-        <span class="rank-name">${d.n}</span>
-        <div class="bar-bg">
-          <div class="bar-fill" style="width:${barWidth}%;"></div>
-        </div>
-        <span class="rank-pct">$${fmt(cp, 2)}</span>
-      </div>`;
-    }).join('');
-    return;
-  }
-
   const pctKey = mode === 'valor' ? 'vpct' : 'upct';
   const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
   
@@ -362,64 +308,6 @@ function renderRanking(){
 
 function renderTable(){
   const filtered = getFilteredData();
-  
-  if(mode === 'costoPromedio'){
-    document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-align:center;">Estatus</th>
-        <th>Cumplido Dólar</th>
-        <th>Cumplido Unidades</th>
-        <th>Costo Promedio (Real)</th>
-        <th>Costo Promedio (Ppto)</th>
-        <th>Variación Costo</th>
-      </tr>
-    `;
-
-    const rows = filtered.map(d => {
-      const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
-      const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
-      const varCosto = cpReal - cpPpto;
-      return `
-      <tr>
-        <td>${d.n}</td>
-        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
-        <td>$${fmt(d.vc)}</td>
-        <td>${fmt(d.uc)} u</td>
-        <td>$${fmt(cpReal, 2)}</td>
-        <td>$${fmt(cpPpto, 2)}</td>
-        <td style="color:${varCosto <= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto)}</td>
-      </tr>`;
-    }).join('');
-
-    const t = getTotals(filtered);
-    const totalRow = `
-      <tr class="total-row">
-        <td>TOTAL CONSOLIDADO</td>
-        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
-        <td>$${fmt(t.c)}</td>
-        <td>${fmt(t.uc)} u</td>
-        <td>$${fmt(t.costoPromedio, 2)}</td>
-        <td>$${fmt(t.costoPromedioPpto, 2)}</td>
-        <td>$${fmtSigned(t.costoPromedio - t.costoPromedioPpto)}</td>
-      </tr>`;
-
-    document.getElementById('tableBody').innerHTML = rows + totalRow;
-    return;
-  }
-
-  document.getElementById('tableHead').innerHTML = `
-    <tr>
-      <th>Sucursal</th>
-      <th style="text-align:center;">Estatus</th>
-      <th>Presupuesto</th>
-      <th>Cumplido</th>
-      <th>%</th>
-      <th>Proyección</th>
-      <th>Diferencia</th>
-    </tr>
-  `;
-
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   const pKey = mode === 'valor' ? 'vp' : 'up';
