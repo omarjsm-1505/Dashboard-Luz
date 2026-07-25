@@ -252,34 +252,58 @@
 </div>
 
 <script>
-// CLAVE DE ACCESO
-const SECRET_KEY = "Luz2026";
-
+// FUNCIONES DE AUTENTICACIÓN A PRUEBA DE FALLOS EN MÓVILES
 function checkAuth() {
-  // .trim() evita que falle si el teclado del celular agrega un espacio al final
-  // .toLowerCase() evita errores si el celular pone la "L" minúscula por error
-  const pass = document.getElementById('passInput').value.trim().toLowerCase();
+  const inputEl = document.getElementById('passInput');
+  const errorEl = document.getElementById('authError');
   
-  if (pass === SECRET_KEY.toLowerCase()) {
-    sessionStorage.setItem('luz_authenticated', 'true');
-    document.getElementById('authError').style.display = 'none';
+  // Limpiamos la clave y la pasamos a minúscula para evitar problemas de tipeo
+  const pass = (inputEl.value || "").trim().toLowerCase();
+  
+  if (pass === "luz2026") {
+    // Si la clave es correcta, ocultamos el error
+    errorEl.style.display = 'none';
+    
+    // Guardamos la sesión dentro de un Try-Catch para que WhatsApp no rompa el código
+    try {
+      sessionStorage.setItem('luz_authenticated', 'true');
+    } catch(e) {
+      console.warn("Navegador bloqueó sessionStorage, pero se permite el acceso");
+    }
+    
+    // Desbloqueamos
     unlockDashboard();
   } else {
-    document.getElementById('authError').style.display = 'block';
+    // Clave errada
+    errorEl.style.display = 'block';
   }
 }
 
 function handleKeyPress(e) {
-  if (e.key === 'Enter') checkAuth();
+  if (e.key === 'Enter') {
+    checkAuth();
+  }
 }
 
 function unlockDashboard() {
   document.getElementById('authOverlay').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
-  renderAll();
+  renderAll(); // Dispara la carga visual
 }
 
+// INICIALIZACIÓN DE LA PÁGINA (Comprueba si ya tenía sesión)
+try {
+  if (sessionStorage.getItem('luz_authenticated') === 'true') {
+    unlockDashboard();
+  }
+} catch (e) {
+  // Ignorar errores de navegadores restrictivos
+}
+
+
+// ------------------------------------------
 // LÓGICA DEL DASHBOARD (CORTE AL 24/07/2026)
+// ------------------------------------------
 const EXPECTED_PCT = 77.42;
 
 const data = [
@@ -439,23 +463,4 @@ function renderTable(){
   
   if(mode === 'costoPromedio'){
     document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-align:center;">Estatus</th>
-        <th>Cumplido Dólar</th>
-        <th>Cumplido Unidades</th>
-        <th>Precio Vta. Prom. (Real)</th>
-        <th>Precio Vta. Prom. (Ppto)</th>
-        <th>Variación Precio</th>
-      </tr>
-    `;
-
-    const rows = filtered.map(d => {
-      const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
-      const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
-      const varCosto = cpReal - cpPpto;
-      return `
-      <tr>
-        <td>${d.n}</td>
-        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
-        
+  
