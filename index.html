@@ -50,7 +50,7 @@
     pointer-events: none;
   }
 
-  /* ACCESO RESTRINGIDO */
+  /* PANTALLA DE BLOQUEO */
   #authOverlay {
     position: fixed; inset: 0; z-index: 99999;
     background: var(--bg);
@@ -79,7 +79,7 @@
   .auth-btn:hover { background: var(--wine-light); }
   .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
 
-  /* CONTENIDO DASHBOARD */
+  /* CONTENIDO PRINCIPAL */
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
 
   .corte-bar{
@@ -177,21 +177,21 @@
 </head>
 <body>
 
-<!-- PANTALLA DE AUTENTICACIÓN -->
+<!-- OVERLAY DE AUTENTICACIÓN -->
 <div id="authOverlay">
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
     <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <form onsubmit="event.preventDefault(); validateAccess();">
-      <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso">
-      <button type="submit" class="auth-btn" onclick="validateAccess()">Ingresar al Dashboard</button>
-    </form>
+    <div style="width:100%;">
+      <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeyup="checkEnterKey(event)">
+      <button type="button" class="auth-btn" onclick="validateAccess()">Ingresar al Dashboard</button>
+    </div>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
 
-<!-- CONTENIDO DEL DASHBOARD -->
+<!-- CONTENIDO DASHBOARD -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
     <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
@@ -234,14 +234,14 @@
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
-    <!-- RANKING DE CUMPLIMIENTO -->
+    <!-- RANKING -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
       <span class="sec-sub">Cumplimiento de mayor a menor</span>
       <div id="rankingList"></div>
     </div>
 
-    <!-- CINTA DE BARRAS DE TICKET PROMEDIO -->
+    <!-- TICKET PROMEDIO -->
     <div class="section-box">
       <h2 class="sec-title">Ticket Promedio por Sucursal</h2>
       <span class="sec-sub">Relación Cumplido Valor $ / Cumplido Unidades (Promedio Red: $2,11)</span>
@@ -276,10 +276,21 @@
 </div>
 
 <script>
+function checkEnterKey(e) {
+  if (e.key === 'Enter' || e.keyCode === 13) {
+    validateAccess();
+  }
+}
+
 function validateAccess() {
   var input = document.getElementById('passInput');
   var pass = input ? input.value.trim().toUpperCase() : '';
-  if (pass === "L2026") {
+  
+  if (pass === "L2026" || pass === "2026") {
+    try {
+      localStorage.setItem('luz_unlocked', 'true');
+    } catch(e) {}
+    
     document.getElementById('authOverlay').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
     renderAll();
@@ -287,6 +298,15 @@ function validateAccess() {
     document.getElementById('authError').style.display = 'block';
   }
 }
+
+// COMPROBACIÓN AUTOMÁTICA SI YA SE HABÍA DESBLOQUEADO ANTES
+try {
+  if (localStorage.getItem('luz_unlocked') === 'true') {
+    document.getElementById('authOverlay').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    setTimeout(renderAll, 100);
+  }
+} catch(e) {}
 
 var EXPECTED_PCT = 74.19;
 
@@ -400,15 +420,4 @@ function renderTable(){
       '<td>' + unit + fmt(d[pKey]) + sfx + '</td>' +
       '<td>' + unit + fmt(d[cKey]) + sfx + '</td>' +
       '<td>' + pct.toFixed(2).replace('.', ',') + '%</td>' +
-      '<td>' + unit + fmt(d[proyKey]) + sfx + '</td>' +
-      '<td style="color:' + (diff >= 0 ? 'var(--good)' : 'var(--warn)') + ';">' + unit + fmtSigned(diff) + sfx + '</td>' +
-    '</tr>';
-  }
-
-  var t = getTotals(filtered);
-  var totalRow = '<tr class="total-row">' +
-    '<td>TOTAL CONSOLIDADO</td>' +
-    '<td style="text-align:center;"><span class="badge obs">Obs.</span></td>' +
-    '<td>' + unit + fmt(t.p) + sfx + '</td>' +
-    '<td>' + unit + fmt(t.c) + sfx + '</td>' +
-    '<t
+      '<td
