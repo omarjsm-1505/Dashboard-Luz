@@ -50,7 +50,7 @@
     pointer-events: none;
   }
 
-  /* PANTALLA DE ACCESO RESTRINGIDO */
+  /* PANTALLA DE ACCESO RESTRENGIDO */
   .auth-overlay {
     position: fixed; inset: 0; z-index: 9999;
     background: var(--bg);
@@ -127,9 +127,9 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
   .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
@@ -146,7 +146,7 @@
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 70px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
   .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
   .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
   .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
@@ -211,11 +211,10 @@
         </div>
       </div>
       <div class="ctrl-box">
-        <span class="ctrl-title">Métrica / Cinta</span>
+        <span class="ctrl-title">Métrica</span>
         <div class="toggle-group" id="groupMode">
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
-          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Precio Vta. Prom. Por Artículo</button>
         </div>
       </div>
     </div>
@@ -230,7 +229,7 @@
     <!-- RANKING -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Indicador consolidado</span>
+      <span class="sec-sub">Cumplimiento de mayor a menor</span>
       <div id="rankingList"></div>
     </div>
 
@@ -241,7 +240,17 @@
 
       <div class="tbl-wrap">
         <table>
-          <thead id="tableHead"></thead>
+          <thead>
+            <tr>
+              <th>Sucursal</th>
+              <th style="text-align:center;">Estatus</th>
+              <th>Presupuesto</th>
+              <th>Cumplido</th>
+              <th>%</th>
+              <th>Proyección</th>
+              <th>Diferencia</th>
+            </tr>
+          </thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
@@ -252,33 +261,21 @@
 </div>
 
 <script>
-// FUNCIONES DE AUTENTICACIÓN
+// CLAVE DE ACCESO
+const SECRET_KEY = "Luz2026";
+
 function checkAuth() {
-  var passInput = document.getElementById('passInput');
-  var errorEl = document.getElementById('authError');
-  
-  if (!passInput || !errorEl) return;
-  
-  // Convertimos a minúsculas y limpiamos espacios para hacerla más tolerante
-  var pass = passInput.value.trim().toLowerCase();
-  
-  if (pass === "luz2026") {
-    errorEl.style.display = 'none';
-    
-    try {
-      sessionStorage.setItem('luz_auth_jul24', 'true');
-    } catch(e) {}
-    
+  const pass = document.getElementById('passInput').value;
+  if (pass === SECRET_KEY) {
+    sessionStorage.setItem('luz_authenticated', 'true');
     unlockDashboard();
   } else {
-    errorEl.style.display = 'block';
+    document.getElementById('authError').style.display = 'block';
   }
 }
 
 function handleKeyPress(e) {
-  if (e.key === 'Enter') {
-    checkAuth();
-  }
+  if (e.key === 'Enter') checkAuth();
 }
 
 function unlockDashboard() {
@@ -287,14 +284,7 @@ function unlockDashboard() {
   renderAll();
 }
 
-// INICIALIZACIÓN
-try {
-  if (sessionStorage.getItem('luz_auth_jul24') === 'true') {
-    unlockDashboard();
-  }
-} catch (e) {}
-
-// LÓGICA DEL DASHBOARD (CORTE AL 24/07/2026)
+// LÓGICA DEL DASHBOARD
 const EXPECTED_PCT = 77.42;
 
 const data = [
@@ -313,10 +303,8 @@ const data = [
 let mode = 'valor';
 let zone = 'todas';
 
-function fmt(n, decimals = 0){ 
-  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
-}
-function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + fmt(n); }
+function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
+function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
 
 function getFilteredData(){
   return zone === 'todas' ? data : data.filter(d => d.zone === zone);
@@ -324,60 +312,19 @@ function getFilteredData(){
 
 function getTotals(list){
   let p = 0, c = 0, proy = 0, diff = 0;
-  let total_vp = 0, total_vc = 0, total_up = 0, total_uc = 0;
-  
+  const isVal = (mode === 'valor');
   list.forEach(d => {
-    // Mantener la suma dinámica para Valor vs Unidades
-    if(mode === 'valor' || mode === 'costoPromedio') {
-      p += d.vp; c += d.vc; proy += d.vproy; diff += d.vdiff;
-    } else {
-      p += d.up; c += d.uc; proy += d.uproy; diff += d.udiff;
-    }
-    // Guardar totales absolutos para la cinta de Costo Promedio
-    total_vp += d.vp; total_vc += d.vc; total_up += d.up; total_uc += d.uc;
+    p += isVal ? d.vp : d.up;
+    c += isVal ? d.vc : d.uc;
+    proy += isVal ? d.vproy : d.uproy;
+    diff += isVal ? d.vdiff : d.udiff;
   });
-  
   const pct = p ? (c / p * 100) : 0;
-  const costoPromedio = total_uc > 0 ? (total_vc / total_uc) : 0;
-  const costoPromedioPpto = total_up > 0 ? (total_vp / total_up) : 0;
-  
-  return { p, c, pct, proy, diff, vp: total_vp, vc: total_vc, up: total_up, uc: total_uc, costoPromedio, costoPromedioPpto };
+  return { p, c, pct, proy, diff };
 }
 
 function renderKPIs(){
   const t = getTotals(getFilteredData());
-  
-  if(mode === 'costoPromedio'){
-    document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card">
-        <div class="kpi-title">Precio Vta. Prom. Ppto</div>
-        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
-        <div class="kpi-sub">Presupuesto Dólar / Unidades</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Precio Vta. Prom. Real</div>
-        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-        <div class="kpi-sub">Cumplido Dólar / Unidades</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Total Cumplido Dólar</div>
-        <div class="kpi-value">$${fmt(t.vc)}</div>
-        <div class="kpi-sub">Acumulado a la fecha</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Total Cumplido Unidades</div>
-        <div class="kpi-value">${fmt(t.uc)} u</div>
-        <div class="kpi-sub">Acumulado a la fecha</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Valla Día 24</div>
-        <div class="kpi-value">77,42%</div>
-        <div class="kpi-sub">Meta teórica hoy</div>
-      </div>
-    `;
-    return;
-  }
-
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   
@@ -412,31 +359,6 @@ function renderKPIs(){
 
 function renderRanking(){
   const filtered = getFilteredData();
-  
-  if(mode === 'costoPromedio'){
-    const sorted = [...filtered].sort((a,b) => {
-      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
-      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
-      return cpB - cpA;
-    });
-    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
-    
-    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
-      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
-      const barWidth = Math.min((cp / maxCp) * 100, 100);
-      return `
-      <div class="rank-row">
-        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-        <span class="rank-name">${d.n}</span>
-        <div class="bar-bg">
-          <div class="bar-fill" style="width:${barWidth}%;"></div>
-        </div>
-        <span class="rank-pct">$${fmt(cp, 2)}</span>
-      </div>`;
-    }).join('');
-    return;
-  }
-
   const pctKey = mode === 'valor' ? 'vpct' : 'upct';
   const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
   
@@ -456,9 +378,70 @@ function renderRanking(){
 
 function renderTable(){
   const filtered = getFilteredData();
-  
-  if(mode === 'costoPromedio'){
-    document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-al
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  const pKey = mode === 'valor' ? 'vp' : 'up';
+  const cKey = mode === 'valor' ? 'vc' : 'uc';
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
+  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
+
+  const rows = filtered.map(d => {
+    const pct = d[pctKey];
+    const diff = d[diffKey];
+    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    return `
+    <tr>
+      <td>${d.n}</td>
+      <td style="text-align:center;">${badge}</td>
+      <td>${unit}${fmt(d[pKey])}${sfx}</td>
+      <td>${unit}${fmt(d[cKey])}${sfx}</td>
+      <td>${pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
+      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
+    </tr>`;
+  }).join('');
+
+  const t = getTotals(filtered);
+  const totalRow = `
+    <tr class="total-row">
+      <td>TOTAL CONSOLIDADO</td>
+      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
+      <td>${unit}${fmt(t.p)}${sfx}</td>
+      <td>${unit}${fmt(t.c)}${sfx}</td>
+      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(t.proy)}${sfx}</td>
+      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
+    </tr>`;
+
+  document.getElementById('tableBody').innerHTML = rows + totalRow;
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRanking();
+  renderTable();
+}
+
+function setZone(z, btn){
+  zone = z;
+  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+// VERIFICAR AUTENTICACIÓN INICIAL
+if (sessionStorage.getItem('luz_authenticated') === 'true') {
+  unlockDashboard();
+}
+</script>
+
+</body>
+</html>
