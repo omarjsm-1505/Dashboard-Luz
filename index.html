@@ -1,3 +1,5 @@
+<script>
+// CLAVE DE ACCESO
 const SECRET_KEY = "Luz2026";
 
 function checkAuth() {
@@ -9,3 +11,293 @@ function checkAuth() {
     document.getElementById('authError').style.display = 'block';
   }
 }
+
+function handleKeyPress(e) {
+  if (e.key === 'Enter') checkAuth();
+}
+
+function unlockDashboard() {
+  document.getElementById('authOverlay').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  renderAll();
+}
+
+// LÓGICA DEL DASHBOARD (CORTE AL 24/07/2026)
+const EXPECTED_PCT = 77.42;
+
+const data = [
+  {n:"Carlota", zone:"este", vp:1166881, vc:884728, vpct:75.82, vproy:1142774, vdiff:-24107, up:505094, uc:384250, upct:76.07, uproy:496323, udiff:-90968},
+  {n:"Chacao", zone:"oeste", vp:561736, vc:412819, vpct:73.49, vproy:533225, vdiff:-28511, up:281930, uc:210144, upct:74.54, uproy:271436, udiff:-10494},
+  {n:"Dos Caminos", zone:"oeste", vp:341109, vc:234345, vpct:68.70, vproy:302695, vdiff:-38414, up:165215, uc:119105, upct:72.09, uproy:153844, udiff:-11371},
+  {n:"Florida", zone:"oeste", vp:731985, vc:561925, vpct:76.77, vproy:725819, vdiff:-6166, up:336633, uc:263708, upct:78.34, uproy:340623, udiff:705},
+  {n:"Luz Quick Rest", zone:"oeste", vp:195119, vc:133322, vpct:68.33, vproy:172208, vdiff:-22911, up:98828, uc:68155, upct:68.96, uproy:88033, udiff:-10795},
+  {n:"Llanito", zone:"este", vp:545671, vc:372203, vpct:68.21, vproy:480762, vdiff:-64909, up:257886, uc:178653, upct:69.28, uproy:230760, udiff:-27126},
+  {n:"Marques", zone:"este", vp:166498, vc:119274, vpct:71.64, vproy:154062, vdiff:12436, up:83053, uc:60878, upct:73.30, uproy:78635, udiff:-4418},
+  {n:"Pedregal", zone:"oeste", vp:360241, vc:258081, vpct:71.64, vproy:333354, vdiff:-26887, up:179795, uc:132401, upct:73.64, uproy:171018, udiff:-8778},
+  {n:"San Antonio", zone:"este", vp:491697, vc:387171, vpct:78.74, vproy:500095, vdiff:8398, up:224427, uc:181907, upct:81.05, uproy:234963, udiff:10536},
+  {n:"Urbina", zone:"este", vp:691063, vc:502087, vpct:72.65, vproy:648529, vdiff:-42534, up:310139, uc:232393, upct:74.93, uproy:300174, udiff:-9965}
+];
+
+let mode = 'valor';
+let zone = 'todas';
+
+function fmt(n, decimals = 0){ 
+  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
+}
+function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + fmt(n); }
+
+function getFilteredData(){
+  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
+}
+
+function getTotals(list){
+  let p = 0, c = 0, proy = 0, diff = 0;
+  let up = 0, uc = 0;
+  list.forEach(d => {
+    p += d.vp;
+    c += d.vc;
+    proy += d.vproy;
+    diff += d.vdiff;
+    up += d.up;
+    uc += d.uc;
+  });
+  const pct = p ? (c / p * 100) : 0;
+  const costoPromedio = uc > 0 ? (c / uc) : 0;
+  const costoPromedioPpto = up > 0 ? (p / up) : 0;
+  return { p, c, pct, proy, diff, up, uc, costoPromedio, costoPromedioPpto };
+}
+
+function renderKPIs(){
+  const t = getTotals(getFilteredData());
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Ppto</div>
+        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
+        <div class="kpi-sub">Presupuesto Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Real</div>
+        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+        <div class="kpi-sub">Cumplido Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Dólar</div>
+        <div class="kpi-value">$${fmt(t.c)}</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Unidades</div>
+        <div class="kpi-value">${fmt(t.uc)} u</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Valla Día 24</div>
+        <div class="kpi-value">77,42%</div>
+        <div class="kpi-sub">Meta teórica hoy</div>
+      </div>
+    `;
+    return;
+  }
+
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-title">Presupuesto</div>
+      <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
+      <div class="kpi-sub">Meta del mes</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Cumplido</div>
+      <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
+      <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Proyección Cierre</div>
+      <div class="kpi-value">${unit}${fmt(t.proy)}${sfx}</div>
+      <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
+    </div>
+    <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
+      <div class="kpi-title">Diferencia</div>
+      <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
+      <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Valla Día 24</div>
+      <div class="kpi-value">77,42%</div>
+      <div class="kpi-sub">Meta teórica hoy</div>
+    </div>
+  `;
+}
+
+function renderRanking(){
+  const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    const sorted = [...filtered].sort((a,b) => {
+      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
+      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
+      return cpB - cpA;
+    });
+    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
+    
+    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const barWidth = Math.min((cp / maxCp) * 100, 100);
+      return `
+      <div class="rank-row">
+        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="rank-name">${d.n}</span>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${barWidth}%;"></div>
+        </div>
+        <span class="rank-pct">$${fmt(cp, 2)}</span>
+      </div>`;
+    }).join('');
+    return;
+  }
+
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
+  
+  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+    const pct = d[pctKey];
+    return `
+    <div class="rank-row">
+      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="rank-name">${d.n}</span>
+      <div class="bar-bg">
+        <div class="bar-fill ${pct >= EXPECTED_PCT ? 'top' : ''}" style="width:${Math.min(pct, 100)}%;"></div>
+      </div>
+      <span class="rank-pct">${pct.toFixed(2).replace('.', ',')}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTable(){
+  const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:center;">Estatus</th>
+        <th>Cumplido Dólar</th>
+        <th>Cumplido Unidades</th>
+        <th>Precio Vta. Prom. (Real)</th>
+        <th>Precio Vta. Prom. (Ppto)</th>
+        <th>Variación Precio</th>
+      </tr>
+    `;
+
+    const rows = filtered.map(d => {
+      const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
+      const varCosto = cpReal - cpPpto;
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
+        <td>$${fmt(d.vc)}</td>
+        <td>${fmt(d.uc)} u</td>
+        <td>$${fmt(cpReal, 2)}</td>
+        <td>$${fmt(cpPpto, 2)}</td>
+        <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto)}</td>
+      </tr>`;
+    }).join('');
+
+    const t = getTotals(filtered);
+    const totalRow = `
+      <tr class="total-row">
+        <td>TOTAL CONSOLIDADO</td>
+        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
+        <td>$${fmt(t.c)}</td>
+        <td>$${fmt(t.uc)} u</td>
+        <td>$${fmt(t.costoPromedio, 2)}</td>
+        <td>$${fmt(t.costoPromedioPpto, 2)}</td>
+        <td>$${fmtSigned(t.costoPromedio - t.costoPromedioPpto)}</td>
+      </tr>`;
+
+    document.getElementById('tableBody').innerHTML = rows + totalRow;
+    return;
+  }
+
+  document.getElementById('tableHead').innerHTML = `
+    <tr>
+      <th>Sucursal</th>
+      <th style="text-align:center;">Estatus</th>
+      <th>Presupuesto</th>
+      <th>Cumplido</th>
+      <th>%</th>
+      <th>Proyección</th>
+      <th>Diferencia</th>
+    </tr>
+  `;
+
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  const pKey = mode === 'valor' ? 'vp' : 'up';
+  const cKey = mode === 'valor' ? 'vc' : 'uc';
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
+  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
+
+  const rows = filtered.map(d => {
+    const pct = d[pctKey];
+    const diff = d[diffKey];
+    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    return `
+    <tr>
+      <td>${d.n}</td>
+      <td style="text-align:center;">${badge}</td>
+      <td>${unit}${fmt(d[pKey])}${sfx}</td>
+      <td>${unit}${fmt(d[cKey])}${sfx}</td>
+      <td>${pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
+      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
+    </tr>`;
+  }).join('');
+
+  const t = getTotals(filtered);
+  const totalRow = `
+    <tr class="total-row">
+      <td>TOTAL CONSOLIDADO</td>
+      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
+      <td>${unit}${fmt(t.p)}${sfx}</td>
+      <td>${unit}${fmt(t.c)}${sfx}</td>
+      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(t.proy)}${sfx}</td>
+      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
+    </tr>`;
+
+  document.getElementById('tableBody').innerHTML = rows + totalRow;
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRanking();
+  renderTable();
+}
+
+function setZone(z, btn){
+  zone = z;
+  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+// VERIFICAR AUTENTICACIÓN INICIAL
+if (sessionStorage.getItem('luz_authenticated') === 'true') {
+  unlockDashboard();
+}
+</script>
