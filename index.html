@@ -74,7 +74,7 @@
   .auth-btn {
     width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
     border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
-    cursor: pointer; transition: background 0.2s;
+    cursor: pointer; transition: background 0.2s; touch-action: manipulation;
   }
   .auth-btn:hover { background: var(--wine-light); }
   .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
@@ -178,14 +178,16 @@
 </head>
 <body>
 
-<!-- OVERLAY DE BLOQUEO POR CLAVE -->
+<!-- OVERLAY DE BLOQUEO POR CLAVE CON FORMULARIO NATIVO -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
     <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
+    <form onsubmit="event.preventDefault(); checkAuth();">
+      <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="current-password">
+      <button type="submit" class="auth-btn">Ingresar al Dashboard</button>
+    </form>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
@@ -279,22 +281,29 @@
 const SECRET_KEY = "L2026";
 
 function checkAuth() {
-  const pass = document.getElementById('passInput').value.trim();
+  const inputEl = document.getElementById('passInput');
+  const errEl = document.getElementById('authError');
+  if (!inputEl) return;
+
+  const pass = inputEl.value.trim().toUpperCase();
+  
   if (pass === SECRET_KEY) {
-    sessionStorage.setItem('luz_authenticated', 'true');
+    try {
+      sessionStorage.setItem('luz_authenticated', 'true');
+    } catch(e) {
+      console.warn("Storage bloqueado por el navegador:", e);
+    }
     unlockDashboard();
   } else {
-    document.getElementById('authError').style.display = 'block';
+    if (errEl) errEl.style.display = 'block';
   }
 }
 
-function handleKeyPress(e) {
-  if (e.key === 'Enter') checkAuth();
-}
-
 function unlockDashboard() {
-  document.getElementById('authOverlay').style.display = 'none';
-  document.getElementById('mainContent').style.display = 'block';
+  const overlay = document.getElementById('authOverlay');
+  const main = document.getElementById('mainContent');
+  if (overlay) overlay.style.display = 'none';
+  if (main) main.style.display = 'block';
   renderAll();
 }
 
@@ -342,7 +351,10 @@ function renderKPIs(){
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   
-  document.getElementById('kpiGrid').innerHTML = `
+  const el = document.getElementById('kpiGrid');
+  if(!el) return;
+  
+  el.innerHTML = `
     <div class="kpi-card">
       <div class="kpi-title">Presupuesto</div>
       <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
@@ -376,7 +388,10 @@ function renderRanking(){
   const pctKey = mode === 'valor' ? 'vpct' : 'upct';
   const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
   
-  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+  const el = document.getElementById('rankingList');
+  if(!el) return;
+
+  el.innerHTML = sorted.map((d, i) => {
     const pct = d[pctKey];
     return `
     <div class="rank-row">
@@ -398,8 +413,10 @@ function renderTicketBars(){
   })).sort((a,b) => b.ticket - a.ticket);
 
   const maxVal = 2.50;
+  const el = document.getElementById('ticketBarList');
+  if(!el) return;
 
-  document.getElementById('ticketBarList').innerHTML = withTickets.map(d => {
+  el.innerHTML = withTickets.map(d => {
     const barWidth = Math.min((d.ticket / maxVal) * 100, 100);
     return `
     <div class="ticket-row">
@@ -434,16 +451,4 @@ function renderTable(){
       <td>${unit}${fmt(d[cKey])}${sfx}</td>
       <td>${pct.toFixed(2).replace('.', ',')}%</td>
       <td>${unit}${fmt(d[proyKey])}${sfx}</td>
-      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
-    </tr>`;
-  }).join('');
-
-  const t = getTotals(filtered);
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
-      <td>${unit}${fmt(t.p)}${sfx}</td>
-      <td>${unit}${fmt(t.c)}${sfx}</td>
-      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
- 
+      <td style="color:${diff >= 0 ? '
