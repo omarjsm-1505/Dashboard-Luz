@@ -100,6 +100,7 @@
   .toggle-btn{
     border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
@@ -160,16 +161,16 @@
     <div class="ctrl-box">
       <span class="ctrl-title">Zona Comercial</span>
       <div class="toggle-group" id="groupZone">
-        <button class="toggle-btn active" data-zone="todas">Todas</button>
-        <button class="toggle-btn" data-zone="este">Zona Este</button>
-        <button class="toggle-btn" data-zone="oeste">Zona Oeste</button>
+        <button class="toggle-btn active" onclick="changeZone('todas', this)">Todas</button>
+        <button class="toggle-btn" onclick="changeZone('este', this)">Zona Este</button>
+        <button class="toggle-btn" onclick="changeZone('oeste', this)">Zona Oeste</button>
       </div>
     </div>
     <div class="ctrl-box">
       <span class="ctrl-title">Métrica</span>
       <div class="toggle-group" id="groupMode">
-        <button class="toggle-btn active" data-mode="valor">Valor $</button>
-        <button class="toggle-btn" data-mode="unidades">Unidades</button>
+        <button class="toggle-btn active" onclick="changeMode('valor', this)">Valor $</button>
+        <button class="toggle-btn" onclick="changeMode('unidades', this)">Unidades</button>
       </div>
     </div>
   </div>
@@ -286,28 +287,26 @@
 var currentZone = 'todas';
 var currentMode = 'valor';
 
-document.addEventListener('DOMContentLoaded', function() {
-  
-  // Asignar listeners a botones de Zona
-  var zoneBtns = document.querySelectorAll('#groupZone .toggle-btn');
-  for (var i = 0; i < zoneBtns.length; i++) {
-    zoneBtns[i].addEventListener('click', function(e) {
-      e.preventDefault();
-      for (var j = 0; j < zoneBtns.length; j++) { zoneBtns[j].classList.remove('active'); }
-      this.classList.add('active');
-      currentZone = this.getAttribute('data-zone');
-      updateView();
-    });
-  }
+function changeZone(zoneVal, btnEl) {
+  currentZone = zoneVal;
+  var btns = document.querySelectorAll('#groupZone .toggle-btn');
+  for (var i = 0; i < btns.length; i++) { btns[i].className = 'toggle-btn'; }
+  btnEl.className = 'toggle-btn active';
+  refreshDashboard();
+}
 
-  // Asignar listeners a botones de Métrica
-  var modeBtns = document.querySelectorAll('#groupMode .toggle-btn');
-  for (var k = 0; k < modeBtns.length; k++) {
-    modeBtns[k].addEventListener('click', function(e) {
-      e.preventDefault();
-      for (var l = 0; l < modeBtns.length; l++) { modeBtns[l].classList.remove('active'); }
-      this.classList.add('active');
-      currentMode = this.getAttribute('data-mode');
-      updateView();
-    });
- 
+function changeMode(modeVal, btnEl) {
+  currentMode = modeVal;
+  var btns = document.querySelectorAll('#groupMode .toggle-btn');
+  for (var i = 0; i < btns.length; i++) { btns[i].className = 'toggle-btn'; }
+  btnEl.className = 'toggle-btn active';
+  refreshDashboard();
+}
+
+function refreshDashboard() {
+  var isVal = (currentMode === 'valor');
+  
+  // 1. KPIs
+  document.getElementById('kpiPpto').innerHTML = isVal ? "$5.252.000" : "2.443.000 u";
+  document.getElementById('kpiReal').innerHTML = isVal ? "$3.692.778" : "1.748.163 u";
+  document.getElementBy
