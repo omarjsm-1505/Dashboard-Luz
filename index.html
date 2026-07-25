@@ -69,6 +69,28 @@
   .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--cream); background:var(--card); border:1px solid var(--line); padding:6px 12px; border-radius:100px; }
   .corte-pill b{color:var(--gold);}
 
+  /* BOTONES DE FILTRO DE ZONA */
+  .zone-filter-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 16px;
+    margin-bottom:24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .zone-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--gold); margin:0; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
+  .toggle-btn{
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:6px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+  }
+  .toggle-btn.active{
+    background:linear-gradient(135deg, var(--wine), var(--wine-light)); color:var(--cream); box-shadow:0 2px 8px rgba(140,29,64,0.4);
+  }
+
   /* SECCIONES Y TITULOS */
   .section-box{ margin-bottom:30px; }
   .sec-title{ font-family:'Fraunces', serif; font-size:20px; margin:0 0 2px 0; color:var(--cream); }
@@ -125,6 +147,16 @@
     <div class="corte-pill">◆ Corte al <b>23 de julio, 2026</b></div>
   </section>
 
+  <!-- FILTRO POR ZONA INTERACTIVO -->
+  <div class="zone-filter-box">
+    <span class="zone-title">Filtrar por Zona Comercial</span>
+    <div class="toggle-group">
+      <button class="toggle-btn active" onclick="filterZone('todas', this)">Todas</button>
+      <button class="toggle-btn" onclick="filterZone('este', this)">Zona Este</button>
+      <button class="toggle-btn" onclick="filterZone('oeste', this)">Zona Oeste</button>
+    </div>
+  </div>
+
   <!-- RESUMEN DE KPIS -->
   <div class="section-box">
     <h2 class="sec-title">Resumen del mes</h2>
@@ -164,16 +196,16 @@
     <h2 class="sec-title">Ranking por sucursal</h2>
     <span class="sec-sub">Cumplimiento de mayor a menor</span>
 
-    <div class="rank-row"><span class="rank-num">01</span><span class="rank-name">San Antonio</span><div class="bar-bg"><div class="bar-fill top" style="width:74.85%;"></div></div><span class="rank-pct">74,85%</span></div>
-    <div class="rank-row"><span class="rank-num">02</span><span class="rank-name">Florida</span><div class="bar-bg"><div class="bar-fill" style="width:73.16%;"></div></div><span class="rank-pct">73,16%</span></div>
-    <div class="rank-row"><span class="rank-num">03</span><span class="rank-name">Carlota</span><div class="bar-bg"><div class="bar-fill" style="width:72.53%;"></div></div><span class="rank-pct">72,53%</span></div>
-    <div class="rank-row"><span class="rank-num">04</span><span class="rank-name">Chacao</span><div class="bar-bg"><div class="bar-fill" style="width:70.42%;"></div></div><span class="rank-pct">70,42%</span></div>
-    <div class="rank-row"><span class="rank-num">05</span><span class="rank-name">Urbina</span><div class="bar-bg"><div class="bar-fill" style="width:69.22%;"></div></div><span class="rank-pct">69,22%</span></div>
-    <div class="rank-row"><span class="rank-num">06</span><span class="rank-name">Pedregal</span><div class="bar-bg"><div class="bar-fill" style="width:68.74%;"></div></div><span class="rank-pct">68,74%</span></div>
-    <div class="rank-row"><span class="rank-num">07</span><span class="rank-name">Marques</span><div class="bar-bg"><div class="bar-fill" style="width:68.13%;"></div></div><span class="rank-pct">68,13%</span></div>
-    <div class="rank-row"><span class="rank-num">08</span><span class="rank-name">Dos Caminos</span><div class="bar-bg"><div class="bar-fill" style="width:65.72%;"></div></div><span class="rank-pct">65,72%</span></div>
-    <div class="rank-row"><span class="rank-num">09</span><span class="rank-name">Luz Quick Rest</span><div class="bar-bg"><div class="bar-fill" style="width:65.71%;"></div></div><span class="rank-pct">65,71%</span></div>
-    <div class="rank-row"><span class="rank-num">10</span><span class="rank-name">Llanito</span><div class="bar-bg"><div class="bar-fill" style="width:65.15%;"></div></div><span class="rank-pct">65,15%</span></div>
+    <div class="rank-row" data-zone="este"><span class="rank-num">01</span><span class="rank-name">San Antonio</span><div class="bar-bg"><div class="bar-fill top" style="width:74.85%;"></div></div><span class="rank-pct">74,85%</span></div>
+    <div class="rank-row" data-zone="oeste"><span class="rank-num">02</span><span class="rank-name">Florida</span><div class="bar-bg"><div class="bar-fill" style="width:73.16%;"></div></div><span class="rank-pct">73,16%</span></div>
+    <div class="rank-row" data-zone="este"><span class="rank-num">03</span><span class="rank-name">Carlota</span><div class="bar-bg"><div class="bar-fill" style="width:72.53%;"></div></div><span class="rank-pct">72,53%</span></div>
+    <div class="rank-row" data-zone="oeste"><span class="rank-num">04</span><span class="rank-name">Chacao</span><div class="bar-bg"><div class="bar-fill" style="width:70.42%;"></div></div><span class="rank-pct">70,42%</span></div>
+    <div class="rank-row" data-zone="este"><span class="rank-num">05</span><span class="rank-name">Urbina</span><div class="bar-bg"><div class="bar-fill" style="width:69.22%;"></div></div><span class="rank-pct">69,22%</span></div>
+    <div class="rank-row" data-zone="oeste"><span class="rank-num">06</span><span class="rank-name">Pedregal</span><div class="bar-bg"><div class="bar-fill" style="width:68.74%;"></div></div><span class="rank-pct">68,74%</span></div>
+    <div class="rank-row" data-zone="este"><span class="rank-num">07</span><span class="rank-name">Marques</span><div class="bar-bg"><div class="bar-fill" style="width:68.13%;"></div></div><span class="rank-pct">68,13%</span></div>
+    <div class="rank-row" data-zone="oeste"><span class="rank-num">08</span><span class="rank-name">Dos Caminos</span><div class="bar-bg"><div class="bar-fill" style="width:65.72%;"></div></div><span class="rank-pct">65,72%</span></div>
+    <div class="rank-row" data-zone="oeste"><span class="rank-num">09</span><span class="rank-name">Luz Quick Rest</span><div class="bar-bg"><div class="bar-fill" style="width:65.71%;"></div></div><span class="rank-pct">65,71%</span></div>
+    <div class="rank-row" data-zone="este"><span class="rank-num">10</span><span class="rank-name">Llanito</span><div class="bar-bg"><div class="bar-fill" style="width:65.15%;"></div></div><span class="rank-pct">65,15%</span></div>
   </div>
 
   <!-- TABLA COMPLETA -->
@@ -195,17 +227,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>Carlota</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$1.166.881</td><td>$846.283</td><td>72,53%</td><td>$1.140.642</td><td style="color:var(--warn);">-$26.239</td></tr>
-          <tr><td>Chacao</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$561.736</td><td>$395.590</td><td>70,42%</td><td>$533.187</td><td style="color:var(--warn);">-$28.549</td></tr>
-          <tr><td>Dos Caminos</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$341.109</td><td>$224.190</td><td>65,72%</td><td>$302.170</td><td style="color:var(--warn);">-$38.939</td></tr>
-          <tr><td>Florida</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$731.985</td><td>$535.528</td><td>73,16%</td><td>$721.799</td><td style="color:var(--warn);">-$10.186</td></tr>
-          <tr><td>Luz Quick Rest</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$195.119</td><td>$128.208</td><td>65,71%</td><td>$172.802</td><td style="color:var(--warn);">-$22.317</td></tr>
-          <tr><td>Llanito</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$545.671</td><td>$355.502</td><td>65,15%</td><td>$479.155</td><td style="color:var(--warn);">-$66.516</td></tr>
-          <tr><td>Marques</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$166.498</td><td>$113.436</td><td>68,13%</td><td>$152.892</td><td style="color:var(--warn);">-$13.606</td></tr>
-          <tr><td>Pedregal</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$360.241</td><td>$247.643</td><td>68,74%</td><td>$333.780</td><td style="color:var(--warn);">-$26.461</td></tr>
-          <tr><td>San Antonio</td><td style="text-align:center;"><span class="badge meta">Meta</span></td><td>$491.697</td><td>$368.046</td><td>74,85%</td><td>$496.062</td><td style="color:var(--good);">+$4.365</td></tr>
-          <tr><td>Urbina</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$691.063</td><td>$478.351</td><td>69,22%</td><td>$644734</td><td style="color:var(--warn);">-$46.329</td></tr>
-          <tr class="total-row"><td>TOTAL</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$5.252.000</td><td>$3.692.778</td><td>70,31%</td><td>$4.977.222</td><td style="color:var(--warn);">-$274.778</td></tr>
+          <tr data-zone="este"><td>Carlota</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$1.166.881</td><td>$846.283</td><td>72,53%</td><td>$1.140.642</td><td style="color:var(--warn);">-$26.239</td></tr>
+          <tr data-zone="oeste"><td>Chacao</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$561.736</td><td>$395.590</td><td>70,42%</td><td>$533.187</td><td style="color:var(--warn);">-$28.549</td></tr>
+          <tr data-zone="oeste"><td>Dos Caminos</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$341.109</td><td>$224.190</td><td>65,72%</td><td>$302.170</td><td style="color:var(--warn);">-$38.939</td></tr>
+          <tr data-zone="oeste"><td>Florida</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$731.985</td><td>$535.528</td><td>73,16%</td><td>$721.799</td><td style="color:var(--warn);">-$10.186</td></tr>
+          <tr data-zone="oeste"><td>Luz Quick Rest</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$195.119</td><td>$128.208</td><td>65,71%</td><td>$172.802</td><td style="color:var(--warn);">-$22.317</td></tr>
+          <tr data-zone="este"><td>Llanito</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$545.671</td><td>$355.502</td><td>65,15%</td><td>$479.155</td><td style="color:var(--warn);">-$66.516</td></tr>
+          <tr data-zone="este"><td>Marques</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$166.498</td><td>$113.436</td><td>68,13%</td><td>$152.892</td><td style="color:var(--warn);">-$13.606</td></tr>
+          <tr data-zone="oeste"><td>Pedregal</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$360.241</td><td>$247.643</td><td>68,74%</td><td>$333.780</td><td style="color:var(--warn);">-$26.461</td></tr>
+          <tr data-zone="este"><td>San Antonio</td><td style="text-align:center;"><span class="badge meta">Meta</span></td><td>$491.697</td><td>$368.046</td><td>74,85%</td><td>$496.062</td><td style="color:var(--good);">+$4.365</td></tr>
+          <tr data-zone="este"><td>Urbina</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$691.063</td><td>$478.351</td><td>69,22%</td><td>$644.734</td><td style="color:var(--warn);">-$46.329</td></tr>
+          <tr class="total-row"><td>TOTAL CONSOLIDADO</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td>$5.252.000</td><td>$3.692.778</td><td>70,31%</td><td>$4.977.222</td><td style="color:var(--warn);">-$274.778</td></tr>
         </tbody>
       </table>
     </div>
@@ -213,6 +245,39 @@
 
   <footer>LUZ · SEGUIMIENTO_JULIO_2026</footer>
 </div>
+
+<script>
+function filterZone(zone, btn) {
+  // Cambiar estado visual de botones
+  var btns = document.querySelectorAll('.toggle-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.remove('active');
+  }
+  btn.classList.add('active');
+
+  // Filtrar filas del Ranking
+  var rankRows = document.querySelectorAll('.rank-row');
+  for (var j = 0; j < rankRows.length; j++) {
+    var rowZone = rankRows[j].getAttribute('data-zone');
+    if (zone === 'todas' || rowZone === zone) {
+      rankRows[j].style.display = 'grid';
+    } else {
+      rankRows[j].style.display = 'none';
+    }
+  }
+
+  // Filtrar filas de la Tabla
+  var tableRows = document.querySelectorAll('tbody tr:not(.total-row)');
+  for (var k = 0; k < tableRows.length; k++) {
+    var trZone = tableRows[k].getAttribute('data-zone');
+    if (zone === 'todas' || trZone === zone) {
+      tableRows[k].style.display = 'table-row';
+    } else {
+      tableRows[k].style.display = 'none';
+    }
+  }
+}
+</script>
 
 </body>
 </html>
