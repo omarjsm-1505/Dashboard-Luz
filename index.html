@@ -52,7 +52,7 @@
 
   /* PANTALLA DE ACCESO */
   #authOverlay {
-    position: fixed; inset: 0; z-index: 99999;
+    position: fixed; inset: 0; z-index: 999999;
     background: var(--bg);
     display: flex; align-items: center; justify-content: center;
     padding: 20px;
@@ -178,14 +178,14 @@
 </head>
 <body>
 
-<!-- PANTALLA DE ACCESO -->
+<!-- PANTALLA DE ACCESO INMEDIATO -->
 <div id="authOverlay">
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
     <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off">
-    <button type="button" class="auth-btn" id="btnIngresar">Ingresar al Dashboard</button>
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off" onkeydown="if(event.key==='Enter'||event.keyCode===13) validateAccess();">
+    <button type="button" class="auth-btn" onclick="validateAccess()">Ingresar al Dashboard</button>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
@@ -265,16 +265,16 @@
       <span class="sec-sub">Relación Cumplido Valor $ / Cumplido Unidades (Promedio Red: $2,11)</span>
 
       <div id="ticketBarList">
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Carlota</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:92,4%;"></div></div><span class="ticket-val">$2,31</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Urbina</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:86,4%;"></div></div><span class="ticket-val">$2,16</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">San Antonio</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85,2%;"></div></div><span class="ticket-val">$2,13</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Florida</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85,2%;"></div></div><span class="ticket-val">$2,13</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Llanito</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:83,2%;"></div></div><span class="ticket-val">$2,08</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Chacao</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,8%;"></div></div><span class="ticket-val">$1,97</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Dos Caminos</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,8%;"></div></div><span class="ticket-val">$1,97</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Marques</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,4%;"></div></div><span class="ticket-val">$1,96</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Luz Quick Rest</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,4%;"></div></div><span class="ticket-val">$1,96</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Pedregal</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78,0%;"></div></div><span class="ticket-val">$1,95</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Carlota</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:92.4%;"></div></div><span class="ticket-val">$2,31</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Urbina</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:86.4%;"></div></div><span class="ticket-val">$2,16</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">San Antonio</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85.2%;"></div></div><span class="ticket-val">$2,13</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Florida</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85.2%;"></div></div><span class="ticket-val">$2,13</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Llanito</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:83.2%;"></div></div><span class="ticket-val">$2,08</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Chacao</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.8%;"></div></div><span class="ticket-val">$1,97</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Dos Caminos</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.8%;"></div></div><span class="ticket-val">$1,97</span></div>
+        <div class="ticket-row" data-zone="este"><span class="ticket-name">Marques</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.4%;"></div></div><span class="ticket-val">$1,96</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Luz Quick Rest</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.4%;"></div></div><span class="ticket-val">$1,96</span></div>
+        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Pedregal</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.0%;"></div></div><span class="ticket-val">$1,95</span></div>
       </div>
     </div>
 
@@ -299,4 +299,4 @@
           <tbody>
             <tr data-zone="este" data-vp="$1.166.881" data-vc="$846.283" data-vpct="72,53%" data-vproy="$1.140.642" data-vdiff="-$26.239" data-up="505.094" data-uc="366.866" data-upct="72,63%" data-uproy="494.472" data-udiff="-10.622"><td>Carlota</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td class="col-ppto">$1.166.881</td><td class="col-real">$846.283</td><td class="col-pct">72,53%</td><td class="col-proy">$1.140.642</td><td class="col-diff" style="color:var(--warn);">-$26.239</td></tr>
             <tr data-zone="oeste" data-vp="$561.736" data-vc="$395.590" data-vpct="70,42%" data-vproy="$533.187" data-vdiff="-$28.549" data-up="281.930" data-uc="201.182" data-upct="71,36%" data-uproy="271.159" data-udiff="-10.771"><td>Chacao</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td class="col-ppto">$561.736</td><td class="col-real">$395.590</td><td class="col-pct">70,42%</td><td class="col-proy">$533.187</td><td class="col-diff" style="color:var(--warn);">-$28.549</td></tr>
-            <tr data-zone="oeste" data-vp="$341.109" data-vc="$224.190" data-vpct="65,72%" data-vproy="$302.170" data-vdiff="-$38.939" data-up="165.215" data-uc="113.602" data-upct="68,76%" data-uproy="153.116" data-udiff="-12.099"><td>Dos Caminos</td><td style="text-align:center;"><s
+            <tr data-zone="oeste" data-vp="$341.109" data-vc="$224.190" data-vpct="65,72%" data-vproy="$302.170" data-vdiff="-$38.939" data-up="165.215" data-uc="113.602" data-upct="68,76%" 
