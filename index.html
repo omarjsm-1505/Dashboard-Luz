@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luz · Dashboard Ejecutivo de Presupuesto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@
     --good-bg: rgba(46,125,50,0.1);
     --warn:#D97A46;
     --warn-bg: rgba(217,122,70,0.12);
-    --danger:#C14646;
   }
   *{box-sizing:border-box;}
   body{
@@ -50,36 +49,6 @@
     pointer-events: none;
   }
 
-  /* PANTALLA DE ACCESO NATIVA INTEGRADA */
-  #authOverlay {
-    position: fixed; inset: 0; z-index: 999999;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .auth-card {
-    background: var(--card); border: 1px solid var(--line);
-    padding: 36px 28px; border-radius: 20px; text-align: center;
-    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
-  }
-  .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
-  .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
-  .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
-  .auth-input {
-    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
-    border-radius: 10px; font-size: 16px; text-align: center; font-family: 'JetBrains Mono', monospace;
-    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
-  }
-  .auth-input:focus { border-color: var(--wine); }
-  .auth-btn {
-    width: 100%; padding: 14px; background: var(--wine); color: #FFFFFF;
-    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 15px;
-    cursor: pointer; transition: background 0.2s; touch-action: manipulation;
-  }
-  .auth-btn:active { background: var(--wine-light); }
-  .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
-
-  /* CONTENIDO DEL DASHBOARD */
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
 
   .corte-bar{
@@ -154,12 +123,6 @@
   .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
-  .ticket-row{ display:grid; grid-template-columns: 120px 1fr 65px; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); }
-  .ticket-name{ font-weight:600; font-size:12.5px; color:var(--text); }
-  .ticket-bar-bg{ position:relative; height:18px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
-  .ticket-bar-fill{ height:100%; background:linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius:5px; }
-  .ticket-val{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
-
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
   table{ width:100%; border-collapse:collapse; min-width:620px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
@@ -177,125 +140,235 @@
 </head>
 <body>
 
-<!-- PANTALLA DE ACCESO INTEGRADA -->
-<div id="authOverlay">
-  <div class="auth-card">
-    <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
-    <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off" onkeydown="if(event.key==='Enter'||event.keyCode===13) validateAccess();">
-    <button type="button" class="auth-btn" onclick="validateAccess()">Ingresar al Dashboard</button>
-    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
-  </div>
+<div class="corte-bar">
+  <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
+  <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
 </div>
 
-<!-- CONTENIDO DASHBOARD -->
-<div id="mainContent" style="display:none;">
-  <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 23 DE JULIO DE 2026</span>
-    <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
+<div class="wrap">
+
+  <section class="hero">
+    <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
+    <p class="eyebrow">Automercado Luz</p>
+    <h1>Seguimiento <em>presupuesto</em></h1>
+    <p class="hero-sub">Unidades - Valor $</p>
+    <div class="corte-pill">◆ Corte al <b>23 de julio, 2026</b></div>
+  </section>
+
+  <!-- CONTROLES -->
+  <div class="control-grid">
+    <div class="ctrl-box">
+      <span class="ctrl-title">Zona Comercial</span>
+      <div class="toggle-group" id="groupZone">
+        <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
+        <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
+        <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+      </div>
+    </div>
+    <div class="ctrl-box">
+      <span class="ctrl-title">Métrica</span>
+      <div class="toggle-group" id="groupMode">
+        <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
+        <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+      </div>
+    </div>
   </div>
 
-  <div class="wrap">
+  <!-- KPIS -->
+  <div class="section-box">
+    <h2 class="sec-title">Resumen del mes</h2>
+    <span class="sec-sub">Totales consolidados a la fecha de corte</span>
+    <div class="kpis-grid" id="kpiGrid"></div>
+  </div>
 
-    <section class="hero">
-      <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Automercado Luz</p>
-      <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Unidades - Valor $</p>
-      <div class="corte-pill">◆ Corte al <b>23 de julio, 2026</b></div>
-    </section>
+  <!-- RANKING -->
+  <div class="section-box">
+    <h2 class="sec-title">Ranking por sucursal</h2>
+    <span class="sec-sub">Cumplimiento de mayor a menor</span>
+    <div id="rankingList"></div>
+  </div>
 
-    <!-- CONTROLES -->
-    <div class="control-grid">
-      <div class="ctrl-box">
-        <span class="ctrl-title">Zona Comercial</span>
-        <div class="toggle-group" id="groupZone">
-          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
-          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
-          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
-        </div>
-      </div>
-      <div class="ctrl-box">
-        <span class="ctrl-title">Métrica</span>
-        <div class="toggle-group" id="groupMode">
-          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
-          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
-        </div>
-      </div>
+  <!-- TABLA -->
+  <div class="section-box">
+    <h2 class="sec-title">Detalle completo</h2>
+    <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Sucursal</th>
+            <th style="text-align:center;">Estatus</th>
+            <th>Presupuesto</th>
+            <th>Cumplido</th>
+            <th>%</th>
+            <th>Proyección</th>
+            <th>Diferencia</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
     </div>
+  </div>
 
-    <!-- KPIS -->
-    <div class="section-box">
-      <h2 class="sec-title">Resumen del mes</h2>
-      <span class="sec-sub">Totales consolidados a la fecha de corte</span>
-      
-      <div class="kpis-grid">
-        <div class="kpi-card"><div class="kpi-title">Presupuesto</div><div class="kpi-value" id="kpiPpto">$5.252.000</div><div class="kpi-sub">Meta del mes</div></div>
-        <div class="kpi-card"><div class="kpi-title">Cumplido</div><div class="kpi-value" id="kpiReal">$3.692.778</div><div class="kpi-sub" id="kpiPct">70,31% de la meta</div></div>
-        <div class="kpi-card"><div class="kpi-title">Proyección Cierre</div><div class="kpi-value" id="kpiProy">$4.977.222</div><div class="kpi-sub">Cierra bajo ppto</div></div>
-        <div class="kpi-card neg"><div class="kpi-title">Diferencia</div><div class="kpi-value" id="kpiDiff">-$274.778</div><div class="kpi-sub">Brecha proyectada</div></div>
-        <div class="kpi-card"><div class="kpi-title">Valla Día 23</div><div class="kpi-value">74,19%</div><div class="kpi-sub">Meta teórica hoy</div></div>
-      </div>
+  <footer>LUZ · SEGUIMIENTO_JULIO_2026</footer>
+</div>
+
+<script>
+const EXPECTED_PCT = 74.19;
+
+const data = [
+  {n:"Carlota", zone:"este", vp:1166881, vc:846283, vpct:72.53, vproy:1140642, vdiff:-26239, up:505094, uc:366866, upct:72.63, uproy:494472, udiff:-10622},
+  {n:"Chacao", zone:"oeste", vp:561736, vc:395590, vpct:70.42, vproy:533187, vdiff:-28549, up:281930, uc:201182, upct:71.36, uproy:271159, udiff:-10771},
+  {n:"Dos Caminos", zone:"oeste", vp:341109, vc:224190, vpct:65.72, vproy:302170, vdiff:-38939, up:165215, uc:113602, upct:68.76, uproy:153116, udiff:-12099},
+  {n:"Florida", zone:"oeste", vp:731985, vc:535528, vpct:73.16, vproy:721799, vdiff:-10186, up:336633, uc:251517, upct:74.72, uproy:339001, udiff:2368},
+  {n:"Luz Quick Rest", zone:"oeste", vp:195119, vc:128208, vpct:65.71, vproy:172802, vdiff:-22317, up:98828, uc:65314, upct:66.09, uproy:88033, udiff:-10796},
+  {n:"Llanito", zone:"este", vp:545671, vc:355502, vpct:65.15, vproy:479155, vdiff:-66516, up:257886, uc:170643, upct:66.17, uproy:229997, udiff:-27889},
+  {n:"Marques", zone:"este", vp:166498, vc:113436, vpct:68.13, vproy:152892, vdiff:-13606, up:83053, uc:57825, upct:69.62, uproy:77938, udiff:-5115},
+  {n:"Pedregal", zone:"oeste", vp:360241, vc:247643, vpct:68.74, vproy:333780, vdiff:-26461, up:179795, uc:126851, upct:70.55, uproy:170973, udiff:-8822},
+  {n:"San Antonio", zone:"este", vp:491697, vc:368046, vpct:74.85, vproy:496062, vdiff:4365, up:224427, uc:173100, upct:77.13, uproy:233308, udiff:8881},
+  {n:"Urbina", zone:"este", vp:691063, vc:478351, vpct:69.22, vproy:644734, vdiff:-46329, up:310139, uc:221263, upct:71.34, uproy:298224, udiff:-11915}
+];
+
+let mode = 'valor';
+let zone = 'todas';
+
+function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
+function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
+
+function getFilteredData(){
+  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
+}
+
+function getTotals(list){
+  let p = 0, c = 0, proy = 0, diff = 0;
+  const isVal = (mode === 'valor');
+  list.forEach(d => {
+    p += isVal ? d.vp : d.up;
+    c += isVal ? d.vc : d.uc;
+    proy += isVal ? d.vproy : d.uproy;
+    diff += isVal ? d.vdiff : d.udiff;
+  });
+  const pct = p ? (c / p * 100) : 0;
+  return { p, c, pct, proy, diff };
+}
+
+function renderKPIs(){
+  const t = getTotals(getFilteredData());
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-title">Presupuesto</div>
+      <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
+      <div class="kpi-sub">Meta del mes</div>
     </div>
-
-    <!-- RANKING DE CUMPLIMIENTO -->
-    <div class="section-box">
-      <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Cumplimiento de mayor a menor</span>
-
-      <div id="rankingList">
-        <div class="rank-row" data-zone="este"><span class="rank-num">01</span><span class="rank-name">San Antonio</span><div class="bar-bg"><div class="bar-fill top" style="width:74.85%;" data-v="74.85" data-u="77.13"></div></div><span class="rank-pct">74,85%</span></div>
-        <div class="rank-row" data-zone="oeste"><span class="rank-num">02</span><span class="rank-name">Florida</span><div class="bar-bg"><div class="bar-fill" style="width:73.16%;" data-v="73.16" data-u="74.72"></div></div><span class="rank-pct">73,16%</span></div>
-        <div class="rank-row" data-zone="este"><span class="rank-num">03</span><span class="rank-name">Carlota</span><div class="bar-bg"><div class="bar-fill" style="width:72.53%;" data-v="72.53" data-u="72.63"></div></div><span class="rank-pct">72,53%</span></div>
-        <div class="rank-row" data-zone="oeste"><span class="rank-num">04</span><span class="rank-name">Chacao</span><div class="bar-bg"><div class="bar-fill" style="width:70.42%;" data-v="70.42" data-u="71.36"></div></div><span class="rank-pct">70,42%</span></div>
-        <div class="rank-row" data-zone="este"><span class="rank-num">05</span><span class="rank-name">Urbina</span><div class="bar-bg"><div class="bar-fill" style="width:69.22%;" data-v="69.22" data-u="71.34"></div></div><span class="rank-pct">69,22%</span></div>
-        <div class="rank-row" data-zone="oeste"><span class="rank-num">06</span><span class="rank-name">Pedregal</span><div class="bar-bg"><div class="bar-fill" style="width:68.74%;" data-v="68.74" data-u="70.55"></div></div><span class="rank-pct">68,74%</span></div>
-        <div class="rank-row" data-zone="este"><span class="rank-num">07</span><span class="rank-name">Marques</span><div class="bar-bg"><div class="bar-fill" style="width:68.13%;" data-v="68.13" data-u="69.62"></div></div><span class="rank-pct">68,13%</span></div>
-        <div class="rank-row" data-zone="oeste"><span class="rank-num">08</span><span class="rank-name">Dos Caminos</span><div class="bar-bg"><div class="bar-fill" style="width:65.72%;" data-v="65.72" data-u="68.76"></div></div><span class="rank-pct">65,72%</span></div>
-        <div class="rank-row" data-zone="oeste"><span class="rank-num">09</span><span class="rank-name">Luz Quick Rest</span><div class="bar-bg"><div class="bar-fill" style="width:65.71%;" data-v="65.71" data-u="66.09"></div></div><span class="rank-pct">65,71%</span></div>
-        <div class="rank-row" data-zone="este"><span class="rank-num">10</span><span class="rank-name">Llanito</span><div class="bar-bg"><div class="bar-fill" style="width:65.15%;" data-v="65.15" data-u="66.17"></div></div><span class="rank-pct">65,15%</span></div>
-      </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Cumplido</div>
+      <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
+      <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
     </div>
-
-    <!-- TICKET PROMEDIO -->
-    <div class="section-box">
-      <h2 class="sec-title">Ticket Promedio por Sucursal</h2>
-      <span class="sec-sub">Relación Cumplido Valor $ / Cumplido Unidades (Promedio Red: $2,11)</span>
-
-      <div id="ticketBarList">
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Carlota</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:92.4%;"></div></div><span class="ticket-val">$2,31</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Urbina</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:86.4%;"></div></div><span class="ticket-val">$2,16</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">San Antonio</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85.2%;"></div></div><span class="ticket-val">$2,13</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Florida</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:85.2%;"></div></div><span class="ticket-val">$2,13</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Llanito</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:83.2%;"></div></div><span class="ticket-val">$2,08</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Chacao</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.8%;"></div></div><span class="ticket-val">$1,97</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Dos Caminos</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.8%;"></div></div><span class="ticket-val">$1,97</span></div>
-        <div class="ticket-row" data-zone="este"><span class="ticket-name">Marques</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.4%;"></div></div><span class="ticket-val">$1,96</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Luz Quick Rest</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.4%;"></div></div><span class="ticket-val">$1,96</span></div>
-        <div class="ticket-row" data-zone="oeste"><span class="ticket-name">Pedregal</span><div class="ticket-bar-bg"><div class="ticket-bar-fill" style="width:78.0%;"></div></div><span class="ticket-val">$1,95</span></div>
-      </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Proyección Cierre</div>
+      <div class="kpi-value">${unit}${fmt(t.proy)}${sfx}</div>
+      <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
     </div>
+    <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
+      <div class="kpi-title">Diferencia</div>
+      <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
+      <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Valla Día 23</div>
+      <div class="kpi-value">74,19%</div>
+      <div class="kpi-sub">Meta teórica hoy</div>
+    </div>
+  `;
+}
 
-    <!-- TABLA DETALLE COMPLETO -->
-    <div class="section-box">
-      <h2 class="sec-title">Detalle completo</h2>
-      <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
+function renderRanking(){
+  const filtered = getFilteredData();
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
+  
+  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+    const pct = d[pctKey];
+    return `
+    <div class="rank-row">
+      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="rank-name">${d.n}</span>
+      <div class="bar-bg">
+        <div class="bar-fill ${pct >= EXPECTED_PCT ? 'top' : ''}" style="width:${Math.min(pct, 100)}%;"></div>
+      </div>
+      <span class="rank-pct">${pct.toFixed(2).replace('.', ',')}%</span>
+    </div>`;
+  }).join('');
+}
 
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Sucursal</th>
-              <th style="text-align:center;">Estatus</th>
-              <th>Presupuesto</th>
-              <th>Cumplido</th>
-              <th>%</th>
-              <th>Proyección</th>
-              <th>Diferencia</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-zone="este" data-vp="$1.166.881" data-vc="$846.283" data-vpct="72,53%" data-vproy="$1.140.642" data-vdiff="-$26.239" data-up="505.094" data-uc="366.866" data-upct="72,63%" data-uproy="494.472" data-udiff="-10.622"><td>Carlota</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td class="col-ppto">$1.166.881</td><td class="col-real">$846.283</td><td class="col-pct">72,53%</td><td class="col-proy">$1.140.642</td><td class="col-diff" style="color:var(--warn);">-$26.239</td></tr>
-            <tr data-zone="oeste" data-vp="$561.736" data-vc="$395.590" data-vpct="70,42%" data-vproy="$533.187" data-vdiff="-$28.549" data-up="281.930" data-uc="201.182" data-upct="71,36%" data-uproy="271.159" data-udiff="-10.771"><td>Chacao</td><td style="text-align:center;"><span class="badge obs">Obs.</span></td><td class="col-ppto">$561.736</td><td class="col-real">$395.590</td><td class="col-pct">70,42%</td><td class="col-proy">$533.187</td><td class="col-diff" style="color:var(--warn);">-$28.549</td></tr>
-            <tr data-zone="oeste" data-vp="$341.109" data-vc="$224.190" data-vpct="65,72%" data-vproy="$302.170" data-vdiff="-$38.939" data-up="165.215" data-uc="113.602" data-upct="68,76%" dat
+function renderTable(){
+  const filtered = getFilteredData();
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  const pKey = mode === 'valor' ? 'vp' : 'up';
+  const cKey = mode === 'valor' ? 'vc' : 'uc';
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
+  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
+
+  const rows = filtered.map(d => {
+    const pct = d[pctKey];
+    const diff = d[diffKey];
+    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    return `
+    <tr>
+      <td>${d.n}</td>
+      <td style="text-align:center;">${badge}</td>
+      <td>${unit}${fmt(d[pKey])}${sfx}</td>
+      <td>${unit}${fmt(d[cKey])}${sfx}</td>
+      <td>${pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
+      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
+    </tr>`;
+  }).join('');
+
+  const t = getTotals(filtered);
+  const totalRow = `
+    <tr class="total-row">
+      <td>TOTAL CONSOLIDADO</td>
+      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
+      <td>${unit}${fmt(t.p)}${sfx}</td>
+      <td>${unit}${fmt(t.c)}${sfx}</td>
+      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(t.proy)}${sfx}</td>
+      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
+    </tr>`;
+
+  document.getElementById('tableBody').innerHTML = rows + totalRow;
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRanking();
+  renderTable();
+}
+
+function setZone(z, btn){
+  zone = z;
+  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+renderAll();
+</script>
+
+</body>
+</html>
