@@ -127,9 +127,9 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
   .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
@@ -146,7 +146,7 @@
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 70px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
   .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
   .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
   .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
@@ -186,7 +186,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 26 DE JULIO DE 2026</span>
+    <span>◆ SEGUIMIENTO LUZ · 27 DE JULIO DE 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
@@ -197,7 +197,7 @@
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
       <p class="hero-sub">Unidades - Valor $</p>
-      <div class="corte-pill">◆ Corte al <b>26 de julio, 2026</b></div>
+      <div class="corte-pill">◆ Corte al <b>27 de julio, 2026</b></div>
     </section>
 
     <!-- CONTROLES -->
@@ -211,10 +211,11 @@
         </div>
       </div>
       <div class="ctrl-box">
-        <span class="ctrl-title">Métrica</span>
+        <span class="ctrl-title">Métrica / Cinta</span>
         <div class="toggle-group" id="groupMode">
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Precio Vta. Prom. Por Artículo</button>
         </div>
       </div>
     </div>
@@ -229,7 +230,7 @@
     <!-- RANKING -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Cumplimiento de mayor a menor</span>
+      <span class="sec-sub">Indicador consolidado</span>
       <div id="rankingList"></div>
     </div>
 
@@ -240,17 +241,7 @@
 
       <div class="tbl-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Sucursal</th>
-              <th style="text-align:center;">Estatus</th>
-              <th>Presupuesto</th>
-              <th>Cumplido</th>
-              <th>%</th>
-              <th>Proyección</th>
-              <th>Diferencia</th>
-            </tr>
-          </thead>
+          <thead id="tableHead"></thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
@@ -265,17 +256,31 @@
 const SECRET_KEY = "Luz2026";
 
 function checkAuth() {
-  const pass = document.getElementById('passInput').value;
-  if (pass === SECRET_KEY) {
-    sessionStorage.setItem('luz_authenticated', 'true');
+  var passInput = document.getElementById('passInput');
+  var errorEl = document.getElementById('authError');
+  
+  if (!passInput || !errorEl) return;
+  
+  // Convertimos a minúsculas y limpiamos espacios para hacerla más tolerante
+  var pass = passInput.value.trim().toLowerCase();
+  
+  if (pass === "luz2026") {
+    errorEl.style.display = 'none';
+    
+    try {
+      sessionStorage.setItem('luz_auth_jul27', 'true');
+    } catch(e) {}
+    
     unlockDashboard();
   } else {
-    document.getElementById('authError').style.display = 'block';
+    errorEl.style.display = 'block';
   }
 }
 
 function handleKeyPress(e) {
-  if (e.key === 'Enter') checkAuth();
+  if (e.key === 'Enter') {
+    checkAuth();
+  }
 }
 
 function unlockDashboard() {
@@ -284,27 +289,36 @@ function unlockDashboard() {
   renderAll();
 }
 
-// LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 83.87;
+// INICIALIZACIÓN
+try {
+  if (sessionStorage.getItem('luz_auth_jul27') === 'true') {
+    unlockDashboard();
+  }
+} catch (e) {}
+
+// LÓGICA DEL DASHBOARD (CORTE AL 27/07/2026)
+const EXPECTED_PCT = 87.10;
 
 const data = [
-  {n:"Carlota", zone:"este", vp:1166881, vc:954620, vpct:81.81, vproy:1138201, vdiff:-28680, up:505094, uc:415384, upct:82.24, uproy:495265, udiff:-9829},
-  {n:"Chacao", zone:"oeste", vp:561736, vc:441561, vpct:78.61, vproy:526477, vdiff:-35259, up:281930, uc:225497, upct:79.98, uproy:268862, udiff:-13068},
-  {n:"Dos Caminos", zone:"oeste", vp:341109, vc:251929, vpct:73.86, vproy:300377, vdiff:-40732, up:165215, uc:128231, upct:77.61, uproy:152891, udiff:-12324},
-  {n:"Florida", zone:"oeste", vp:731985, vc:608154, vpct:83.08, vproy:725106, vdiff:-6879, up:336633, uc:285168, upct:84.71, uproy:340008, udiff:3375},
-  {n:"Luz Quick Rest", zone:"oeste", vp:195119, vc:142023, vpct:72.79, vproy:169335, vdiff:-25784, up:98828, uc:72906, upct:73.77, uproy:86926, udiff:-11902},
-  {n:"Llanito", zone:"este", vp:545671, vc:401969, vpct:73.67, vproy:479271, vdiff:-66400, up:257886, uc:193018, upct:74.85, uproy:230137, udiff:-27749},
-  {n:"Marques", zone:"este", vp:166498, vc:128361, vpct:77.09, vproy:153045, vdiff:-13452, up:83053, uc:65518, upct:78.89, uproy:78118, udiff:-4935},
-  {n:"Pedregal", zone:"oeste", vp:360241, vc:277389, vpct:77.00, vproy:330733, vdiff:-29508, up:179795, uc:142300, upct:79.15, uproy:169666, udiff:-10129},
-  {n:"San Antonio", zone:"este", vp:491697, vc:420728, vpct:85.57, vproy:501637, vdiff:9940, up:224427, uc:197624, upct:88.06, uproy:235628, udiff:11201},
-  {n:"Urbina", zone:"este", vp:691063, vc:539758, vpct:78.11, vproy:643557, vdiff:-47506, up:310139, uc:250315, upct:80.71, uproy:298453, udiff:-11686}
+  {n:"Carlota", zone:"este", vp:1166881, vc:983393, vpct:84.28, vproy:1172507, vdiff:5626, up:505094, uc:428201, upct:84.78, uproy:510548, udiff:5454},
+  {n:"Chacao", zone:"oeste", vp:561736, vc:458089, vpct:81.55, vproy:546188, vdiff:-15548, up:281930, uc:233919, upct:82.97, uproy:278904, udiff:-3026},
+  {n:"Dos Caminos", zone:"oeste", vp:341109, vc:260549, vpct:76.38, vproy:310654, vdiff:-30455, up:165215, uc:132628, upct:80.28, uproy:158134, udiff:-7081},
+  {n:"Florida", zone:"oeste", vp:731985, vc:626227, vpct:85.55, vproy:746655, vdiff:14670, up:336633, uc:293735, upct:87.26, uproy:350223, udiff:13590},
+  {n:"Luz Quick Rest", zone:"oeste", vp:195119, vc:147259, vpct:75.47, vproy:175578, vdiff:-19541, up:98828, uc:75448, upct:76.34, uproy:89957, udiff:-8871},
+  {n:"Llanito", zone:"este", vp:545671, vc:411123, vpct:75.34, vproy:490185, vdiff:-55486, up:257886, uc:197419, upct:76.55, uproy:235384, udiff:-22502},
+  {n:"Marques", zone:"este", vp:166498, vc:133112, vpct:79.95, vproy:158711, vdiff:-7787, up:83053, uc:67954, upct:81.82, uproy:81022, udiff:-2031},
+  {n:"Pedregal", zone:"oeste", vp:360241, vc:286093, vpct:79.42, vproy:341111, vdiff:-19130, up:179795, uc:146670, upct:81.58, uproy:174876, udiff:-4919},
+  {n:"San Antonio", zone:"este", vp:491697, vc:433500, vpct:88.16, vproy:516865, vdiff:25168, up:224427, uc:203769, upct:90.80, uproy:242955, udiff:18528},
+  {n:"Urbina", zone:"este", vp:691063, vc:553398, vpct:80.08, vproy:659820, vdiff:-31243, up:310139, uc:256727, upct:82.78, uproy:306098, udiff:-4041}
 ];
 
 let mode = 'valor';
 let zone = 'todas';
 
-function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
-function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
+function fmt(n, decimals = 0){ 
+  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
+}
+function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + fmt(n); }
 
 function getFilteredData(){
   return zone === 'todas' ? data : data.filter(d => d.zone === zone);
@@ -312,19 +326,60 @@ function getFilteredData(){
 
 function getTotals(list){
   let p = 0, c = 0, proy = 0, diff = 0;
-  const isVal = (mode === 'valor');
+  let total_vp = 0, total_vc = 0, total_up = 0, total_uc = 0;
+  
   list.forEach(d => {
-    p += isVal ? d.vp : d.up;
-    c += isVal ? d.vc : d.uc;
-    proy += isVal ? d.vproy : d.uproy;
-    diff += isVal ? d.vdiff : d.udiff;
+    // Mantener la suma dinámica para Valor vs Unidades
+    if(mode === 'valor' || mode === 'costoPromedio') {
+      p += d.vp; c += d.vc; proy += d.vproy; diff += d.vdiff;
+    } else {
+      p += d.up; c += d.uc; proy += d.uproy; diff += d.udiff;
+    }
+    // Guardar totales absolutos para la cinta de Costo Promedio
+    total_vp += d.vp; total_vc += d.vc; total_up += d.up; total_uc += d.uc;
   });
+  
   const pct = p ? (c / p * 100) : 0;
-  return { p, c, pct, proy, diff };
+  const costoPromedio = total_uc > 0 ? (total_vc / total_uc) : 0;
+  const costoPromedioPpto = total_up > 0 ? (total_vp / total_up) : 0;
+  
+  return { p, c, pct, proy, diff, vp: total_vp, vc: total_vc, up: total_up, uc: total_uc, costoPromedio, costoPromedioPpto };
 }
 
 function renderKPIs(){
   const t = getTotals(getFilteredData());
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Ppto</div>
+        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
+        <div class="kpi-sub">Presupuesto Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Real</div>
+        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+        <div class="kpi-sub">Cumplido Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Dólar</div>
+        <div class="kpi-value">$${fmt(t.vc)}</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Unidades</div>
+        <div class="kpi-value">${fmt(t.uc)} u</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Valla Día 27</div>
+        <div class="kpi-value">87,10%</div>
+        <div class="kpi-sub">Meta teórica hoy</div>
+      </div>
+    `;
+    return;
+  }
+
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   
@@ -350,8 +405,8 @@ function renderKPIs(){
       <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Valla Día 26</div>
-      <div class="kpi-value">83,87%</div>
+      <div class="kpi-title">Valla Día 27</div>
+      <div class="kpi-value">87,10%</div>
       <div class="kpi-sub">Meta teórica hoy</div>
     </div>
   `;
@@ -359,6 +414,31 @@ function renderKPIs(){
 
 function renderRanking(){
   const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    const sorted = [...filtered].sort((a,b) => {
+      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
+      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
+      return cpB - cpA;
+    });
+    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
+    
+    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const barWidth = Math.min((cp / maxCp) * 100, 100);
+      return `
+      <div class="rank-row">
+        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="rank-name">${d.n}</span>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${barWidth}%;"></div>
+        </div>
+        <span class="rank-pct">$${fmt(cp, 2)}</span>
+      </div>`;
+    }).join('');
+    return;
+  }
+
   const pctKey = mode === 'valor' ? 'vpct' : 'upct';
   const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
   
@@ -378,70 +458,9 @@ function renderRanking(){
 
 function renderTable(){
   const filtered = getFilteredData();
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
-  const pKey = mode === 'valor' ? 'vp' : 'up';
-  const cKey = mode === 'valor' ? 'vc' : 'uc';
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
-  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
-
-  const rows = filtered.map(d => {
-    const pct = d[pctKey];
-    const diff = d[diffKey];
-    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td style="text-align:center;">${badge}</td>
-      <td>${unit}${fmt(d[pKey])}${sfx}</td>
-      <td>${unit}${fmt(d[cKey])}${sfx}</td>
-      <td>${pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
-      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
-    </tr>`;
-  }).join('');
-
-  const t = getTotals(filtered);
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
-      <td>${unit}${fmt(t.p)}${sfx}</td>
-      <td>${unit}${fmt(t.c)}${sfx}</td>
-      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(t.proy)}${sfx}</td>
-      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
-    </tr>`;
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
-}
-
-function renderAll(){
-  renderKPIs();
-  renderRanking();
-  renderTable();
-}
-
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-function setMode(m, btn){
-  mode = m;
-  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-// VERIFICAR AUTENTICACIÓN INICIAL
-if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
-</script>
-
-</body>
-</html>
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <t
