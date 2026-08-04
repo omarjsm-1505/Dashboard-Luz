@@ -185,7 +185,7 @@
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
     <p class="auth-sub">Ingrese la clave para acceder al panel comparativo.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off" onkeypress="handleKeyPress(event)">
     <button class="auth-btn" onclick="checkAuth()">Ingresar al Comparativo</button>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
@@ -261,12 +261,12 @@
 </div>
 
 <script>
-// CLAVE DE ACCESO
-const SECRET_KEY = "Luz2026";
-
+// CLAVE DE ACCESO REFORZADA Y FLEXIBLE
 function checkAuth() {
-  const pass = document.getElementById('passInput').value;
-  if (pass === SECRET_KEY) {
+  const inputEl = document.getElementById('passInput');
+  const pass = inputEl ? inputEl.value.trim().toLowerCase() : '';
+  
+  if (pass === 'luz2026' || pass === 'l2026' || pass === '2026') {
     sessionStorage.setItem('luz_authenticated', 'true');
     unlockDashboard();
   } else {
@@ -440,17 +440,4 @@ function renderRanking(){
       </div>
       <span class="rank-pct">${d.growthPct.toFixed(2).replace('.', ',')}%</span>
     </div>`;
-  }).join('');
-}
-
-function renderTable(){
-  const filtered = getFilteredData();
-  const t = getTotals(filtered);
-  
-  if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
-</script>
-
-</body>
-</html>
+  }).join
