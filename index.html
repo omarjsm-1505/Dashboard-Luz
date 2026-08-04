@@ -261,13 +261,19 @@
 </div>
 
 <script>
-// CLAVE DE ACCESO REFORZADA Y FLEXIBLE
+// BLOQUEO SEGURO - IGNORARÁ LOS ERRORES DEL NAVEGADOR
 function checkAuth() {
   const inputEl = document.getElementById('passInput');
   const pass = inputEl ? inputEl.value.trim().toLowerCase() : '';
   
   if (pass === 'luz2026' || pass === 'l2026' || pass === '2026') {
-    sessionStorage.setItem('luz_authenticated', 'true');
+    // Si el teléfono bloquea la memoria local (muy común en móviles o archivos sueltos), 
+    // el try/catch evitará que el código se congele y te dejará entrar directo.
+    try { 
+      sessionStorage.setItem('luz_authenticated', 'true'); 
+    } catch(e) {
+      console.warn("Navegador bloquea sesión, procediendo directo...");
+    }
     unlockDashboard();
   } else {
     document.getElementById('authError').style.display = 'block';
@@ -433,11 +439,4 @@ function renderRanking(){
     const barWidth = Math.min(d.growthPct, 100); 
     return `
     <div class="rank-row">
-      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-      <span class="rank-name">${d.n}</span>
-      <div class="bar-bg">
-        <div class="bar-fill ${isGrowth ? 'top' : ''}" style="width:${barWidth}%;"></div>
-      </div>
-      <span class="rank-pct">${d.growthPct.toFixed(2).replace('.', ',')}%</span>
-    </div>`;
-  }).join
+      <span class="rank-num">${String(i+1).padSt
