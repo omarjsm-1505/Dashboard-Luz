@@ -159,13 +159,20 @@
   table{ width:100%; border-collapse:collapse; min-width:620px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
   th:first-child{ text-align:left; }
-  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
+  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); vertical-align:middle; }
   td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
   tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
 
   .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
   .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
   .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
+
+  /* ESTILOS PARA VISTA TODAS (APILADA) */
+  .stacked-cell { display:flex; flex-direction:column; gap:4px; text-align:right; width:100%; min-width:90px; }
+  .st-row { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+  .st-lbl { color:var(--muted); font-size:9.5px; text-transform:uppercase; }
+  .st-val { font-weight:600; font-family:'JetBrains Mono', monospace; color:var(--text); font-size:11.5px; }
+  .st-var { justify-content:flex-end; border-top:1px dashed rgba(140,29,64,0.15); padding-top:4px; margin-top:2px; font-weight:700; font-family:'JetBrains Mono', monospace; font-size:12px; }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
@@ -217,6 +224,7 @@
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
           <button class="toggle-btn" onclick="setMode('ticket', this)">Costo Prom.</button>
+          <button class="toggle-btn" onclick="setMode('all', this)">Todas</button>
         </div>
       </div>
     </div>
@@ -231,7 +239,7 @@
     <!-- RANKING -->
     <div class="section-box">
       <h2 class="sec-title">Ranking de Retención/Crecimiento</h2>
-      <span class="sec-sub">% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)</span>
+      <span class="sec-sub" id="rankSub">% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)</span>
       <div id="rankingList"></div>
     </div>
 
@@ -242,16 +250,7 @@
 
       <div class="tbl-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Sucursal</th>
-              <th style="text-align:center;">Estatus</th>
-              <th>Prom. Junio (30d)</th>
-              <th>Prom. Julio (31d)</th>
-              <th>Variación Neta</th>
-              <th>Variación %</th>
-            </tr>
-          </thead>
+          <thead id="tableHead"></thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
@@ -285,9 +284,6 @@ function unlockDashboard() {
   renderAll();
 }
 
-// LÓGICA DEL DASHBOARD DE PROMEDIOS DIARIOS
-// Los datos corresponden a los cierres mensuales totales. 
-// El código se encarga de promediarlos dividiendo entre 30 y 31 dinámicamente.
 const DAYS_JUN = 30;
 const DAYS_JUL = 31;
 
@@ -311,7 +307,7 @@ function getFilteredData(){
   return zone === 'todas' ? rawData : rawData.filter(d => d.zone === zone);
 }
 
-// Calculadora de métricas normalizadas
+// Calculadora Base
 function calcMetrics(d, currentMode) {
   let m_jun, m_jul;
   if (currentMode === 'valor') {
@@ -321,15 +317,12 @@ function calcMetrics(d, currentMode) {
     m_jun = d.u_jun / DAYS_JUN;
     m_jul = d.u_jul / DAYS_JUL;
   } else if (currentMode === 'ticket') {
-    // Ticket promedio = Valor total / Unidades totales (independiente de los días)
     m_jun = d.v_jun / d.u_jun;
     m_jul = d.v_jul / d.u_jul;
   }
-  
   const diff = m_jul - m_jun;
-  const growthPct = m_jun ? (m_jul / m_jun) * 100 : 0; // Para el ranking (100% es empate)
-  const varPct = m_jun ? (diff / m_jun) * 100 : 0;     // Para la tabla (-2%, +5%)
-  
+  const growthPct = m_jun ? (m_jul / m_jun) * 100 : 0; 
+  const varPct = m_jun ? (diff / m_jun) * 100 : 0;     
   return { m_jun, m_jul, diff, varPct, growthPct };
 }
 
@@ -338,61 +331,106 @@ function getTotals(list){
   list.forEach(d => {
     v_jun += d.v_jun; v_jul += d.v_jul; u_jun += d.u_jun; u_jul += d.u_jul;
   });
-  return calcMetrics({v_jun, v_jul, u_jun, u_jul}, mode);
+  return {
+    v: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'valor'),
+    u: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'unidades'),
+    t: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'ticket'),
+    single: mode !== 'all' ? calcMetrics({v_jun, v_jul, u_jun, u_jul}, mode) : null
+  };
 }
 
 // Formateadores
-function fmtMetric(val) {
-  if (mode === 'valor') return "$" + Math.round(val || 0).toLocaleString('es-VE');
-  if (mode === 'unidades') return Math.round(val || 0).toLocaleString('es-VE') + " u";
-  if (mode === 'ticket') return "$" + (val || 0).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
+function fmtMetric(val, type) {
+  const current = type || mode;
+  if (current === 'valor') return "$" + Math.round(val || 0).toLocaleString('es-VE');
+  if (current === 'unidades') return Math.round(val || 0).toLocaleString('es-VE') + " u";
+  if (current === 'ticket') return "$" + (val || 0).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
-function fmtSigned(val) {
-  const sign = (val > 0 && mode !== 'ticket') ? '+' : '';
-  return sign + fmtMetric(val);
+function fmtSigned(val, type) {
+  const current = type || mode;
+  const sign = (val > 0 && current !== 'ticket') ? '+' : '';
+  return sign + fmtMetric(val, current);
 }
 
-function renderKPIs(){
-  const t = getTotals(getFilteredData());
-  const isNeg = t.diff < 0;
-  
-  document.getElementById('kpiGrid').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-title">Día Prom. Junio</div>
-      <div class="kpi-value">${fmtMetric(t.m_jun)}</div>
-      <div class="kpi-sub">Base 30 días</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Día Prom. Julio</div>
-      <div class="kpi-value">${fmtMetric(t.m_jul)}</div>
-      <div class="kpi-sub">Base 31 días</div>
-    </div>
-    <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
-      <div class="kpi-title">Variación Neta</div>
-      <div class="kpi-value">${fmtSigned(t.diff)}</div>
-      <div class="kpi-sub">${isNeg ? 'Contracción diaria' : 'Crecimiento diario'}</div>
-    </div>
-    <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
-      <div class="kpi-title">Variación %</div>
-      <div class="kpi-value">${t.varPct > 0 ? '+' : ''}${t.varPct.toFixed(2).replace('.', ',')}%</div>
-      <div class="kpi-sub">Frente al mes anterior</div>
+// Celda Apilada (Para modo TODAS)
+function renderStackedCell(metrics, type) {
+  const color = metrics.diff >= 0 ? 'var(--good)' : 'var(--warn)';
+  const sign = metrics.varPct > 0 ? '+' : '';
+  return `
+    <div class="stacked-cell">
+      <div class="st-row"><span class="st-lbl">Jun</span><span class="st-val">${fmtMetric(metrics.m_jun, type)}</span></div>
+      <div class="st-row"><span class="st-lbl">Jul</span><span class="st-val">${fmtMetric(metrics.m_jul, type)}</span></div>
+      <div class="st-row st-var" style="color:${color}">${sign}${metrics.varPct.toFixed(2).replace('.', ',')}%</div>
     </div>
   `;
 }
 
+function renderKPIs(){
+  const t = getTotals(getFilteredData());
+  
+  if (mode === 'all') {
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card ${t.v.diff < 0 ? 'neg' : 'pos'}">
+        <div class="kpi-title">Var. Valor Diario</div>
+        <div class="kpi-value">${t.v.varPct > 0 ? '+' : ''}${t.v.varPct.toFixed(2).replace('.',',')}%</div>
+        <div class="kpi-sub">Julio vs Junio</div>
+      </div>
+      <div class="kpi-card ${t.u.diff < 0 ? 'neg' : 'pos'}">
+        <div class="kpi-title">Var. Unid. Diarias</div>
+        <div class="kpi-value">${t.u.varPct > 0 ? '+' : ''}${t.u.varPct.toFixed(2).replace('.',',')}%</div>
+        <div class="kpi-sub">Julio vs Junio</div>
+      </div>
+      <div class="kpi-card ${t.t.diff < 0 ? 'neg' : 'pos'}">
+        <div class="kpi-title">Var. Costo Prom.</div>
+        <div class="kpi-value">${t.t.varPct > 0 ? '+' : ''}${t.t.varPct.toFixed(2).replace('.',',')}%</div>
+        <div class="kpi-sub">Julio vs Junio</div>
+      </div>
+    `;
+  } else {
+    const s = t.single;
+    const isNeg = s.diff < 0;
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-title">Día Prom. Junio</div>
+        <div class="kpi-value">${fmtMetric(s.m_jun)}</div>
+        <div class="kpi-sub">Base 30 días</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Día Prom. Julio</div>
+        <div class="kpi-value">${fmtMetric(s.m_jul)}</div>
+        <div class="kpi-sub">Base 31 días</div>
+      </div>
+      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+        <div class="kpi-title">Variación Neta</div>
+        <div class="kpi-value">${fmtSigned(s.diff)}</div>
+        <div class="kpi-sub">${isNeg ? 'Contracción diaria' : 'Crecimiento diario'}</div>
+      </div>
+      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+        <div class="kpi-title">Variación %</div>
+        <div class="kpi-value">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</div>
+        <div class="kpi-sub">Frente al mes anterior</div>
+      </div>
+    `;
+  }
+}
+
 function renderRanking(){
   const filtered = getFilteredData();
-  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
+  const rankMode = mode === 'all' ? 'valor' : mode; 
   
-  // Ordenar del mayor porcentaje de retención/crecimiento al menor
+  if(mode === 'all'){
+    document.getElementById('rankSub').textContent = "% de retención basado en VALOR $ (Julio vs Junio)";
+  } else {
+    document.getElementById('rankSub').textContent = "% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)";
+  }
+
+  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, rankMode) }));
   const sorted = calculated.sort((a,b) => b.growthPct - a.growthPct);
   
   document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
     const isGrowth = d.growthPct >= 100;
-    // Ancho visual para la barra (topado a 100% si creció, o el % real si bajó)
     const barWidth = Math.min(d.growthPct, 100); 
-    
     return `
     <div class="rank-row">
       <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
@@ -407,66 +445,6 @@ function renderRanking(){
 
 function renderTable(){
   const filtered = getFilteredData();
-  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
-
-  const rows = calculated.map(d => {
-    const isGrowth = d.diff >= 0;
-    const badge = isGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>';
-    const color = isGrowth ? 'var(--good)' : 'var(--warn)';
-    
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td style="text-align:center;">${badge}</td>
-      <td>${fmtMetric(d.m_jun)}</td>
-      <td>${fmtMetric(d.m_jul)}</td>
-      <td style="color:${color};">${fmtSigned(d.diff)}</td>
-      <td style="color:${color}; font-weight:700;">${d.varPct > 0 ? '+' : ''}${d.varPct.toFixed(2).replace('.', ',')}%</td>
-    </tr>`;
-  }).join('');
-
   const t = getTotals(filtered);
-  const isTotalGrowth = t.diff >= 0;
-  const tColor = isTotalGrowth ? 'var(--good)' : 'var(--warn)';
   
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;">${isTotalGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>'}</td>
-      <td>${fmtMetric(t.m_jun)}</td>
-      <td>${fmtMetric(t.m_jul)}</td>
-      <td style="color:${tColor};">${fmtSigned(t.diff)}</td>
-      <td style="color:${tColor}; font-weight:700;">${t.varPct > 0 ? '+' : ''}${t.varPct.toFixed(2).replace('.', ',')}%</td>
-    </tr>`;
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
-}
-
-function renderAll(){
-  renderKPIs();
-  renderRanking();
-  renderTable();
-}
-
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-function setMode(m, btn){
-  mode = m;
-  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-// VERIFICAR AUTENTICACIÓN INICIAL
-if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
-</script>
-
-</body>
-</html>
+  if (
