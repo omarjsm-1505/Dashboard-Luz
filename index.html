@@ -259,7 +259,6 @@
     <footer>LUZ · COMPARATIVO DIARIO_2026</footer>
   </div>
 </div>
-
 <script>
 // BLOQUEO SEGURO - IGNORARÁ LOS ERRORES DEL NAVEGADOR
 function checkAuth() {
@@ -439,4 +438,125 @@ function renderRanking(){
     const barWidth = Math.min(d.growthPct, 100); 
     return `
     <div class="rank-row">
-      <span class="rank-num">${String(i+1).padSt
+      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="rank-name">${d.n}</span>
+      <div class="bar-bg">
+        <div class="bar-fill ${isGrowth ? 'top' : ''}" style="width:${barWidth}%;"></div>
+      </div>
+      <span class="rank-pct">${d.growthPct.toFixed(2).replace('.', ',')}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTable(){
+  const filtered = getFilteredData();
+  const t = getTotals(filtered);
+  
+  if (mode === 'all') {
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:right;">Prom. Valor $</th>
+        <th style="text-align:right;">Prom. Unidades</th>
+        <th style="text-align:right;">Costo Prom.</th>
+      </tr>
+    `;
+    
+    const rows = filtered.map(d => {
+      const v = calcMetrics(d, 'valor');
+      const u = calcMetrics(d, 'unidades');
+      const tk = calcMetrics(d, 'ticket');
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td>${renderStackedCell(v, 'valor')}</td>
+        <td>${renderStackedCell(u, 'unidades')}</td>
+        <td>${renderStackedCell(tk, 'ticket')}</td>
+      </tr>`;
+    }).join('');
+
+    const totalRow = `
+      <tr class="total-row">
+        <td>TOTAL CONS.</td>
+        <td>${renderStackedCell(t.v, 'valor')}</td>
+        <td>${renderStackedCell(t.u, 'unidades')}</td>
+        <td>${renderStackedCell(t.t, 'ticket')}</td>
+      </tr>`;
+
+    document.getElementById('tableBody').innerHTML = rows + totalRow;
+    
+  } else {
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:center;">Estatus</th>
+        <th>Prom. Junio</th>
+        <th>Prom. Julio</th>
+        <th>Var. Neta</th>
+        <th>Var. %</th>
+      </tr>
+    `;
+    
+    const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
+    const rows = calculated.map(d => {
+      const isGrowth = d.diff >= 0;
+      const badge = isGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>';
+      const color = isGrowth ? 'var(--good)' : 'var(--warn)';
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td style="text-align:center;">${badge}</td>
+        <td>${fmtMetric(d.m_jun)}</td>
+        <td>${fmtMetric(d.m_jul)}</td>
+        <td style="color:${color};">${fmtSigned(d.diff)}</td>
+        <td style="color:${color}; font-weight:700;">${d.varPct > 0 ? '+' : ''}${d.varPct.toFixed(2).replace('.', ',')}%</td>
+      </tr>`;
+    }).join('');
+
+    const s = t.single;
+    const isTotalGrowth = s.diff >= 0;
+    const tColor = isTotalGrowth ? 'var(--good)' : 'var(--warn)';
+    const totalRow = `
+      <tr class="total-row">
+        <td>TOTAL CONSOLIDADO</td>
+        <td style="text-align:center;">${isTotalGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>'}</td>
+        <td>${fmtMetric(s.m_jun)}</td>
+        <td>${fmtMetric(s.m_jul)}</td>
+        <td style="color:${tColor};">${fmtSigned(s.diff)}</td>
+        <td style="color:${tColor}; font-weight:700;">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</td>
+      </tr>`;
+
+    document.getElementById('tableBody').innerHTML = rows + totalRow;
+  }
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRanking();
+  renderTable();
+}
+
+function setZone(z, btn){
+  zone = z;
+  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+// INICIAR DE FORMA SEGURA
+try {
+  if (sessionStorage.getItem('luz_authenticated') === 'true') {
+    unlockDashboard();
+  }
+} catch(e) {}
+</script>
+
+</body>
+</html>
