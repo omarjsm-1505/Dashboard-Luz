@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Dashboard Ejecutivo de Presupuesto</title>
+<title>Luz · Comparativo Promedio Diario</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -111,7 +111,7 @@
 
   .control-grid{
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap:14px;
     margin-bottom:28px;
   }
@@ -129,7 +129,7 @@
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
   .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
   .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
@@ -139,9 +139,10 @@
   .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
   .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
 
-  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:24px; }
+  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px; }
   .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
   .kpi-card.neg{ border-left-color:var(--warn); }
+  .kpi-card.pos{ border-left-color:var(--good); }
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
@@ -150,7 +151,7 @@
   .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
   .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
   .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
-  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--wine), var(--wine-light)); border-radius:5px; transition:width 0.3s ease; }
+  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--warn), #E59A6D); border-radius:5px; transition:width 0.3s ease; }
   .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
@@ -176,9 +177,9 @@
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
+    <p class="auth-sub">Ingrese la clave para acceder al panel comparativo.</p>
     <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
+    <button class="auth-btn" onclick="checkAuth()">Ingresar al Comparativo</button>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
@@ -186,7 +187,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 3 DE AGOSTO DE 2026</span>
+    <span>◆ COMPARATIVO DIARIO · JUNIO VS JULIO 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
@@ -194,10 +195,10 @@
 
     <section class="hero">
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Automercado Luz</p>
-      <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Unidades - Valor $</p>
-      <div class="corte-pill">◆ Corte al <b>3 de agosto, 2026</b></div>
+      <p class="eyebrow">Análisis de Desempeño</p>
+      <h1>Comparativo <em>Promedio Diario</em></h1>
+      <p class="hero-sub">Evaluación normalizada (Junio 30 días vs Julio 31 días)</p>
+      <div class="corte-pill">◆ Cierres Oficiales <b>Consolidados</b></div>
     </section>
 
     <!-- CONTROLES -->
@@ -211,32 +212,33 @@
         </div>
       </div>
       <div class="ctrl-box">
-        <span class="ctrl-title">Métrica</span>
+        <span class="ctrl-title">Métrica Diaria</span>
         <div class="toggle-group" id="groupMode">
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+          <button class="toggle-btn" onclick="setMode('ticket', this)">Costo Prom.</button>
         </div>
       </div>
     </div>
 
     <!-- KPIS -->
     <div class="section-box">
-      <h2 class="sec-title">Resumen del mes</h2>
-      <span class="sec-sub">Totales consolidados a la fecha de corte</span>
+      <h2 class="sec-title">Rendimiento Promedio por Día</h2>
+      <span class="sec-sub">Totales de la cadena (o zona filtrada) promediados por los días de cada mes</span>
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
     <!-- RANKING -->
     <div class="section-box">
-      <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Cumplimiento de mayor a menor</span>
+      <h2 class="sec-title">Ranking de Retención/Crecimiento</h2>
+      <span class="sec-sub">% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)</span>
       <div id="rankingList"></div>
     </div>
 
     <!-- TABLA -->
     <div class="section-box">
-      <h2 class="sec-title">Detalle completo</h2>
-      <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
+      <h2 class="sec-title">Detalle Sucursales</h2>
+      <span class="sec-sub">Comparación directa de promedios diarios normalizados</span>
 
       <div class="tbl-wrap">
         <table>
@@ -244,11 +246,10 @@
             <tr>
               <th>Sucursal</th>
               <th style="text-align:center;">Estatus</th>
-              <th>Presupuesto</th>
-              <th>Cumplido</th>
-              <th>%</th>
-              <th>Proyección</th>
-              <th>Diferencia</th>
+              <th>Prom. Junio (30d)</th>
+              <th>Prom. Julio (31d)</th>
+              <th>Variación Neta</th>
+              <th>Variación %</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -256,7 +257,7 @@
       </div>
     </div>
 
-    <footer>LUZ · SEGUIMIENTO_AGOSTO_2026</footer>
+    <footer>LUZ · COMPARATIVO DIARIO_2026</footer>
   </div>
 </div>
 
@@ -284,134 +285,158 @@ function unlockDashboard() {
   renderAll();
 }
 
-// LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 9.68;
+// LÓGICA DEL DASHBOARD DE PROMEDIOS DIARIOS
+// Los datos corresponden a los cierres mensuales totales. 
+// El código se encarga de promediarlos dividiendo entre 30 y 31 dinámicamente.
+const DAYS_JUN = 30;
+const DAYS_JUL = 31;
 
-const data = [
-  {n:"Carlota", zone:"este", vp:1217490, vc:113553, vpct:9.33, vproy:1173385, vdiff:-44105, up:526666, uc:52657, upct:10.00, uproy:544120, udiff:17454},
-  {n:"Chacao", zone:"oeste", vp:561964, vc:55920, vpct:9.95, vproy:577843, vdiff:15879, up:289842, uc:30011, upct:10.35, uproy:310109, udiff:20267},
-  {n:"Dos Caminos", zone:"oeste", vp:319847, vc:28333, vpct:8.86, vproy:292779, vdiff:-27068, up:163606, uc:14633, upct:8.94, uproy:151210, udiff:-12396},
-  {n:"Florida", zone:"oeste", vp:755763, vc:85421, vpct:11.30, vproy:882688, vdiff:126925, up:357075, uc:41160, upct:11.53, uproy:425323, udiff:68248},
-  {n:"Luz Quick Rest", zone:"oeste", vp:182770, vc:16753, vpct:9.17, vproy:173110, vdiff:-9660, up:93835, uc:8940, upct:9.53, uproy:92383, udiff:-1452},
-  {n:"Llanito", zone:"este", vp:496914, vc:55676, vpct:11.20, vproy:575314, vdiff:78400, up:240394, uc:28308, upct:11.78, uproy:292516, udiff:52122},
-  {n:"Marques", zone:"este", vp:161762, vc:16512, vpct:10.21, vproy:170628, vdiff:8866, up:83188, uc:8653, upct:10.40, uproy:89419, udiff:6232},
-  {n:"Pedregal", zone:"oeste", vp:351359, vc:34862, vpct:9.92, vproy:360240, vdiff:8881, up:180609, uc:18682, upct:10.34, uproy:193050, udiff:12442},
-  {n:"San Antonio", zone:"este", vp:533452, vc:56254, vpct:10.55, vproy:581295, vdiff:47843, up:250593, uc:26805, upct:10.70, uproy:276988, udiff:26395},
-  {n:"Urbina", zone:"este", vp:670680, vc:73262, vpct:10.92, vproy:757038, vdiff:86357, up:314193, uc:36025, upct:11.47, uproy:372261, udiff:58068}
+const rawData = [
+  {n:"Carlota", zone:"este", v_jun:1126130, v_jul:1143104, u_jun:488215, u_jul:494157},
+  {n:"Chacao", zone:"oeste", v_jun:542118, v_jul:530351, u_jun:272509, u_jul:271951},
+  {n:"Dos Caminos", zone:"oeste", v_jun:329196, v_jul:300398, u_jun:159694, u_jul:153507},
+  {n:"Florida", zone:"oeste", v_jun:706422, v_jul:709754, u_jun:325384, u_jul:335034},
+  {n:"Luz Quick Rest", zone:"oeste", v_jun:188305, v_jul:171371, u_jun:95526, u_jul:88043},
+  {n:"Llanito", zone:"este", v_jun:526614, v_jul:466184, u_jun:249268, u_jul:225555},
+  {n:"Marques", zone:"este", v_jun:160683, v_jul:151972, u_jun:80278, u_jul:78053},
+  {n:"Pedregal", zone:"oeste", v_jun:347661, v_jul:329829, u_jun:173787, u_jul:169460},
+  {n:"San Antonio", zone:"este", v_jun:474525, v_jul:498267, u_jun:216927, u_jul:235125},
+  {n:"Urbina", zone:"este", v_jun:666929, v_jul:629883, u_jun:299775, u_jul:294799}
 ];
 
 let mode = 'valor';
 let zone = 'todas';
 
-function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
-function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
-
 function getFilteredData(){
-  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
+  return zone === 'todas' ? rawData : rawData.filter(d => d.zone === zone);
+}
+
+// Calculadora de métricas normalizadas
+function calcMetrics(d, currentMode) {
+  let m_jun, m_jul;
+  if (currentMode === 'valor') {
+    m_jun = d.v_jun / DAYS_JUN;
+    m_jul = d.v_jul / DAYS_JUL;
+  } else if (currentMode === 'unidades') {
+    m_jun = d.u_jun / DAYS_JUN;
+    m_jul = d.u_jul / DAYS_JUL;
+  } else if (currentMode === 'ticket') {
+    // Ticket promedio = Valor total / Unidades totales (independiente de los días)
+    m_jun = d.v_jun / d.u_jun;
+    m_jul = d.v_jul / d.u_jul;
+  }
+  
+  const diff = m_jul - m_jun;
+  const growthPct = m_jun ? (m_jul / m_jun) * 100 : 0; // Para el ranking (100% es empate)
+  const varPct = m_jun ? (diff / m_jun) * 100 : 0;     // Para la tabla (-2%, +5%)
+  
+  return { m_jun, m_jul, diff, varPct, growthPct };
 }
 
 function getTotals(list){
-  let p = 0, c = 0, proy = 0, diff = 0;
-  const isVal = (mode === 'valor');
+  let v_jun = 0, v_jul = 0, u_jun = 0, u_jul = 0;
   list.forEach(d => {
-    p += isVal ? d.vp : d.up;
-    c += isVal ? d.vc : d.uc;
-    proy += isVal ? d.vproy : d.uproy;
-    diff += isVal ? d.vdiff : d.udiff;
+    v_jun += d.v_jun; v_jul += d.v_jul; u_jun += d.u_jun; u_jul += d.u_jul;
   });
-  const pct = p ? (c / p * 100) : 0;
-  return { p, c, pct, proy, diff };
+  return calcMetrics({v_jun, v_jul, u_jun, u_jul}, mode);
+}
+
+// Formateadores
+function fmtMetric(val) {
+  if (mode === 'valor') return "$" + Math.round(val || 0).toLocaleString('es-VE');
+  if (mode === 'unidades') return Math.round(val || 0).toLocaleString('es-VE') + " u";
+  if (mode === 'ticket') return "$" + (val || 0).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function fmtSigned(val) {
+  const sign = (val > 0 && mode !== 'ticket') ? '+' : '';
+  return sign + fmtMetric(val);
 }
 
 function renderKPIs(){
   const t = getTotals(getFilteredData());
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
+  const isNeg = t.diff < 0;
   
   document.getElementById('kpiGrid').innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-title">Presupuesto</div>
-      <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
-      <div class="kpi-sub">Meta del mes</div>
+      <div class="kpi-title">Día Prom. Junio</div>
+      <div class="kpi-value">${fmtMetric(t.m_jun)}</div>
+      <div class="kpi-sub">Base 30 días</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Cumplido</div>
-      <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
-      <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
+      <div class="kpi-title">Día Prom. Julio</div>
+      <div class="kpi-value">${fmtMetric(t.m_jul)}</div>
+      <div class="kpi-sub">Base 31 días</div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Proyección Cierre</div>
-      <div class="kpi-value">${unit}${fmt(t.proy)}${sfx}</div>
-      <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
+    <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+      <div class="kpi-title">Variación Neta</div>
+      <div class="kpi-value">${fmtSigned(t.diff)}</div>
+      <div class="kpi-sub">${isNeg ? 'Contracción diaria' : 'Crecimiento diario'}</div>
     </div>
-    <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
-      <div class="kpi-title">Diferencia</div>
-      <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
-      <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Valla Día 3</div>
-      <div class="kpi-value">9,68%</div>
-      <div class="kpi-sub">Meta teórica hoy</div>
+    <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+      <div class="kpi-title">Variación %</div>
+      <div class="kpi-value">${t.varPct > 0 ? '+' : ''}${t.varPct.toFixed(2).replace('.', ',')}%</div>
+      <div class="kpi-sub">Frente al mes anterior</div>
     </div>
   `;
 }
 
 function renderRanking(){
   const filtered = getFilteredData();
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
+  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
+  
+  // Ordenar del mayor porcentaje de retención/crecimiento al menor
+  const sorted = calculated.sort((a,b) => b.growthPct - a.growthPct);
   
   document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
-    const pct = d[pctKey];
+    const isGrowth = d.growthPct >= 100;
+    // Ancho visual para la barra (topado a 100% si creció, o el % real si bajó)
+    const barWidth = Math.min(d.growthPct, 100); 
+    
     return `
     <div class="rank-row">
       <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
       <span class="rank-name">${d.n}</span>
       <div class="bar-bg">
-        <div class="bar-fill ${pct >= EXPECTED_PCT ? 'top' : ''}" style="width:${Math.min(pct, 100)}%;"></div>
+        <div class="bar-fill ${isGrowth ? 'top' : ''}" style="width:${barWidth}%;"></div>
       </div>
-      <span class="rank-pct">${pct.toFixed(2).replace('.', ',')}%</span>
+      <span class="rank-pct">${d.growthPct.toFixed(2).replace('.', ',')}%</span>
     </div>`;
   }).join('');
 }
 
 function renderTable(){
   const filtered = getFilteredData();
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
-  const pKey = mode === 'valor' ? 'vp' : 'up';
-  const cKey = mode === 'valor' ? 'vc' : 'uc';
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
-  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
+  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
 
-  const rows = filtered.map(d => {
-    const pct = d[pctKey];
-    const diff = d[diffKey];
-    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+  const rows = calculated.map(d => {
+    const isGrowth = d.diff >= 0;
+    const badge = isGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>';
+    const color = isGrowth ? 'var(--good)' : 'var(--warn)';
+    
     return `
     <tr>
       <td>${d.n}</td>
       <td style="text-align:center;">${badge}</td>
-      <td>${unit}${fmt(d[pKey])}${sfx}</td>
-      <td>${unit}${fmt(d[cKey])}${sfx}</td>
-      <td>${pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
-      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
+      <td>${fmtMetric(d.m_jun)}</td>
+      <td>${fmtMetric(d.m_jul)}</td>
+      <td style="color:${color};">${fmtSigned(d.diff)}</td>
+      <td style="color:${color}; font-weight:700;">${d.varPct > 0 ? '+' : ''}${d.varPct.toFixed(2).replace('.', ',')}%</td>
     </tr>`;
   }).join('');
 
   const t = getTotals(filtered);
+  const isTotalGrowth = t.diff >= 0;
+  const tColor = isTotalGrowth ? 'var(--good)' : 'var(--warn)';
+  
   const totalRow = `
     <tr class="total-row">
       <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
-      <td>${unit}${fmt(t.p)}${sfx}</td>
-      <td>${unit}${fmt(t.c)}${sfx}</td>
-      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(t.proy)}${sfx}</td>
-      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
+      <td style="text-align:center;">${isTotalGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>'}</td>
+      <td>${fmtMetric(t.m_jun)}</td>
+      <td>${fmtMetric(t.m_jul)}</td>
+      <td style="color:${tColor};">${fmtSigned(t.diff)}</td>
+      <td style="color:${tColor}; font-weight:700;">${t.varPct > 0 ? '+' : ''}${t.varPct.toFixed(2).replace('.', ',')}%</td>
     </tr>`;
 
   document.getElementById('tableBody').innerHTML = rows + totalRow;
