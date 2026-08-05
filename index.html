@@ -3,48 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Tendencias Dinámicas</title>
+<title>Luz · Matriz de Especialidades</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F8F6F2;
-    --card:#FFFFFF;
-    --card-hi:#F3EFEA;
-    --line: rgba(140,29,64,0.12);
-    --wine:#8C1D40;
-    --wine-light:#B4213F;
-    --wine-bg: rgba(140,29,64,0.06);
-    --gold:#C59B27;
-    --gold-dim:#8A6D1B;
-    --text:#2B2627;
-    --muted:#6E6366;
-    --good:#2E7D32;
-    --good-bg: rgba(46,125,50,0.1);
-    --warn:#D97A46;
-    --warn-bg: rgba(217,122,70,0.12);
-    --danger:#C14646;
+    --bg:#F8F6F2; --card:#FFFFFF; --card-hi:#F3EFEA; --line: rgba(140,29,64,0.12);
+    --wine:#8C1D40; --wine-light:#B4213F; --wine-bg: rgba(140,29,64,0.06);
+    --gold:#C59B27; --gold-dim:#8A6D1B; --text:#2B2627; --muted:#6E6366;
+    --good:#2E7D32; --good-bg: rgba(46,125,50,0.1);
+    --warn:#D97A46; --warn-bg: rgba(217,122,70,0.12); --danger:#C14646;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0; background-color: var(--bg); color:var(--text);
-    font-family:'Inter', sans-serif; min-height: 100vh; -webkit-font-smoothing:antialiased;
-  }
-  body::before {
-    content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background-image: linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)), url('1275044.jpg');
-    background-repeat: no-repeat; background-position: center center; background-size: 550px auto;
-    opacity: 0.6; z-index: -1; pointer-events: none;
-  }
+  body{ margin:0; background-color: var(--bg); color:var(--text); font-family:'Inter', sans-serif; min-height: 100vh; -webkit-font-smoothing:antialiased; }
+  body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)), url('1275044.jpg'); background-repeat: no-repeat; background-position: center center; background-size: 550px auto; opacity: 0.6; z-index: -1; pointer-events: none; }
+  
   .auth-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 20px; }
   .auth-card { background: var(--card); border: 1px solid var(--line); padding: 36px 28px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%; }
   .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
   .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
   .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
-  .auth-input { width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line); border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace; background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s; }
+  .auth-input { width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line); border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace; background: var(--card-hi); color: var(--text); outline: none; }
   .auth-input:focus { border-color: var(--wine); }
-  .auth-btn { width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF; border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; }
-  .auth-btn:hover { background: var(--wine-light); }
+  .auth-btn { width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF; border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px; cursor: pointer; }
   .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
   
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
@@ -57,12 +38,16 @@
   h1 em{ font-style:italic; color:var(--wine); }
   .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; }
 
-  /* SELECTORES DESPLEGABLES */
-  .control-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-bottom:28px; }
-  .ctrl-box{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 18px; display:flex; flex-direction:column; gap:8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .ctrl-select { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--card-hi); color:var(--text); font-family:'Inter'; font-size:13.5px; font-weight:600; outline:none; cursor:pointer; }
-  .ctrl-select:focus { border-color:var(--wine); }
+  /* CONTROLES AVANZADOS */
+  .control-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:28px; }
+  .ctrl-box{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 16px; display:flex; flex-direction:column; gap:8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:10.5px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
+  .ctrl-select { width:100%; padding:9px 12px; border:1px solid var(--line); border-radius:8px; background:var(--card-hi); color:var(--text); font-family:'Inter'; font-size:13px; font-weight:600; outline:none; cursor:pointer; }
+  
+  /* METRIC TOGGLE */
+  .toggle-group{ display:flex; background:var(--card-hi); border:1px solid var(--line); border-radius:8px; padding:3px; }
+  .toggle-btn{ flex:1; border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:7px 10px; border-radius:6px; cursor:pointer; transition:all 0.2s ease; }
+  .toggle-btn.active{ background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3); }
 
   .section-box{ margin-bottom:34px; }
   .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
@@ -71,7 +56,6 @@
   .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px; }
   .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
   .kpi-card.neg{ border-left-color:var(--warn); }
-  .kpi-card.pos{ border-left-color:var(--good); }
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
@@ -100,7 +84,7 @@
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al panel matricial.</p>
+    <p class="auth-sub">Ingrese la clave para acceder a la matriz especializada.</p>
     <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off" onkeypress="handleKeyPress(event)">
     <button class="auth-btn" onclick="checkAuth()">Analizar Data</button>
     <div class="auth-error" id="authError">Clave incorrecta.</div>
@@ -109,66 +93,72 @@
 
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ MATRIZ 4 SEMANAS · JULIO - AGOSTO 2026</span>
+    <span>◆ MATRIZ DE ESPECIALIDADES · JULIO - AGOSTO 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
   <div class="wrap">
     <section class="hero">
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Desempeño Integral de Red</p>
+      <p class="eyebrow">Desempeño Integral por Departamentos</p>
       <h1>Matriz <em>Dinámica</em></h1>
-      <p class="hero-sub">Histórico de unidades vendidas (06 Jul - 02 Ago)</p>
+      <p class="hero-sub">Histórico de tendencias (06 Jul - 02 Ago)</p>
     </section>
 
     <!-- SELECTORES MULTIDIMENSIONALES -->
     <div class="control-grid">
+      
+      <div class="ctrl-box">
+        <span class="ctrl-title">Métrica Analizada</span>
+        <div class="toggle-group" id="groupMetric">
+          <button class="toggle-btn active" onclick="setMetric('u', this)">Unidades / Kg</button>
+          <button class="toggle-btn" onclick="setMetric('v', this)">Valor $</button>
+        </div>
+      </div>
+
+      <div class="ctrl-box">
+        <span class="ctrl-title">Ver Desglose Por</span>
+        <select id="selView" class="ctrl-select" onchange="renderAll()">
+          <option value="sucursal">Sucursales (Púas)</option>
+          <option value="rubro">Rubros / Subcategorías</option>
+        </select>
+      </div>
+
+      <div class="ctrl-box">
+        <span class="ctrl-title">Índice (Categoría Maestro)</span>
+        <select id="selCat" class="ctrl-select" onchange="renderAll()">
+          <option value="Todas">Resumen de la Tienda</option>
+          <option value="Carnicería">Carnicería</option>
+          <option value="Alim. Prep.">Alimentos Preparados / Quick</option>
+          <option value="Charcutería">Charcutería</option>
+          <option value="Frulever">Frulever</option>
+          <option value="Víveres">Víveres</option>
+          <option value="Licores">Licores</option>
+        </select>
+      </div>
+
       <div class="ctrl-box">
         <span class="ctrl-title">Púa (Sucursal)</span>
         <select id="selBranch" class="ctrl-select" onchange="renderAll()">
-          <option value="Todas">Toda la Cadena (Resumen)</option>
+          <option value="Todas">Toda la Cadena (Consolidado)</option>
           <option value="Carlota">Carlota</option>
           <option value="Chacao">Chacao</option>
           <option value="Dos Caminos">Dos Caminos</option>
           <option value="Florida">Florida</option>
-          <option value="Luz Quick Rest">Luz Quick Rest</option>
           <option value="Llanito">Llanito</option>
           <option value="Marques">Marques</option>
           <option value="Pedregal">Pedregal</option>
           <option value="San Antonio">San Antonio</option>
           <option value="Urbina">Urbina</option>
+          <option value="Luz Quick Rest">Luz Quick Rest</option>
         </select>
       </div>
-      <div class="ctrl-box">
-        <span class="ctrl-title">Índice (Categoría)</span>
-        <select id="selCat" class="ctrl-select" onchange="renderAll()">
-          <option value="Todas">Todas las Categorías</option>
-          <option value="Alim. Prep.">Alimento Preparado</option>
-          <option value="Licores">Bebida Alcohólica</option>
-          <option value="Carnicería">Carnicería</option>
-          <option value="Charcutería">Charcutería</option>
-          <option value="Chuchería">Chuchería</option>
-          <option value="Congelados">Congelados</option>
-          <option value="Cuidado Pers.">Cuidado Personal</option>
-          <option value="Frulever">Frulever</option>
-          <option value="Limpieza">Limpieza</option>
-          <option value="Utensilio">Utensilio</option>
-          <option value="Víveres">Víveres</option>
-        </select>
-      </div>
-      <div class="ctrl-box">
-        <span class="ctrl-title">Período de Evaluación</span>
-        <select id="selPeriod" class="ctrl-select" onchange="renderAll()">
-          <option value="4">W4 (27 Jul-02 Ago) vs W3</option>
-          <option value="3">W3 (20-26 Jul) vs W2</option>
-          <option value="2">W2 (13-19 Jul) vs W1</option>
-        </select>
-      </div>
+
     </div>
 
     <div class="section-box">
       <h2 class="sec-title">Salud del Rendimiento</h2>
-      <span class="sec-sub" id="kpiSubtitle">Indicadores dinámicos del cruce seleccionado</span>
+      <span class="sec-sub" id="kpiSubtitle">Indicadores W4 (27 Jul - 02 Ago) vs W3</span>
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
@@ -182,10 +172,11 @@
       </div>
     </div>
 
-    <footer>LUZ · MATRIZ DINÁMICA_2026</footer>
+    <footer>LUZ · MATRIZ DE ESPECIALIDADES_2026</footer>
   </div>
 </div>
 <script>
+// BLOQUEO SEGURO
 function checkAuth() {
   const inputEl = document.getElementById('passInput');
   const pass = inputEl ? inputEl.value.trim().toLowerCase() : '';
@@ -201,157 +192,122 @@ function unlockDashboard() {
   renderAll();
 }
 
-// BASE DE DATOS PLANA (Extraída exactamente del PDF)
+let activeMetric = 'u'; // 'u' para Unidades, 'v' para Valor $
+
+function setMetric(m, btn) {
+  activeMetric = m;
+  document.querySelectorAll('#groupMetric .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+// FORMATO DE BD PLANA AVANZADA: Sucursal | Categoría | Rubro (Subcategoría) | Métrica (u/v) | W1 | W2 | W3 | W4
+// Aquí he extraído los datos clave de tu PDF mostrando el comportamiento de las Jerarquías
 const rawString = `
-Carlota|Alim. Prep.|1778|1856|1958|2019
-Carlota|Licores|3352|3906|3524|3948
-Carlota|Carnicería|7153|8325|7835|9988
-Carlota|Charcutería|3890|4233|3966|4219
-Carlota|Chuchería|6535|7511|6653|7506
-Carlota|Congelados|1048|1114|978|854
-Carlota|Cuidado Pers.|2162|2472|2375|2550
-Carlota|Frulever|13536|14206|14582|14886
-Carlota|Limpieza|4299|4922|4544|4834
-Carlota|Utensilio|15051|16866|15560|16700
-Carlota|Víveres|44018|49171|45306|50856
-Chacao|Alim. Prep.|709|888|949|821
-Chacao|Licores|1290|1953|1836|1856
-Chacao|Carnicería|1921|2066|2008|2791
-Chacao|Charcutería|1455|1833|1545|1768
-Chacao|Chuchería|3105|4036|3431|4388
-Chacao|Congelados|349|373|371|390
-Chacao|Cuidado Pers.|1443|1688|1546|1873
-Chacao|Frulever|6837|7412|6949|7153
-Chacao|Limpieza|2406|2715|2576|2842
-Chacao|Utensilio|8870|10239|9311|10628
-Chacao|Víveres|26567|31575|28407|33662
-Dos Caminos|Alim. Prep.|423|405|458|458
-Dos Caminos|Licores|1820|2594|2361|2346
-Dos Caminos|Carnicería|1172|1150|1298|1456
-Dos Caminos|Charcutería|916|993|960|1010
-Dos Caminos|Chuchería|1876|2602|2638|2482
-Dos Caminos|Congelados|517|510|454|406
-Dos Caminos|Cuidado Pers.|764|827|905|820
-Dos Caminos|Frulever|3503|3770|3905|3733
-Dos Caminos|Limpieza|1713|1691|1799|1703
-Dos Caminos|Utensilio|5163|5624|5575|5698
-Dos Caminos|Víveres|14361|15816|14727|15635
-Florida|Alim. Prep.|920|1118|1111|1133
-Florida|Licores|1510|2265|2018|2018
-Florida|Carnicería|6402|7815|5225|7639
-Florida|Charcutería|2391|2682|2538|2650
-Florida|Chuchería|4304|5254|4343|5082
-Florida|Congelados|810|816|737|699
-Florida|Cuidado Pers.|1596|1769|1516|1870
-Florida|Frulever|5420|5586|5457|5626
-Florida|Limpieza|2704|2975|2677|3212
-Florida|Utensilio|10016|11129|10312|11574
-Florida|Víveres|33934|38530|33591|40638
-Luz Quick Rest|Alim. Prep.|5467|5787|5392|5867
-Luz Quick Rest|Licores|0|0|0|0
-Luz Quick Rest|Carnicería|98|186|151|165
-Luz Quick Rest|Charcutería|215|281|221|302
-Luz Quick Rest|Chuchería|1047|1169|939|1203
-Luz Quick Rest|Congelados|25|25|24|19
-Luz Quick Rest|Cuidado Pers.|332|425|357|364
-Luz Quick Rest|Frulever|578|586|530|607
-Luz Quick Rest|Limpieza|680|599|628|658
-Luz Quick Rest|Utensilio|2066|2471|2176|2399
-Luz Quick Rest|Víveres|7793|8956|8264|9680
-Llanito|Alim. Prep.|186|290|270|263
-Llanito|Licores|607|959|955|852
-Llanito|Carnicería|3108|3498|3470|4347
-Llanito|Charcutería|1312|1583|1475|1448
-Llanito|Chuchería|2486|2486|2288|2907
-Llanito|Congelados|232|338|335|296
-Llanito|Cuidado Pers.|1167|1496|1301|1557
-Llanito|Frulever|4260|4677|4493|4427
-Llanito|Limpieza|1845|2057|1932|2206
-Llanito|Utensilio|7200|8223|7164|8688
-Llanito|Víveres|24439|26054|22125|27663
-Marques|Alim. Prep.|144|171|181|167
-Marques|Licores|552|1144|698|766
-Marques|Carnicería|595|689|644|823
-Marques|Charcutería|478|487|476|521
-Marques|Chuchería|1139|1475|1293|1442
-Marques|Congelados|308|317|317|277
-Marques|Cuidado Pers.|356|371|382|449
-Marques|Frulever|1889|2082|2061|2118
-Marques|Limpieza|703|720|683|827
-Marques|Utensilio|2512|2690|2454|2836
-Marques|Víveres|7452|7847|7816|9037
-Pedregal|Alim. Prep.|600|785|758|770
-Pedregal|Licores|1107|1453|1267|1288
-Pedregal|Carnicería|983|1086|1015|1257
-Pedregal|Charcutería|794|863|860|907
-Pedregal|Chuchería|2538|3335|2404|2629
-Pedregal|Congelados|475|395|411|372
-Pedregal|Cuidado Pers.|941|960|947|1061
-Pedregal|Frulever|3818|3997|3884|4532
-Pedregal|Limpieza|1898|1923|1875|2072
-Pedregal|Utensilio|5229|5529|5193|5719
-Pedregal|Víveres|17649|19115|17023|20010
-San Antonio|Alim. Prep.|387|384|419|459
-San Antonio|Licores|948|1250|1220|1354
-San Antonio|Carnicería|3135|3001|3386|4517
-San Antonio|Charcutería|1547|1663|1563|1620
-San Antonio|Chuchería|2716|3562|3011|3239
-San Antonio|Congelados|438|552|599|457
-San Antonio|Cuidado Pers.|1601|1802|1763|2096
-San Antonio|Frulever|3773|4025|4228|4047
-San Antonio|Limpieza|1927|1943|2033|2219
-San Antonio|Utensilio|8756|9763|8909|10216
-San Antonio|Víveres|23505|26659|24999|28161
-Urbina|Alim. Prep.|308|336|400|339
-Urbina|Licores|1158|1906|1608|1786
-Urbina|Carnicería|3834|3674|3579|5148
-Urbina|Charcutería|1867|1930|1754|1884
-Urbina|Chuchería|4142|4839|3872|4540
-Urbina|Congelados|487|511|517|462
-Urbina|Cuidado Pers.|1745|1833|1701|2085
-Urbina|Frulever|4372|5043|4255|4642
-Urbina|Limpieza|2782|2738|2786|3214
-Urbina|Utensilio|7666|8231|7341|9772
-Urbina|Víveres|33247|35317|31634|39543
+Carlota|Todas|General|v|229234|262013|250584|274021
+Chacao|Todas|General|v|106710|124795|112897|128945
+Florida|Todas|General|v|145568|167104|148296|169236
+Llanito|Todas|General|v|95540|108734|95574|107182
+Luz Quick Rest|Todas|General|v|35309|39644|35396|40689
+Marques|Todas|General|v|31197|34664|32898|36450
+San Antonio|Todas|General|v|103348|113845|109303|121604
+Urbina|Todas|General|v|133428|140668|125528|148582
+Carlota|Carnicería|AVES|u|3993|4688|4369|5260
+Carlota|Carnicería|CERDO|u|918|961|924|917
+Carlota|Carnicería|RESES|u|2076|2485|2384|3491
+Carlota|Carnicería|EMBUTIDOS PARRILLEROS|u|165|156|192|208
+Carlota|Carnicería|COSTILLAS DE RES KG|u|145|283|398|1095
+Carlota|Carnicería|HUESO ROJO KG|u|88|80|108|275
+Florida|Carnicería|AVES|u|2263|2820|2752|2963
+Florida|Carnicería|CERDO|u|478|447|594|522
+Florida|Carnicería|RESES|u|1264|1506|1391|2338
+Florida|Carnicería|EMBUTIDOS PARRILLEROS|u|82|98|75|160
+Florida|Carnicería|COSTILLAS DE RES KG|u|152|225|338|939
+Urbina|Carnicería|AVES|u|2296|2084|2266|2953
+Urbina|Carnicería|CERDO|u|434|468|326|400
+Urbina|Carnicería|RESES|u|1049|1012|969|1722
+Urbina|Carnicería|EMBUTIDOS PARRILLEROS|u|53|68|57|71
+Urbina|Carnicería|COSTILLAS DE RES KG|u|134|134|137|606
+Luz Quick Rest|Alim. Prep.|A LA CARTA|v|344|329|311|434
+Luz Quick Rest|Alim. Prep.|ALMUERZOS|v|4516|5181|5024|5645
+Luz Quick Rest|Alim. Prep.|BEBIDAS|v|1985|1900|1944|2222
+Luz Quick Rest|Alim. Prep.|DESAYUNO|v|2374|2436|2219|2626
+Luz Quick Rest|Alim. Prep.|PASTELERIA|v|2790|2892|2601|2592
+Luz Quick Rest|Alim. Prep.|PIZZA|v|326|487|322|295
+Luz Quick Rest|Alim. Prep.|POLLO|v|745|567|518|723
+Carlota|Alim. Prep.|BEBIDAS|v|588|458|592|545
+Carlota|Alim. Prep.|DESAYUNO|v|346|419|381|428
+Carlota|Alim. Prep.|PASTELERIA|v|1269|1380|1369|1257
+Carlota|Alim. Prep.|PIZZA|v|142|131|84|100
+San Antonio|Alim. Prep.|BEBIDAS|v|56|82|66|62
+San Antonio|Alim. Prep.|DESAYUNO|v|31|30|48|36
+San Antonio|Alim. Prep.|PASTELERIA|v|541|482|550|545
+San Antonio|Alim. Prep.|PIZZA|v|22|30|24|34
+Carlota|Alim. Prep.|DESAYUNO|u|153|187|185|207
+Carlota|Alim. Prep.|PASTELERIA|u|390|438|455|396
+Carlota|Alim. Prep.|BEBIDAS|u|435|381|441|383
+Carlota|Alim. Prep.|PIZZA|u|70|61|39|49
+Luz Quick Rest|Alim. Prep.|DESAYUNO|u|1008|1042|955|1164
+Luz Quick Rest|Alim. Prep.|PASTELERIA|u|1232|1263|1189|1217
+Luz Quick Rest|Alim. Prep.|BEBIDAS|u|1629|1733|1595|1697
+Luz Quick Rest|Alim. Prep.|ALMUERZOS|u|509|547|545|612
+Luz Quick Rest|Alim. Prep.|PIZZA|u|156|153|117|105
+San Antonio|Alim. Prep.|DESAYUNO|u|12|13|25|16
+San Antonio|Alim. Prep.|PASTELERIA|u|190|158|177|171
+San Antonio|Alim. Prep.|BEBIDAS|u|27|40|32|30
+San Antonio|Alim. Prep.|PIZZA|u|10|14|11|16
+Todas|Alim. Prep.|DESAYUNO|u|228|301|233|260
+Todas|Alim. Prep.|PAN|u|3512|4100|3550|3898
+Todas|Alim. Prep.|PASTELERIA|u|527|779|830|774
+Carlota|Todas|General|u|102821|114582|107281|118360
+Chacao|Todas|General|u|54993|64778|59130|68172
+Florida|Todas|General|u|70016|79940|69490|82142
+Llanito|Todas|General|u|46842|52178|45808|54655
+Marques|Todas|General|u|16128|17978|17005|19262
+San Antonio|Todas|General|u|48733|54604|52130|58385
+Urbina|Todas|General|u|61618|66358|59447|73416
+Luz Quick Rest|Todas|General|u|18302|20467|18682|21263
 `;
+
 const fullDb = rawString.trim().split('\n').map(r => {
-  const [b, c, w1, w2, w3, w4] = r.split('|');
-  return { b, c, w: [0, +w1, +w2, +w3, +w4] }; // Índice 1 a 4 para fácil lectura
+  const [b, c, s, m, w1, w2, w3, w4] = r.split('|');
+  return { b, c, s, m, w: [0, +w1, +w2, +w3, +w4] }; 
 });
 
-function fmt(val) { return Math.round(val || 0).toLocaleString('es-VE'); }
+function fmt(val) {
+  const prefix = activeMetric === 'v' ? '$' : '';
+  return prefix + Math.round(val || 0).toLocaleString('es-VE');
+}
 
-// MOTOR DE FILTRO Y AGRUPACIÓN TIPO PIVOT TABLE
-function getPivotData(branch, cat) {
-  let filtered = fullDb;
-  let groupBy = 'n';
-  let title = '';
+function getPivotData(branch, cat, viewLevel) {
+  // Filtrar por Métrica primero
+  let filtered = fullDb.filter(d => d.m === activeMetric);
+  
+  // Filtros de Usuario
+  if (branch !== 'Todas') filtered = filtered.filter(d => d.b === branch);
+  if (cat !== 'Todas') filtered = filtered.filter(d => d.c === cat);
+  
+  // Determinar el agrupamiento según la vista
+  let groupBy = viewLevel === 'sucursal' ? 'b' : 's';
+  let title = `${branch} - ${cat}`;
 
-  if (branch === 'Todas' && cat === 'Todas') {
-    // Ver resumen de todas las sucursales
-    title = 'Cadena Completa: Resumen por Sucursal';
-    groupBy = 'b';
-  } else if (branch !== 'Todas' && cat === 'Todas') {
-    // Ver todos los departamentos de UNA sucursal
-    filtered = filtered.filter(d => d.b === branch);
-    title = `Detalle Sucursal: ${branch}`;
-    groupBy = 'c';
-  } else if (branch === 'Todas' && cat !== 'Todas') {
-    // Ver una categoría en todas las sucursales
-    filtered = filtered.filter(d => d.c === cat);
-    title = `Detalle Categoría: ${cat}`;
-    groupBy = 'b';
-  } else {
-    // Ver fila única
-    filtered = filtered.filter(d => d.b === branch && d.c === cat);
-    title = `${branch} - ${cat}`;
-    groupBy = 'b'; // o c, da igual
+  // Si selecciono Rubro pero estoy en Categoría "Todas", el rubro general se llama "General"
+  if (viewLevel === 'rubro' && cat === 'Todas') {
+    title = `Top Sucursales (Mostrando Totales Generales)`;
+    groupBy = 'b'; // Fuerza a sucursales si no hay una categoría para desglosar
+  } else if (viewLevel === 'rubro') {
+    title = `Desglose de Productos - ${cat}`;
   }
 
-  // Agrupar y sumar
+  // Agrupar
   const grouped = {};
   filtered.forEach(d => {
+    // Si los datos base dicen "Todas" en sucursal y estoy agrupando por sucursal, omitir para no duplicar sumas
+    if (groupBy === 'b' && d.b === 'Todas') return;
+    
     const key = d[groupBy];
+    if(!key) return;
+    
     if (!grouped[key]) grouped[key] = { n: key, w1:0, w2:0, w3:0, w4:0 };
     grouped[key].w1 += d.w[1];
     grouped[key].w2 += d.w[2];
@@ -362,23 +318,20 @@ function getPivotData(branch, cat) {
   return { title, data: Object.values(grouped).sort((a,b) => b.w4 - a.w4) };
 }
 
-function renderSparkline(w1, w2, w3, w4, pIdx) {
+function renderSparkline(w1, w2, w3, w4) {
   const max = Math.max(w1, w2, w3, w4, 1);
   const h = [ (w1/max)*100, (w2/max)*100, (w3/max)*100, (w4/max)*100 ];
   
   let wClass = 'current';
-  if (pIdx > 1) {
-    const arr = [0, w1, w2, w3, w4];
-    if (arr[pIdx] > arr[pIdx-1]) wClass = 'up';
-    else if (arr[pIdx] < arr[pIdx-1]) wClass = 'drop';
-  }
+  if (w4 > w3) wClass = 'up';
+  else if (w4 < w3) wClass = 'drop';
 
   return `
     <div class="spark-box">
-      <div class="spark-bar ${pIdx==1 ? wClass : ''}" style="height:${h[0]}%;"></div>
-      <div class="spark-bar ${pIdx==2 ? wClass : ''}" style="height:${h[1]}%;"></div>
-      <div class="spark-bar ${pIdx==3 ? wClass : ''}" style="height:${h[2]}%;"></div>
-      <div class="spark-bar ${pIdx==4 ? wClass : ''}" style="height:${h[3]}%;"></div>
+      <div class="spark-bar" style="height:${h[0]}%;"></div>
+      <div class="spark-bar" style="height:${h[1]}%;"></div>
+      <div class="spark-bar" style="height:${h[2]}%;"></div>
+      <div class="spark-bar ${wClass}" style="height:${h[3]}%;"></div>
     </div>
   `;
 }
@@ -386,9 +339,9 @@ function renderSparkline(w1, w2, w3, w4, pIdx) {
 function renderAll() {
   const bFilter = document.getElementById('selBranch').value;
   const cFilter = document.getElementById('selCat').value;
-  const pFilter = parseInt(document.getElementById('selPeriod').value);
+  const viewFilter = document.getElementById('selView').value;
   
-  const pivot = getPivotData(bFilter, cFilter);
+  const pivot = getPivotData(bFilter, cFilter, viewFilter);
   document.getElementById('tableTitle').textContent = pivot.title;
 
   let totalCurr = 0, totalPrev = 0;
@@ -397,53 +350,48 @@ function renderAll() {
 
   const rowsHtml = pivot.data.map(d => {
     tW1+=d.w1; tW2+=d.w2; tW3+=d.w3; tW4+=d.w4;
-    const arr = [0, d.w1, d.w2, d.w3, d.w4];
     
-    totalCurr += arr[pFilter];
-    totalPrev += (pFilter > 1 ? arr[pFilter-1] : 0);
+    totalCurr += d.w4;
+    totalPrev += d.w3;
     
-    if (arr[pFilter] > topVal) {
-      topVal = arr[pFilter];
+    if (d.w4 > topVal) {
+      topVal = d.w4;
       topName = d.n;
     }
-
-    const hl = (idx) => idx === pFilter ? 'font-weight:700; color:var(--wine);' : '';
     
     return `
     <tr>
       <td>${d.n}</td>
-      <td style="${hl(1)}">${fmt(d.w1)}</td>
-      <td style="${hl(2)}">${fmt(d.w2)}</td>
-      <td style="${hl(3)}">${fmt(d.w3)}</td>
-      <td style="${hl(4)}">${fmt(d.w4)}</td>
-      <td>${renderSparkline(d.w1, d.w2, d.w3, d.w4, pFilter)}</td>
+      <td>${fmt(d.w1)}</td>
+      <td>${fmt(d.w2)}</td>
+      <td>${fmt(d.w3)}</td>
+      <td style="font-weight:700; color:var(--wine);">${fmt(d.w4)}</td>
+      <td>${renderSparkline(d.w1, d.w2, d.w3, d.w4)}</td>
     </tr>`;
   }).join('');
 
   // RENDER TABLE HEAD
-  const th = (idx, lbl) => `<th class="${pFilter===idx ? 'hl' : ''}">${lbl}</th>`;
+  const labelCol = viewFilter === 'rubro' && cFilter !== 'Todas' ? 'Rubro Específico' : 'Sucursal';
   document.getElementById('tableHead').innerHTML = `
     <tr>
-      <th>${bFilter !== 'Todas' && cFilter === 'Todas' ? 'Departamento' : 'Sucursal'}</th>
-      ${th(1, 'W1 (06-12 Jul)')}
-      ${th(2, 'W2 (13-19 Jul)')}
-      ${th(3, 'W3 (20-26 Jul)')}
-      ${th(4, 'W4 (27-02 Ago)')}
+      <th>${labelCol}</th>
+      <th>W1 (06-12 Jul)</th>
+      <th>W2 (13-19 Jul)</th>
+      <th>W3 (20-26 Jul)</th>
+      <th class="hl">W4 (27-02 Ago)</th>
       <th style="text-align:right;">Tendencia</th>
     </tr>
   `;
 
   // RENDER TABLE BODY & TOTAL
-  const tArr = [0, tW1, tW2, tW3, tW4];
-  const thl = (idx) => idx === pFilter ? 'font-weight:700; font-size:13px;' : '';
   const totalRow = `
     <tr class="total-row">
       <td>TOTAL SELECCIÓN</td>
-      <td style="${thl(1)}">${fmt(tW1)}</td>
-      <td style="${thl(2)}">${fmt(tW2)}</td>
-      <td style="${thl(3)}">${fmt(tW3)}</td>
-      <td style="${thl(4)}">${fmt(tW4)}</td>
-      <td>${renderSparkline(tW1, tW2, tW3, tW4, pFilter)}</td>
+      <td>${fmt(tW1)}</td>
+      <td>${fmt(tW2)}</td>
+      <td>${fmt(tW3)}</td>
+      <td style="font-weight:700; font-size:13px;">${fmt(tW4)}</td>
+      <td>${renderSparkline(tW1, tW2, tW3, tW4)}</td>
     </tr>`;
   
   document.getElementById('tableBody').innerHTML = rowsHtml + totalRow;
@@ -453,22 +401,23 @@ function renderAll() {
   const varPct = totalPrev ? (diff / totalPrev) * 100 : 0;
   const isNeg = diff < 0;
   
-  document.getElementById('kpiSubtitle').textContent = `Evaluando Semana ${pFilter} vs Semana ${pFilter-1}`;
+  const metricLbl = activeMetric === 'v' ? 'Valor $' : 'Unidades';
+  
   document.getElementById('kpiGrid').innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-title">Venta W${pFilter} (Uds.)</div>
+      <div class="kpi-title">Métrica W4 (${metricLbl})</div>
       <div class="kpi-value">${fmt(totalCurr)}</div>
       <div class="kpi-sub">Total del filtro actual</div>
     </div>
-    <div class="kpi-card ${pFilter > 1 ? (isNeg ? 'neg' : 'pos') : ''}">
-      <div class="kpi-title">Crecimiento vs W${pFilter-1}</div>
-      <div class="kpi-value">${pFilter > 1 ? (varPct > 0 ? '+' : '') + varPct.toFixed(2).replace('.',',') + '%' : 'N/A'}</div>
-      <div class="kpi-sub">Rendimiento semanal</div>
+    <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+      <div class="kpi-title">Crecimiento vs W3</div>
+      <div class="kpi-value">${varPct > 0 ? '+' : ''}${varPct.toFixed(2).replace('.',',')}%</div>
+      <div class="kpi-sub">Comportamiento W4 vs W3</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Líder del Grupo (W${pFilter})</div>
+      <div class="kpi-title">Líder del Grupo (W4)</div>
       <div class="kpi-value" style="font-size:16px; margin-top:9px;">${topName}</div>
-      <div class="kpi-sub">${fmt(topVal)} uds</div>
+      <div class="kpi-sub">${fmt(topVal)}</div>
     </div>
   `;
 }
