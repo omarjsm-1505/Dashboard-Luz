@@ -3,51 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Matriz de Especialidades</title>
+<title>Luz · Comparativo Promedio Diario</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F8F6F2; --card:#FFFFFF; --card-hi:#F3EFEA; --line: rgba(140,29,64,0.12);
-    --wine:#8C1D40; --wine-light:#B4213F; --wine-bg: rgba(140,29,64,0.06);
-    --gold:#C59B27; --gold-dim:#8A6D1B; --text:#2B2627; --muted:#6E6366;
-    --good:#2E7D32; --good-bg: rgba(46,125,50,0.1);
-    --warn:#D97A46; --warn-bg: rgba(217,122,70,0.12); --danger:#C14646;
+    --bg:#F8F6F2;
+    --card:#FFFFFF;
+    --card-hi:#F3EFEA;
+    --line: rgba(140,29,64,0.12);
+    --wine:#8C1D40;
+    --wine-light:#B4213F;
+    --wine-bg: rgba(140,29,64,0.06);
+    --gold:#C59B27;
+    --gold-dim:#8A6D1B;
+    --text:#2B2627;
+    --muted:#6E6366;
+    --good:#2E7D32;
+    --good-bg: rgba(46,125,50,0.1);
+    --warn:#D97A46;
+    --warn-bg: rgba(217,122,70,0.12);
+    --danger:#C14646;
   }
   *{box-sizing:border-box;}
-  body{ margin:0; background-color: var(--bg); color:var(--text); font-family:'Inter', sans-serif; min-height: 100vh; -webkit-font-smoothing:antialiased; }
-  body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)), url('1275044.jpg'); background-repeat: no-repeat; background-position: center center; background-size: 550px auto; opacity: 0.6; z-index: -1; pointer-events: none; }
-  
-  .auth-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 20px; }
-  .auth-card { background: var(--card); border: 1px solid var(--line); padding: 36px 28px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%; }
+  body{
+    margin:0;
+    background-color: var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+      linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)),
+      url('1275044.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 550px auto;
+    opacity: 0.6;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* PANTALLA DE ACCESO RESTRENGIDO */
+  .auth-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .auth-card {
+    background: var(--card); border: 1px solid var(--line);
+    padding: 36px 28px; border-radius: 20px; text-align: center;
+    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
+  }
   .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
   .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
   .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
-  .auth-input { width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line); border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace; background: var(--card-hi); color: var(--text); outline: none; }
+  .auth-input {
+    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
+    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
+    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
+  }
   .auth-input:focus { border-color: var(--wine); }
-  .auth-btn { width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF; border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .auth-btn {
+    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
+    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .auth-btn:hover { background: var(--wine-light); }
   .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
-  
+
+  /* CONTENIDO PRINCIPAL */
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
-  .corte-bar{ position:sticky; top:0; z-index:50; background:linear-gradient(90deg, #641024, var(--wine), #641024); border-bottom:2px solid var(--gold); color:#FFFFFF; font-family:'JetBrains Mono', monospace; font-size:11px; padding:9px 18px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
-  .btn-print{ background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; border-radius:100px; cursor:pointer; }
+
+  .corte-bar{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(90deg, #641024, var(--wine), #641024);
+    border-bottom:2px solid var(--gold);
+    color:#FFFFFF;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    padding:9px 18px;
+    display:flex; justify-content:space-between; align-items:center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  }
+  .corte-bar b{ color:var(--gold);}
+  .btn-print{ 
+    background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; 
+    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; 
+    border-radius:100px; cursor:pointer; transition:background 0.2s;
+  }
+
   .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
-  .logo-header { height: 52px; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
+  .logo-header { height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
   .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
   h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
   h1 em{ font-style:italic; color:var(--wine); }
-  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; }
+  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0.5px; }
+  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+  .corte-pill b{ color:var(--gold-dim); }
 
-  /* CONTROLES AVANZADOS */
-  .control-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:28px; }
-  .ctrl-box{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 16px; display:flex; flex-direction:column; gap:8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:10.5px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .ctrl-select { width:100%; padding:9px 12px; border:1px solid var(--line); border-radius:8px; background:var(--card-hi); color:var(--text); font-family:'Inter'; font-size:13px; font-weight:600; outline:none; cursor:pointer; }
-  
-  /* METRIC TOGGLE */
-  .toggle-group{ display:flex; background:var(--card-hi); border:1px solid var(--line); border-radius:8px; padding:3px; }
-  .toggle-btn{ flex:1; border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:7px 10px; border-radius:6px; cursor:pointer; transition:all 0.2s ease; }
-  .toggle-btn.active{ background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3); }
+  .control-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .ctrl-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
+  .toggle-btn{
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+  }
+  .toggle-btn.active{
+    background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
+  }
 
   .section-box{ margin-bottom:34px; }
   .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
@@ -56,114 +142,112 @@
   .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px; }
   .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
   .kpi-card.neg{ border-left-color:var(--warn); }
+  .kpi-card.pos{ border-left-color:var(--good); }
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
+  .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
+  .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
+  .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
+  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--warn), #E59A6D); border-radius:5px; transition:width 0.3s ease; }
+  .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
+  .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
+
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:700px; }
+  table{ width:100%; border-collapse:collapse; min-width:620px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
   th:first-child{ text-align:left; }
-  th.hl { background:var(--wine-bg); color:var(--wine); border-bottom:2px solid var(--wine); }
   td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); vertical-align:middle; }
   td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
   tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
 
-  .spark-box { display:flex; align-items:flex-end; justify-content:flex-end; gap:3px; height:24px; width:60px; margin-left:auto; }
-  .spark-bar { width:10px; background-color:var(--wine-light); border-radius:2px 2px 0 0; opacity:0.6; transition:height 0.3s; }
-  .spark-bar.current { background-color:var(--gold); opacity:1; }
-  .spark-bar.drop { background-color:var(--warn); opacity:1; }
-  .spark-bar.up { background-color:var(--good); opacity:1; }
+  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
+  .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
+  .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
+
+  /* ESTILOS PARA VISTA TODAS (APILADA) */
+  .stacked-cell { display:flex; flex-direction:column; gap:4px; text-align:right; width:100%; min-width:90px; }
+  .st-row { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+  .st-lbl { color:var(--muted); font-size:9.5px; text-transform:uppercase; }
+  .st-val { font-weight:600; font-family:'JetBrains Mono', monospace; color:var(--text); font-size:11.5px; }
+  .st-var { justify-content:flex-end; border-top:1px dashed rgba(140,29,64,0.15); padding-top:4px; margin-top:2px; font-weight:700; font-family:'JetBrains Mono', monospace; font-size:12px; }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
 
+<!-- OVERLAY DE BLOQUEO POR CLAVE -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder a la matriz especializada.</p>
+    <p class="auth-sub">Ingrese la clave para acceder al panel comparativo.</p>
     <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Analizar Data</button>
-    <div class="auth-error" id="authError">Clave incorrecta.</div>
+    <button class="auth-btn" onclick="checkAuth()">Ingresar al Comparativo</button>
+    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
 
+<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ MATRIZ DE ESPECIALIDADES · JULIO - AGOSTO 2026</span>
+    <span>◆ COMPARATIVO DIARIO · JUNIO VS JULIO 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
   <div class="wrap">
+
     <section class="hero">
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Desempeño Integral por Departamentos</p>
-      <h1>Matriz <em>Dinámica</em></h1>
-      <p class="hero-sub">Histórico de tendencias (06 Jul - 02 Ago)</p>
+      <p class="eyebrow">Análisis de Desempeño</p>
+      <h1>Comparativo <em>Promedio Diario</em></h1>
+      <p class="hero-sub">Evaluación normalizada (Junio 30 días vs Julio 31 días)</p>
+      <div class="corte-pill">◆ Cierres Oficiales <b>Consolidados</b></div>
     </section>
 
-    <!-- SELECTORES MULTIDIMENSIONALES -->
+    <!-- CONTROLES -->
     <div class="control-grid">
-      
       <div class="ctrl-box">
-        <span class="ctrl-title">Métrica Analizada</span>
-        <div class="toggle-group" id="groupMetric">
-          <button class="toggle-btn active" onclick="setMetric('u', this)">Unidades / Kg</button>
-          <button class="toggle-btn" onclick="setMetric('v', this)">Valor $</button>
+        <span class="ctrl-title">Zona Comercial</span>
+        <div class="toggle-group" id="groupZone">
+          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
+          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
+          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
         </div>
       </div>
-
       <div class="ctrl-box">
-        <span class="ctrl-title">Ver Desglose Por</span>
-        <select id="selView" class="ctrl-select" onchange="renderAll()">
-          <option value="sucursal">Sucursales (Púas)</option>
-          <option value="rubro">Rubros / Subcategorías</option>
-        </select>
+        <span class="ctrl-title">Métrica Diaria</span>
+        <div class="toggle-group" id="groupMode">
+          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
+          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+          <button class="toggle-btn" onclick="setMode('ticket', this)">Costo Prom.</button>
+          <button class="toggle-btn" onclick="setMode('all', this)">Todas</button>
+        </div>
       </div>
-
-      <div class="ctrl-box">
-        <span class="ctrl-title">Índice (Categoría Maestro)</span>
-        <select id="selCat" class="ctrl-select" onchange="renderAll()">
-          <option value="Todas">Resumen de la Tienda</option>
-          <option value="Carnicería">Carnicería</option>
-          <option value="Alim. Prep.">Alimentos Preparados / Quick</option>
-          <option value="Charcutería">Charcutería</option>
-          <option value="Frulever">Frulever</option>
-          <option value="Víveres">Víveres</option>
-          <option value="Licores">Licores</option>
-        </select>
-      </div>
-
-      <div class="ctrl-box">
-        <span class="ctrl-title">Púa (Sucursal)</span>
-        <select id="selBranch" class="ctrl-select" onchange="renderAll()">
-          <option value="Todas">Toda la Cadena (Consolidado)</option>
-          <option value="Carlota">Carlota</option>
-          <option value="Chacao">Chacao</option>
-          <option value="Dos Caminos">Dos Caminos</option>
-          <option value="Florida">Florida</option>
-          <option value="Llanito">Llanito</option>
-          <option value="Marques">Marques</option>
-          <option value="Pedregal">Pedregal</option>
-          <option value="San Antonio">San Antonio</option>
-          <option value="Urbina">Urbina</option>
-          <option value="Luz Quick Rest">Luz Quick Rest</option>
-        </select>
-      </div>
-
     </div>
 
+    <!-- KPIS -->
     <div class="section-box">
-      <h2 class="sec-title">Salud del Rendimiento</h2>
-      <span class="sec-sub" id="kpiSubtitle">Indicadores W4 (27 Jul - 02 Ago) vs W3</span>
+      <h2 class="sec-title">Rendimiento Promedio por Día</h2>
+      <span class="sec-sub">Totales de la cadena (o zona filtrada) promediados por los días de cada mes</span>
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
+    <!-- RANKING -->
     <div class="section-box">
-      <h2 class="sec-title" id="tableTitle">Desglose</h2>
+      <h2 class="sec-title">Ranking de Retención/Crecimiento</h2>
+      <span class="sec-sub" id="rankSub">% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)</span>
+      <div id="rankingList"></div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="section-box">
+      <h2 class="sec-title">Detalle Sucursales</h2>
+      <span class="sec-sub">Comparación directa de promedios diarios normalizados</span>
+
       <div class="tbl-wrap">
         <table>
           <thead id="tableHead"></thead>
@@ -172,259 +256,307 @@
       </div>
     </div>
 
-    <footer>LUZ · MATRIZ DE ESPECIALIDADES_2026</footer>
+    <footer>LUZ · COMPARATIVO DIARIO_2026</footer>
   </div>
 </div>
 <script>
-// BLOQUEO SEGURO
+// BLOQUEO SEGURO - IGNORARÁ LOS ERRORES DEL NAVEGADOR
 function checkAuth() {
   const inputEl = document.getElementById('passInput');
   const pass = inputEl ? inputEl.value.trim().toLowerCase() : '';
+  
   if (pass === 'luz2026' || pass === 'l2026' || pass === '2026') {
-    try { sessionStorage.setItem('luz_authenticated', 'true'); } catch(e) {}
+    // Si el teléfono bloquea la memoria local (muy común en móviles o archivos sueltos), 
+    // el try/catch evitará que el código se congele y te dejará entrar directo.
+    try { 
+      sessionStorage.setItem('luz_authenticated', 'true'); 
+    } catch(e) {
+      console.warn("Navegador bloquea sesión, procediendo directo...");
+    }
     unlockDashboard();
-  } else { document.getElementById('authError').style.display = 'block'; }
+  } else {
+    document.getElementById('authError').style.display = 'block';
+  }
 }
-function handleKeyPress(e) { if (e.key === 'Enter') checkAuth(); }
+
+function handleKeyPress(e) {
+  if (e.key === 'Enter') checkAuth();
+}
+
 function unlockDashboard() {
   document.getElementById('authOverlay').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
   renderAll();
 }
 
-let activeMetric = 'u'; // 'u' para Unidades, 'v' para Valor $
+const DAYS_JUN = 30;
+const DAYS_JUL = 31;
 
-function setMetric(m, btn) {
-  activeMetric = m;
-  document.querySelectorAll('#groupMetric .toggle-btn').forEach(b => b.classList.remove('active'));
+const rawData = [
+  {n:"Carlota", zone:"este", v_jun:1126130, v_jul:1143104, u_jun:488215, u_jul:494157},
+  {n:"Chacao", zone:"oeste", v_jun:542118, v_jul:530351, u_jun:272509, u_jul:271951},
+  {n:"Dos Caminos", zone:"oeste", v_jun:329196, v_jul:300398, u_jun:159694, u_jul:153507},
+  {n:"Florida", zone:"oeste", v_jun:706422, v_jul:709754, u_jun:325384, u_jul:335034},
+  {n:"Luz Quick Rest", zone:"oeste", v_jun:188305, v_jul:171371, u_jun:95526, u_jul:88043},
+  {n:"Llanito", zone:"este", v_jun:526614, v_jul:466184, u_jun:249268, u_jul:225555},
+  {n:"Marques", zone:"este", v_jun:160683, v_jul:151972, u_jun:80278, u_jul:78053},
+  {n:"Pedregal", zone:"oeste", v_jun:347661, v_jul:329829, u_jun:173787, u_jul:169460},
+  {n:"San Antonio", zone:"este", v_jun:474525, v_jul:498267, u_jun:216927, u_jul:235125},
+  {n:"Urbina", zone:"este", v_jun:666929, v_jul:629883, u_jun:299775, u_jul:294799}
+];
+
+let mode = 'valor';
+let zone = 'todas';
+
+function getFilteredData(){
+  return zone === 'todas' ? rawData : rawData.filter(d => d.zone === zone);
+}
+
+// Calculadora Base
+function calcMetrics(d, currentMode) {
+  let m_jun, m_jul;
+  if (currentMode === 'valor') {
+    m_jun = d.v_jun / DAYS_JUN;
+    m_jul = d.v_jul / DAYS_JUL;
+  } else if (currentMode === 'unidades') {
+    m_jun = d.u_jun / DAYS_JUN;
+    m_jul = d.u_jul / DAYS_JUL;
+  } else if (currentMode === 'ticket') {
+    m_jun = d.v_jun / d.u_jun;
+    m_jul = d.v_jul / d.u_jul;
+  }
+  const diff = m_jul - m_jun;
+  const growthPct = m_jun ? (m_jul / m_jun) * 100 : 0; 
+  const varPct = m_jun ? (diff / m_jun) * 100 : 0;     
+  return { m_jun, m_jul, diff, varPct, growthPct };
+}
+
+function getTotals(list){
+  let v_jun = 0, v_jul = 0, u_jun = 0, u_jul = 0;
+  list.forEach(d => {
+    v_jun += d.v_jun; v_jul += d.v_jul; u_jun += d.u_jun; u_jul += d.u_jul;
+  });
+  return {
+    v: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'valor'),
+    u: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'unidades'),
+    t: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'ticket'),
+    single: mode !== 'all' ? calcMetrics({v_jun, v_jul, u_jun, u_jul}, mode) : null
+  };
+}
+
+// Formateadores
+function fmtMetric(val, type) {
+  const current = type || mode;
+  if (current === 'valor') return "$" + Math.round(val || 0).toLocaleString('es-VE');
+  if (current === 'unidades') return Math.round(val || 0).toLocaleString('es-VE') + " u";
+  if (current === 'ticket') return "$" + (val || 0).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function fmtSigned(val, type) {
+  const current = type || mode;
+  const sign = (val > 0 && current !== 'ticket') ? '+' : '';
+  return sign + fmtMetric(val, current);
+}
+
+// Celda Apilada (Para modo TODAS)
+function renderStackedCell(metrics, type) {
+  const color = metrics.diff >= 0 ? 'var(--good)' : 'var(--warn)';
+  const sign = metrics.varPct > 0 ? '+' : '';
+  return `
+    <div class="stacked-cell">
+      <div class="st-row"><span class="st-lbl">Jun</span><span class="st-val">${fmtMetric(metrics.m_jun, type)}</span></div>
+      <div class="st-row"><span class="st-lbl">Jul</span><span class="st-val">${fmtMetric(metrics.m_jul, type)}</span></div>
+      <div class="st-row st-var" style="color:${color}">${sign}${metrics.varPct.toFixed(2).replace('.', ',')}%</div>
+    </div>
+  `;
+}
+
+function renderKPIs(){
+  const t = getTotals(getFilteredData());
+  
+  if (mode === 'all') {
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card ${t.v.diff < 0 ? 'neg' : 'pos'}">
+        <div class="kpi-title">Var. Valor Diario</div>
+        <div class="kpi-value">${t.v.varPct > 0 ? '+' : ''}${t.v.varPct.toFixed(2).replace('.',',')}%</div>
+        <div class="kpi-sub">Julio vs Junio</div>
+      </div>
+      <div class="kpi-card ${t.u.diff < 0 ? 'neg' : 'pos'}">
+        <div class="kpi-title">Var. Unid. Diarias</div>
+        <div class="kpi-value">${t.u.varPct > 0 ? '+' : ''}${t.u.varPct.toFixed(2).replace('.',',')}%</div>
+        <div class="kpi-sub">Julio vs Junio</div>
+      </div>
+      <div class="kpi-card ${t.t.diff < 0 ? 'neg' : 'pos'}">
+        <div class="kpi-title">Var. Costo Prom.</div>
+        <div class="kpi-value">${t.t.varPct > 0 ? '+' : ''}${t.t.varPct.toFixed(2).replace('.',',')}%</div>
+        <div class="kpi-sub">Julio vs Junio</div>
+      </div>
+    `;
+  } else {
+    const s = t.single;
+    const isNeg = s.diff < 0;
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-title">Día Prom. Junio</div>
+        <div class="kpi-value">${fmtMetric(s.m_jun)}</div>
+        <div class="kpi-sub">Base 30 días</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Día Prom. Julio</div>
+        <div class="kpi-value">${fmtMetric(s.m_jul)}</div>
+        <div class="kpi-sub">Base 31 días</div>
+      </div>
+      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+        <div class="kpi-title">Variación Neta</div>
+        <div class="kpi-value">${fmtSigned(s.diff)}</div>
+        <div class="kpi-sub">${isNeg ? 'Contracción diaria' : 'Crecimiento diario'}</div>
+      </div>
+      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+        <div class="kpi-title">Variación %</div>
+        <div class="kpi-value">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</div>
+        <div class="kpi-sub">Frente al mes anterior</div>
+      </div>
+    `;
+  }
+}
+
+function renderRanking(){
+  const filtered = getFilteredData();
+  const rankMode = mode === 'all' ? 'valor' : mode; 
+  
+  if(mode === 'all'){
+    document.getElementById('rankSub').textContent = "% de retención basado en VALOR $ (Julio vs Junio)";
+  } else {
+    document.getElementById('rankSub').textContent = "% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)";
+  }
+
+  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, rankMode) }));
+  const sorted = calculated.sort((a,b) => b.growthPct - a.growthPct);
+  
+  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+    const isGrowth = d.growthPct >= 100;
+    const barWidth = Math.min(d.growthPct, 100); 
+    return `
+    <div class="rank-row">
+      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="rank-name">${d.n}</span>
+      <div class="bar-bg">
+        <div class="bar-fill ${isGrowth ? 'top' : ''}" style="width:${barWidth}%;"></div>
+      </div>
+      <span class="rank-pct">${d.growthPct.toFixed(2).replace('.', ',')}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTable(){
+  const filtered = getFilteredData();
+  const t = getTotals(filtered);
+  
+  if (mode === 'all') {
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:right;">Prom. Valor $</th>
+        <th style="text-align:right;">Prom. Unidades</th>
+        <th style="text-align:right;">Costo Prom.</th>
+      </tr>
+    `;
+    
+    const rows = filtered.map(d => {
+      const v = calcMetrics(d, 'valor');
+      const u = calcMetrics(d, 'unidades');
+      const tk = calcMetrics(d, 'ticket');
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td>${renderStackedCell(v, 'valor')}</td>
+        <td>${renderStackedCell(u, 'unidades')}</td>
+        <td>${renderStackedCell(tk, 'ticket')}</td>
+      </tr>`;
+    }).join('');
+
+    const totalRow = `
+      <tr class="total-row">
+        <td>TOTAL CONS.</td>
+        <td>${renderStackedCell(t.v, 'valor')}</td>
+        <td>${renderStackedCell(t.u, 'unidades')}</td>
+        <td>${renderStackedCell(t.t, 'ticket')}</td>
+      </tr>`;
+
+    document.getElementById('tableBody').innerHTML = rows + totalRow;
+    
+  } else {
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:center;">Estatus</th>
+        <th>Prom. Junio</th>
+        <th>Prom. Julio</th>
+        <th>Var. Neta</th>
+        <th>Var. %</th>
+      </tr>
+    `;
+    
+    const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
+    const rows = calculated.map(d => {
+      const isGrowth = d.diff >= 0;
+      const badge = isGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>';
+      const color = isGrowth ? 'var(--good)' : 'var(--warn)';
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td style="text-align:center;">${badge}</td>
+        <td>${fmtMetric(d.m_jun)}</td>
+        <td>${fmtMetric(d.m_jul)}</td>
+        <td style="color:${color};">${fmtSigned(d.diff)}</td>
+        <td style="color:${color}; font-weight:700;">${d.varPct > 0 ? '+' : ''}${d.varPct.toFixed(2).replace('.', ',')}%</td>
+      </tr>`;
+    }).join('');
+
+    const s = t.single;
+    const isTotalGrowth = s.diff >= 0;
+    const tColor = isTotalGrowth ? 'var(--good)' : 'var(--warn)';
+    const totalRow = `
+      <tr class="total-row">
+        <td>TOTAL CONSOLIDADO</td>
+        <td style="text-align:center;">${isTotalGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>'}</td>
+        <td>${fmtMetric(s.m_jun)}</td>
+        <td>${fmtMetric(s.m_jul)}</td>
+        <td style="color:${tColor};">${fmtSigned(s.diff)}</td>
+        <td style="color:${tColor}; font-weight:700;">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</td>
+      </tr>`;
+
+    document.getElementById('tableBody').innerHTML = rows + totalRow;
+  }
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRanking();
+  renderTable();
+}
+
+function setZone(z, btn){
+  zone = z;
+  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderAll();
 }
 
-// FORMATO DE BD PLANA AVANZADA: Sucursal | Categoría | Rubro (Subcategoría) | Métrica (u/v) | W1 | W2 | W3 | W4
-// Aquí he extraído los datos clave de tu PDF mostrando el comportamiento de las Jerarquías
-const rawString = `
-Carlota|Todas|General|v|229234|262013|250584|274021
-Chacao|Todas|General|v|106710|124795|112897|128945
-Florida|Todas|General|v|145568|167104|148296|169236
-Llanito|Todas|General|v|95540|108734|95574|107182
-Luz Quick Rest|Todas|General|v|35309|39644|35396|40689
-Marques|Todas|General|v|31197|34664|32898|36450
-San Antonio|Todas|General|v|103348|113845|109303|121604
-Urbina|Todas|General|v|133428|140668|125528|148582
-Carlota|Carnicería|AVES|u|3993|4688|4369|5260
-Carlota|Carnicería|CERDO|u|918|961|924|917
-Carlota|Carnicería|RESES|u|2076|2485|2384|3491
-Carlota|Carnicería|EMBUTIDOS PARRILLEROS|u|165|156|192|208
-Carlota|Carnicería|COSTILLAS DE RES KG|u|145|283|398|1095
-Carlota|Carnicería|HUESO ROJO KG|u|88|80|108|275
-Florida|Carnicería|AVES|u|2263|2820|2752|2963
-Florida|Carnicería|CERDO|u|478|447|594|522
-Florida|Carnicería|RESES|u|1264|1506|1391|2338
-Florida|Carnicería|EMBUTIDOS PARRILLEROS|u|82|98|75|160
-Florida|Carnicería|COSTILLAS DE RES KG|u|152|225|338|939
-Urbina|Carnicería|AVES|u|2296|2084|2266|2953
-Urbina|Carnicería|CERDO|u|434|468|326|400
-Urbina|Carnicería|RESES|u|1049|1012|969|1722
-Urbina|Carnicería|EMBUTIDOS PARRILLEROS|u|53|68|57|71
-Urbina|Carnicería|COSTILLAS DE RES KG|u|134|134|137|606
-Luz Quick Rest|Alim. Prep.|A LA CARTA|v|344|329|311|434
-Luz Quick Rest|Alim. Prep.|ALMUERZOS|v|4516|5181|5024|5645
-Luz Quick Rest|Alim. Prep.|BEBIDAS|v|1985|1900|1944|2222
-Luz Quick Rest|Alim. Prep.|DESAYUNO|v|2374|2436|2219|2626
-Luz Quick Rest|Alim. Prep.|PASTELERIA|v|2790|2892|2601|2592
-Luz Quick Rest|Alim. Prep.|PIZZA|v|326|487|322|295
-Luz Quick Rest|Alim. Prep.|POLLO|v|745|567|518|723
-Carlota|Alim. Prep.|BEBIDAS|v|588|458|592|545
-Carlota|Alim. Prep.|DESAYUNO|v|346|419|381|428
-Carlota|Alim. Prep.|PASTELERIA|v|1269|1380|1369|1257
-Carlota|Alim. Prep.|PIZZA|v|142|131|84|100
-San Antonio|Alim. Prep.|BEBIDAS|v|56|82|66|62
-San Antonio|Alim. Prep.|DESAYUNO|v|31|30|48|36
-San Antonio|Alim. Prep.|PASTELERIA|v|541|482|550|545
-San Antonio|Alim. Prep.|PIZZA|v|22|30|24|34
-Carlota|Alim. Prep.|DESAYUNO|u|153|187|185|207
-Carlota|Alim. Prep.|PASTELERIA|u|390|438|455|396
-Carlota|Alim. Prep.|BEBIDAS|u|435|381|441|383
-Carlota|Alim. Prep.|PIZZA|u|70|61|39|49
-Luz Quick Rest|Alim. Prep.|DESAYUNO|u|1008|1042|955|1164
-Luz Quick Rest|Alim. Prep.|PASTELERIA|u|1232|1263|1189|1217
-Luz Quick Rest|Alim. Prep.|BEBIDAS|u|1629|1733|1595|1697
-Luz Quick Rest|Alim. Prep.|ALMUERZOS|u|509|547|545|612
-Luz Quick Rest|Alim. Prep.|PIZZA|u|156|153|117|105
-San Antonio|Alim. Prep.|DESAYUNO|u|12|13|25|16
-San Antonio|Alim. Prep.|PASTELERIA|u|190|158|177|171
-San Antonio|Alim. Prep.|BEBIDAS|u|27|40|32|30
-San Antonio|Alim. Prep.|PIZZA|u|10|14|11|16
-Todas|Alim. Prep.|DESAYUNO|u|228|301|233|260
-Todas|Alim. Prep.|PAN|u|3512|4100|3550|3898
-Todas|Alim. Prep.|PASTELERIA|u|527|779|830|774
-Carlota|Todas|General|u|102821|114582|107281|118360
-Chacao|Todas|General|u|54993|64778|59130|68172
-Florida|Todas|General|u|70016|79940|69490|82142
-Llanito|Todas|General|u|46842|52178|45808|54655
-Marques|Todas|General|u|16128|17978|17005|19262
-San Antonio|Todas|General|u|48733|54604|52130|58385
-Urbina|Todas|General|u|61618|66358|59447|73416
-Luz Quick Rest|Todas|General|u|18302|20467|18682|21263
-`;
-
-const fullDb = rawString.trim().split('\n').map(r => {
-  const [b, c, s, m, w1, w2, w3, w4] = r.split('|');
-  return { b, c, s, m, w: [0, +w1, +w2, +w3, +w4] }; 
-});
-
-function fmt(val) {
-  const prefix = activeMetric === 'v' ? '$' : '';
-  return prefix + Math.round(val || 0).toLocaleString('es-VE');
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
 }
 
-function getPivotData(branch, cat, viewLevel) {
-  // Filtrar por Métrica primero
-  let filtered = fullDb.filter(d => d.m === activeMetric);
-  
-  // Filtros de Usuario
-  if (branch !== 'Todas') filtered = filtered.filter(d => d.b === branch);
-  if (cat !== 'Todas') filtered = filtered.filter(d => d.c === cat);
-  
-  // Determinar el agrupamiento según la vista
-  let groupBy = viewLevel === 'sucursal' ? 'b' : 's';
-  let title = `${branch} - ${cat}`;
-
-  // Si selecciono Rubro pero estoy en Categoría "Todas", el rubro general se llama "General"
-  if (viewLevel === 'rubro' && cat === 'Todas') {
-    title = `Top Sucursales (Mostrando Totales Generales)`;
-    groupBy = 'b'; // Fuerza a sucursales si no hay una categoría para desglosar
-  } else if (viewLevel === 'rubro') {
-    title = `Desglose de Productos - ${cat}`;
-  }
-
-  // Agrupar
-  const grouped = {};
-  filtered.forEach(d => {
-    // Si los datos base dicen "Todas" en sucursal y estoy agrupando por sucursal, omitir para no duplicar sumas
-    if (groupBy === 'b' && d.b === 'Todas') return;
-    
-    const key = d[groupBy];
-    if(!key) return;
-    
-    if (!grouped[key]) grouped[key] = { n: key, w1:0, w2:0, w3:0, w4:0 };
-    grouped[key].w1 += d.w[1];
-    grouped[key].w2 += d.w[2];
-    grouped[key].w3 += d.w[3];
-    grouped[key].w4 += d.w[4];
-  });
-
-  return { title, data: Object.values(grouped).sort((a,b) => b.w4 - a.w4) };
-}
-
-function renderSparkline(w1, w2, w3, w4) {
-  const max = Math.max(w1, w2, w3, w4, 1);
-  const h = [ (w1/max)*100, (w2/max)*100, (w3/max)*100, (w4/max)*100 ];
-  
-  let wClass = 'current';
-  if (w4 > w3) wClass = 'up';
-  else if (w4 < w3) wClass = 'drop';
-
-  return `
-    <div class="spark-box">
-      <div class="spark-bar" style="height:${h[0]}%;"></div>
-      <div class="spark-bar" style="height:${h[1]}%;"></div>
-      <div class="spark-bar" style="height:${h[2]}%;"></div>
-      <div class="spark-bar ${wClass}" style="height:${h[3]}%;"></div>
-    </div>
-  `;
-}
-
-function renderAll() {
-  const bFilter = document.getElementById('selBranch').value;
-  const cFilter = document.getElementById('selCat').value;
-  const viewFilter = document.getElementById('selView').value;
-  
-  const pivot = getPivotData(bFilter, cFilter, viewFilter);
-  document.getElementById('tableTitle').textContent = pivot.title;
-
-  let totalCurr = 0, totalPrev = 0;
-  let topName = "-", topVal = 0;
-  let tW1=0, tW2=0, tW3=0, tW4=0;
-
-  const rowsHtml = pivot.data.map(d => {
-    tW1+=d.w1; tW2+=d.w2; tW3+=d.w3; tW4+=d.w4;
-    
-    totalCurr += d.w4;
-    totalPrev += d.w3;
-    
-    if (d.w4 > topVal) {
-      topVal = d.w4;
-      topName = d.n;
-    }
-    
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td>${fmt(d.w1)}</td>
-      <td>${fmt(d.w2)}</td>
-      <td>${fmt(d.w3)}</td>
-      <td style="font-weight:700; color:var(--wine);">${fmt(d.w4)}</td>
-      <td>${renderSparkline(d.w1, d.w2, d.w3, d.w4)}</td>
-    </tr>`;
-  }).join('');
-
-  // RENDER TABLE HEAD
-  const labelCol = viewFilter === 'rubro' && cFilter !== 'Todas' ? 'Rubro Específico' : 'Sucursal';
-  document.getElementById('tableHead').innerHTML = `
-    <tr>
-      <th>${labelCol}</th>
-      <th>W1 (06-12 Jul)</th>
-      <th>W2 (13-19 Jul)</th>
-      <th>W3 (20-26 Jul)</th>
-      <th class="hl">W4 (27-02 Ago)</th>
-      <th style="text-align:right;">Tendencia</th>
-    </tr>
-  `;
-
-  // RENDER TABLE BODY & TOTAL
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL SELECCIÓN</td>
-      <td>${fmt(tW1)}</td>
-      <td>${fmt(tW2)}</td>
-      <td>${fmt(tW3)}</td>
-      <td style="font-weight:700; font-size:13px;">${fmt(tW4)}</td>
-      <td>${renderSparkline(tW1, tW2, tW3, tW4)}</td>
-    </tr>`;
-  
-  document.getElementById('tableBody').innerHTML = rowsHtml + totalRow;
-
-  // RENDER KPIS
-  const diff = totalCurr - totalPrev;
-  const varPct = totalPrev ? (diff / totalPrev) * 100 : 0;
-  const isNeg = diff < 0;
-  
-  const metricLbl = activeMetric === 'v' ? 'Valor $' : 'Unidades';
-  
-  document.getElementById('kpiGrid').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-title">Métrica W4 (${metricLbl})</div>
-      <div class="kpi-value">${fmt(totalCurr)}</div>
-      <div class="kpi-sub">Total del filtro actual</div>
-    </div>
-    <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
-      <div class="kpi-title">Crecimiento vs W3</div>
-      <div class="kpi-value">${varPct > 0 ? '+' : ''}${varPct.toFixed(2).replace('.',',')}%</div>
-      <div class="kpi-sub">Comportamiento W4 vs W3</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Líder del Grupo (W4)</div>
-      <div class="kpi-value" style="font-size:16px; margin-top:9px;">${topName}</div>
-      <div class="kpi-sub">${fmt(topVal)}</div>
-    </div>
-  `;
-}
-
+// INICIAR DE FORMA SEGURA
 try {
-  if (sessionStorage.getItem('luz_authenticated') === 'true') { unlockDashboard(); }
+  if (sessionStorage.getItem('luz_authenticated') === 'true') {
+    unlockDashboard();
+  }
 } catch(e) {}
 </script>
+
 </body>
 </html>
