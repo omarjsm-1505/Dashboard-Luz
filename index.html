@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Comparativo Promedio Diario</title>
+<title>Luz · Tendencias 4 Semanas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -106,39 +106,27 @@
   h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
   h1 em{ font-style:italic; color:var(--wine); }
   .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0.5px; }
-  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
-  .corte-pill b{ color:var(--gold-dim); }
 
+  /* CONTROLES MULTI-FILTRO */
   .control-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap:14px;
-    margin-bottom:28px;
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:28px;
   }
   .ctrl-box{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:12px 18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap:wrap; justify-content:flex-end;}
   .toggle-btn{
     border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
   }
-  .toggle-btn.active{
-    background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
-  }
+  .toggle-btn.active{ background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3); }
 
   .section-box{ margin-bottom:34px; }
   .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
   .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
 
+  /* KPIS */
   .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px; }
   .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
   .kpi-card.neg{ border-left-color:var(--warn); }
@@ -147,32 +135,21 @@
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
-  .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
-  .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
-  .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
-  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--warn), #E59A6D); border-radius:5px; transition:width 0.3s ease; }
-  .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
-  .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
-
+  /* TABLA MATRIZ */
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:620px; }
+  table{ width:100%; border-collapse:collapse; min-width:750px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
   th:first-child{ text-align:left; }
   td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); vertical-align:middle; }
   td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
   tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
 
-  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
-  .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
-  .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
-
-  /* ESTILOS PARA VISTA TODAS (APILADA) */
-  .stacked-cell { display:flex; flex-direction:column; gap:4px; text-align:right; width:100%; min-width:90px; }
-  .st-row { display:flex; justify-content:space-between; gap:10px; align-items:center; }
-  .st-lbl { color:var(--muted); font-size:9.5px; text-transform:uppercase; }
-  .st-val { font-weight:600; font-family:'JetBrains Mono', monospace; color:var(--text); font-size:11.5px; }
-  .st-var { justify-content:flex-end; border-top:1px dashed rgba(140,29,64,0.15); padding-top:4px; margin-top:2px; font-weight:700; font-family:'JetBrains Mono', monospace; font-size:12px; }
+  /* SPARKLINE TENDENCIA */
+  .spark-box { display:flex; align-items:flex-end; justify-content:flex-end; gap:3px; height:24px; width:60px; margin-left:auto; }
+  .spark-bar { width:10px; background-color:var(--wine-light); border-radius:2px 2px 0 0; opacity:0.6; transition:height 0.3s; }
+  .spark-bar.current { background-color:var(--gold); opacity:1; }
+  .spark-bar.drop { background-color:var(--warn); opacity:1; }
+  .spark-bar.up { background-color:var(--good); opacity:1; }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
@@ -184,9 +161,9 @@
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al panel comparativo.</p>
+    <p class="auth-sub">Ingrese la clave para acceder al panel de tendencias.</p>
     <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Ingresar al Comparativo</button>
+    <button class="auth-btn" onclick="checkAuth()">Analizar Tendencias</button>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
@@ -194,7 +171,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ COMPARATIVO DIARIO · JUNIO VS JULIO 2026</span>
+    <span>◆ TENDENCIAS 4 SEMANAS · JULIO - AGOSTO 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
@@ -202,14 +179,21 @@
 
     <section class="hero">
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Análisis de Desempeño</p>
-      <h1>Comparativo <em>Promedio Diario</em></h1>
-      <p class="hero-sub">Evaluación normalizada (Junio 30 días vs Julio 31 días)</p>
-      <div class="corte-pill">◆ Cierres Oficiales <b>Consolidados</b></div>
+      <p class="eyebrow">Análisis de Desempeño por Categoría</p>
+      <h1>Tendencias <em>4 Semanas</em></h1>
+      <p class="hero-sub">Histórico de unidades vendidas (06 Jul - 02 Ago)</p>
     </section>
 
     <!-- CONTROLES -->
     <div class="control-grid">
+      <div class="ctrl-box">
+        <span class="ctrl-title">Índice (Categoría)</span>
+        <div class="toggle-group" id="groupIndex">
+          <button class="toggle-btn active" onclick="setIndex('general', this)">Resumen General</button>
+          <button class="toggle-btn" onclick="setIndex('carniceria', this)">Carnicería</button>
+          <button class="toggle-btn" onclick="setIndex('viveres', this)">Víveres</button>
+        </div>
+      </div>
       <div class="ctrl-box">
         <span class="ctrl-title">Zona Comercial</span>
         <div class="toggle-group" id="groupZone">
@@ -218,70 +202,56 @@
           <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
         </div>
       </div>
-      <div class="ctrl-box">
-        <span class="ctrl-title">Métrica Diaria</span>
-        <div class="toggle-group" id="groupMode">
-          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
-          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
-          <button class="toggle-btn" onclick="setMode('ticket', this)">Costo Prom.</button>
-          <button class="toggle-btn" onclick="setMode('all', this)">Todas</button>
-        </div>
-      </div>
     </div>
 
     <!-- KPIS -->
     <div class="section-box">
-      <h2 class="sec-title">Rendimiento Promedio por Día</h2>
-      <span class="sec-sub">Totales de la cadena (o zona filtrada) promediados por los días de cada mes</span>
+      <h2 class="sec-title">Salud del Crecimiento</h2>
+      <span class="sec-sub">Indicadores basados en la Semana 4 (27 Jul - 02 Ago) vs Semana 3 (20 Jul - 26 Jul)</span>
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
-    <!-- RANKING -->
+    <!-- TABLA MATRIZ -->
     <div class="section-box">
-      <h2 class="sec-title">Ranking de Retención/Crecimiento</h2>
-      <span class="sec-sub" id="rankSub">% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)</span>
-      <div id="rankingList"></div>
-    </div>
-
-    <!-- TABLA -->
-    <div class="section-box">
-      <h2 class="sec-title">Detalle Sucursales</h2>
-      <span class="sec-sub">Comparación directa de promedios diarios normalizados</span>
+      <h2 class="sec-title">Matriz Evolutiva</h2>
+      <span class="sec-sub">Comportamiento en Unidades a lo largo del mes</span>
 
       <div class="tbl-wrap">
         <table>
-          <thead id="tableHead"></thead>
+          <thead id="tableHead">
+            <tr>
+              <th>Sucursal</th>
+              <th>W1 (06-12 Jul)</th>
+              <th>W2 (13-19 Jul)</th>
+              <th>W3 (20-26 Jul)</th>
+              <th>W4 (27-02 Ago)</th>
+              <th>Acumulado</th>
+              <th style="text-align:right;">Tendencia</th>
+            </tr>
+          </thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
     </div>
 
-    <footer>LUZ · COMPARATIVO DIARIO_2026</footer>
+    <footer>LUZ · TENDENCIAS 4 SEMANAS_2026</footer>
   </div>
 </div>
 <script>
-// BLOQUEO SEGURO - IGNORARÁ LOS ERRORES DEL NAVEGADOR
+// BLOQUEO SEGURO
 function checkAuth() {
   const inputEl = document.getElementById('passInput');
   const pass = inputEl ? inputEl.value.trim().toLowerCase() : '';
   
   if (pass === 'luz2026' || pass === 'l2026' || pass === '2026') {
-    // Si el teléfono bloquea la memoria local (muy común en móviles o archivos sueltos), 
-    // el try/catch evitará que el código se congele y te dejará entrar directo.
-    try { 
-      sessionStorage.setItem('luz_authenticated', 'true'); 
-    } catch(e) {
-      console.warn("Navegador bloquea sesión, procediendo directo...");
-    }
+    try { sessionStorage.setItem('luz_authenticated', 'true'); } catch(e) {}
     unlockDashboard();
   } else {
     document.getElementById('authError').style.display = 'block';
   }
 }
 
-function handleKeyPress(e) {
-  if (e.key === 'Enter') checkAuth();
-}
+function handleKeyPress(e) { if (e.key === 'Enter') checkAuth(); }
 
 function unlockDashboard() {
   document.getElementById('authOverlay').style.display = 'none';
@@ -289,274 +259,187 @@ function unlockDashboard() {
   renderAll();
 }
 
-const DAYS_JUN = 30;
-const DAYS_JUL = 31;
+// BASE DE DATOS ESTRUCTURADA POR CATEGORÍAS (Tomado del reporte de 4 Semanas)
+const dataDb = {
+  general: [
+    {n:"Carlota", zone:"este", w1:102821, w2:114582, w3:107281, w4:118360},
+    {n:"Chacao", zone:"oeste", w1:54993, w2:64778, w3:59130, w4:68172},
+    {n:"Dos Caminos", zone:"oeste", w1:32228, w2:35983, w3:34979, w4:35726},
+    {n:"Florida", zone:"oeste", w1:70016, w2:79940, w3:69490, w4:82142},
+    {n:"Luz Quick Rest", zone:"oeste", w1:18302, w2:20467, w3:18682, w4:21263},
+    {n:"Llanito", zone:"este", w1:46842, w2:52178, w3:45808, w4:54655},
+    {n:"Marques", zone:"este", w1:16128, w2:17978, w3:17005, w4:19262},
+    {n:"Pedregal", zone:"oeste", w1:36122, w2:39241, w3:35636, w4:40617},
+    {n:"San Antonio", zone:"este", w1:48733, w2:54604, w3:52130, w4:58385},
+    {n:"Urbina", zone:"este", w1:61618, w2:66358, w3:59447, w4:73416}
+  ],
+  carniceria: [
+    {n:"Carlota", zone:"este", w1:7153, w2:8325, w3:7835, w4:9988},
+    {n:"Chacao", zone:"oeste", w1:1921, w2:2066, w3:2008, w4:2791},
+    {n:"Dos Caminos", zone:"oeste", w1:1172, w2:1150, w3:1298, w4:1456},
+    {n:"Florida", zone:"oeste", w1:6402, w2:7815, w3:5225, w4:7639},
+    {n:"Luz Quick Rest", zone:"oeste", w1:98, w2:186, w3:151, w4:165},
+    {n:"Llanito", zone:"este", w1:3108, w2:3498, w3:3470, w4:4347},
+    {n:"Marques", zone:"este", w1:595, w2:689, w3:644, w4:823},
+    {n:"Pedregal", zone:"oeste", w1:983, w2:1086, w3:1015, w4:1257},
+    {n:"San Antonio", zone:"este", w1:3135, w2:3001, w3:3386, w4:4517},
+    {n:"Urbina", zone:"este", w1:3834, w2:3674, w3:3579, w4:5148}
+  ],
+  viveres: [
+    {n:"Carlota", zone:"este", w1:44018, w2:49171, w3:45306, w4:50856},
+    {n:"Chacao", zone:"oeste", w1:26567, w2:31575, w3:28407, w4:33662},
+    {n:"Dos Caminos", zone:"oeste", w1:14361, w2:15816, w3:14727, w4:15635},
+    {n:"Florida", zone:"oeste", w1:33934, w2:38530, w3:33591, w4:40638},
+    {n:"Luz Quick Rest", zone:"oeste", w1:7793, w2:8956, w3:8264, w4:9680},
+    {n:"Llanito", zone:"este", w1:24439, w2:26054, w3:22125, w4:27663},
+    {n:"Marques", zone:"este", w1:7452, w2:7847, w3:7816, w4:9037},
+    {n:"Pedregal", zone:"oeste", w1:17649, w2:19115, w3:17023, w4:20010},
+    {n:"San Antonio", zone:"este", w1:23505, w2:26659, w3:24999, w4:28161},
+    {n:"Urbina", zone:"este", w1:33247, w2:35317, w3:31634, w4:39543}
+  ]
+};
 
-const rawData = [
-  {n:"Carlota", zone:"este", v_jun:1126130, v_jul:1143104, u_jun:488215, u_jul:494157},
-  {n:"Chacao", zone:"oeste", v_jun:542118, v_jul:530351, u_jun:272509, u_jul:271951},
-  {n:"Dos Caminos", zone:"oeste", v_jun:329196, v_jul:300398, u_jun:159694, u_jul:153507},
-  {n:"Florida", zone:"oeste", v_jun:706422, v_jul:709754, u_jun:325384, u_jul:335034},
-  {n:"Luz Quick Rest", zone:"oeste", v_jun:188305, v_jul:171371, u_jun:95526, u_jul:88043},
-  {n:"Llanito", zone:"este", v_jun:526614, v_jul:466184, u_jun:249268, u_jul:225555},
-  {n:"Marques", zone:"este", v_jun:160683, v_jul:151972, u_jun:80278, u_jul:78053},
-  {n:"Pedregal", zone:"oeste", v_jun:347661, v_jul:329829, u_jun:173787, u_jul:169460},
-  {n:"San Antonio", zone:"este", v_jun:474525, v_jul:498267, u_jun:216927, u_jul:235125},
-  {n:"Urbina", zone:"este", v_jun:666929, v_jul:629883, u_jun:299775, u_jul:294799}
-];
-
-let mode = 'valor';
-let zone = 'todas';
+let activeIndex = 'general';
+let activeZone = 'todas';
 
 function getFilteredData(){
-  return zone === 'todas' ? rawData : rawData.filter(d => d.zone === zone);
-}
-
-// Calculadora Base
-function calcMetrics(d, currentMode) {
-  let m_jun, m_jul;
-  if (currentMode === 'valor') {
-    m_jun = d.v_jun / DAYS_JUN;
-    m_jul = d.v_jul / DAYS_JUL;
-  } else if (currentMode === 'unidades') {
-    m_jun = d.u_jun / DAYS_JUN;
-    m_jul = d.u_jul / DAYS_JUL;
-  } else if (currentMode === 'ticket') {
-    m_jun = d.v_jun / d.u_jun;
-    m_jul = d.v_jul / d.u_jul;
+  let dataset = dataDb[activeIndex];
+  if(activeZone !== 'todas') {
+    dataset = dataset.filter(d => d.zone === activeZone);
   }
-  const diff = m_jul - m_jun;
-  const growthPct = m_jun ? (m_jul / m_jun) * 100 : 0; 
-  const varPct = m_jun ? (diff / m_jun) * 100 : 0;     
-  return { m_jun, m_jul, diff, varPct, growthPct };
+  return dataset;
 }
 
-function getTotals(list){
-  let v_jun = 0, v_jul = 0, u_jun = 0, u_jul = 0;
-  list.forEach(d => {
-    v_jun += d.v_jun; v_jul += d.v_jul; u_jun += d.u_jun; u_jul += d.u_jul;
-  });
-  return {
-    v: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'valor'),
-    u: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'unidades'),
-    t: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'ticket'),
-    single: mode !== 'all' ? calcMetrics({v_jun, v_jul, u_jun, u_jul}, mode) : null
-  };
+function fmt(val) {
+  return Math.round(val || 0).toLocaleString('es-VE');
 }
 
-// Formateadores
-function fmtMetric(val, type) {
-  const current = type || mode;
-  if (current === 'valor') return "$" + Math.round(val || 0).toLocaleString('es-VE');
-  if (current === 'unidades') return Math.round(val || 0).toLocaleString('es-VE') + " u";
-  if (current === 'ticket') return "$" + (val || 0).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
-}
+// Genera el minigráfico (Sparkline) evaluando las 4 semanas
+function renderSparkline(w1, w2, w3, w4) {
+  const max = Math.max(w1, w2, w3, w4, 1); // Evitar división por cero
+  const h1 = (w1/max)*100;
+  const h2 = (w2/max)*100;
+  const h3 = (w3/max)*100;
+  const h4 = (w4/max)*100;
+  
+  // Determina el color de la barra actual (W4) basado en W3
+  let w4Class = 'current';
+  if(w4 > w3) w4Class = 'up';
+  else if (w4 < w3) w4Class = 'drop';
 
-function fmtSigned(val, type) {
-  const current = type || mode;
-  const sign = (val > 0 && current !== 'ticket') ? '+' : '';
-  return sign + fmtMetric(val, current);
-}
-
-// Celda Apilada (Para modo TODAS)
-function renderStackedCell(metrics, type) {
-  const color = metrics.diff >= 0 ? 'var(--good)' : 'var(--warn)';
-  const sign = metrics.varPct > 0 ? '+' : '';
   return `
-    <div class="stacked-cell">
-      <div class="st-row"><span class="st-lbl">Jun</span><span class="st-val">${fmtMetric(metrics.m_jun, type)}</span></div>
-      <div class="st-row"><span class="st-lbl">Jul</span><span class="st-val">${fmtMetric(metrics.m_jul, type)}</span></div>
-      <div class="st-row st-var" style="color:${color}">${sign}${metrics.varPct.toFixed(2).replace('.', ',')}%</div>
+    <div class="spark-box">
+      <div class="spark-bar" style="height:${h1}%;"></div>
+      <div class="spark-bar" style="height:${h2}%;"></div>
+      <div class="spark-bar" style="height:${h3}%;"></div>
+      <div class="spark-bar ${w4Class}" style="height:${h4}%;"></div>
     </div>
   `;
 }
 
 function renderKPIs(){
-  const t = getTotals(getFilteredData());
+  const data = getFilteredData();
   
-  if (mode === 'all') {
-    document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card ${t.v.diff < 0 ? 'neg' : 'pos'}">
-        <div class="kpi-title">Var. Valor Diario</div>
-        <div class="kpi-value">${t.v.varPct > 0 ? '+' : ''}${t.v.varPct.toFixed(2).replace('.',',')}%</div>
-        <div class="kpi-sub">Julio vs Junio</div>
-      </div>
-      <div class="kpi-card ${t.u.diff < 0 ? 'neg' : 'pos'}">
-        <div class="kpi-title">Var. Unid. Diarias</div>
-        <div class="kpi-value">${t.u.varPct > 0 ? '+' : ''}${t.u.varPct.toFixed(2).replace('.',',')}%</div>
-        <div class="kpi-sub">Julio vs Junio</div>
-      </div>
-      <div class="kpi-card ${t.t.diff < 0 ? 'neg' : 'pos'}">
-        <div class="kpi-title">Var. Costo Prom.</div>
-        <div class="kpi-value">${t.t.varPct > 0 ? '+' : ''}${t.t.varPct.toFixed(2).replace('.',',')}%</div>
-        <div class="kpi-sub">Julio vs Junio</div>
-      </div>
-    `;
-  } else {
-    const s = t.single;
-    const isNeg = s.diff < 0;
-    document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card">
-        <div class="kpi-title">Día Prom. Junio</div>
-        <div class="kpi-value">${fmtMetric(s.m_jun)}</div>
-        <div class="kpi-sub">Base 30 días</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Día Prom. Julio</div>
-        <div class="kpi-value">${fmtMetric(s.m_jul)}</div>
-        <div class="kpi-sub">Base 31 días</div>
-      </div>
-      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
-        <div class="kpi-title">Variación Neta</div>
-        <div class="kpi-value">${fmtSigned(s.diff)}</div>
-        <div class="kpi-sub">${isNeg ? 'Contracción diaria' : 'Crecimiento diario'}</div>
-      </div>
-      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
-        <div class="kpi-title">Variación %</div>
-        <div class="kpi-value">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</div>
-        <div class="kpi-sub">Frente al mes anterior</div>
-      </div>
-    `;
-  }
-}
+  let totalW3 = 0, totalW4 = 0;
+  let topBranch = {n: "-", val: 0};
 
-function renderRanking(){
-  const filtered = getFilteredData();
-  const rankMode = mode === 'all' ? 'valor' : mode; 
-  
-  if(mode === 'all'){
-    document.getElementById('rankSub').textContent = "% de retención basado en VALOR $ (Julio vs Junio)";
-  } else {
-    document.getElementById('rankSub').textContent = "% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)";
-  }
+  data.forEach(d => {
+    totalW3 += d.w3;
+    totalW4 += d.w4;
+    if(d.w4 > topBranch.val) {
+      topBranch = {n: d.n, val: d.w4};
+    }
+  });
 
-  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, rankMode) }));
-  const sorted = calculated.sort((a,b) => b.growthPct - a.growthPct);
-  
-  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
-    const isGrowth = d.growthPct >= 100;
-    const barWidth = Math.min(d.growthPct, 100); 
-    return `
-    <div class="rank-row">
-      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-      <span class="rank-name">${d.n}</span>
-      <div class="bar-bg">
-        <div class="bar-fill ${isGrowth ? 'top' : ''}" style="width:${barWidth}%;"></div>
-      </div>
-      <span class="rank-pct">${d.growthPct.toFixed(2).replace('.', ',')}%</span>
-    </div>`;
-  }).join('');
+  const diff = totalW4 - totalW3;
+  const varPct = totalW3 ? (diff / totalW3) * 100 : 0;
+  const isNeg = diff < 0;
+
+  const catName = activeIndex === 'general' ? 'Toda la Tienda' : (activeIndex === 'carniceria' ? 'Carnicería' : 'Víveres');
+
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-title">Venta W4 (Unidades)</div>
+      <div class="kpi-value">${fmt(totalW4)}</div>
+      <div class="kpi-sub">Total semana reciente</div>
+    </div>
+    <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
+      <div class="kpi-title">Crecimiento vs W3</div>
+      <div class="kpi-value">${varPct > 0 ? '+' : ''}${varPct.toFixed(2).replace('.',',')}%</div>
+      <div class="kpi-sub">Impulso a cierre de mes</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Categoría Analizada</div>
+      <div class="kpi-value" style="font-size:16px; margin-top:9px;">${catName}</div>
+      <div class="kpi-sub">Segmento actual</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Sucursal Líder W4</div>
+      <div class="kpi-value" style="font-size:16px; margin-top:9px;">${topBranch.n}</div>
+      <div class="kpi-sub">${fmt(topBranch.val)} unidades</div>
+    </div>
+  `;
 }
 
 function renderTable(){
-  const filtered = getFilteredData();
-  const t = getTotals(filtered);
-  
-  if (mode === 'all') {
-    document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-align:right;">Prom. Valor $</th>
-        <th style="text-align:right;">Prom. Unidades</th>
-        <th style="text-align:right;">Costo Prom.</th>
-      </tr>
-    `;
-    
-    const rows = filtered.map(d => {
-      const v = calcMetrics(d, 'valor');
-      const u = calcMetrics(d, 'unidades');
-      const tk = calcMetrics(d, 'ticket');
-      return `
-      <tr>
-        <td>${d.n}</td>
-        <td>${renderStackedCell(v, 'valor')}</td>
-        <td>${renderStackedCell(u, 'unidades')}</td>
-        <td>${renderStackedCell(tk, 'ticket')}</td>
-      </tr>`;
-    }).join('');
+  const data = getFilteredData();
+  let tW1=0, tW2=0, tW3=0, tW4=0, tAcum=0;
 
-    const totalRow = `
-      <tr class="total-row">
-        <td>TOTAL CONS.</td>
-        <td>${renderStackedCell(t.v, 'valor')}</td>
-        <td>${renderStackedCell(t.u, 'unidades')}</td>
-        <td>${renderStackedCell(t.t, 'ticket')}</td>
-      </tr>`;
+  const rows = data.map(d => {
+    const acum = d.w1 + d.w2 + d.w3 + d.w4;
+    tW1+=d.w1; tW2+=d.w2; tW3+=d.w3; tW4+=d.w4; tAcum+=acum;
 
-    document.getElementById('tableBody').innerHTML = rows + totalRow;
-    
-  } else {
-    document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-align:center;">Estatus</th>
-        <th>Prom. Junio</th>
-        <th>Prom. Julio</th>
-        <th>Var. Neta</th>
-        <th>Var. %</th>
-      </tr>
-    `;
-    
-    const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
-    const rows = calculated.map(d => {
-      const isGrowth = d.diff >= 0;
-      const badge = isGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>';
-      const color = isGrowth ? 'var(--good)' : 'var(--warn)';
-      return `
-      <tr>
-        <td>${d.n}</td>
-        <td style="text-align:center;">${badge}</td>
-        <td>${fmtMetric(d.m_jun)}</td>
-        <td>${fmtMetric(d.m_jul)}</td>
-        <td style="color:${color};">${fmtSigned(d.diff)}</td>
-        <td style="color:${color}; font-weight:700;">${d.varPct > 0 ? '+' : ''}${d.varPct.toFixed(2).replace('.', ',')}%</td>
-      </tr>`;
-    }).join('');
+    return `
+    <tr>
+      <td>${d.n}</td>
+      <td>${fmt(d.w1)}</td>
+      <td>${fmt(d.w2)}</td>
+      <td>${fmt(d.w3)}</td>
+      <td style="font-weight:700; color:var(--wine);">${fmt(d.w4)}</td>
+      <td style="color:var(--gold-dim); font-weight:700;">${fmt(acum)}</td>
+      <td>${renderSparkline(d.w1, d.w2, d.w3, d.w4)}</td>
+    </tr>`;
+  }).join('');
 
-    const s = t.single;
-    const isTotalGrowth = s.diff >= 0;
-    const tColor = isTotalGrowth ? 'var(--good)' : 'var(--warn)';
-    const totalRow = `
-      <tr class="total-row">
-        <td>TOTAL CONSOLIDADO</td>
-        <td style="text-align:center;">${isTotalGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>'}</td>
-        <td>${fmtMetric(s.m_jun)}</td>
-        <td>${fmtMetric(s.m_jul)}</td>
-        <td style="color:${tColor};">${fmtSigned(s.diff)}</td>
-        <td style="color:${tColor}; font-weight:700;">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</td>
-      </tr>`;
+  const totalRow = `
+    <tr class="total-row">
+      <td>TOTAL ${activeIndex.toUpperCase()}</td>
+      <td>${fmt(tW1)}</td>
+      <td>${fmt(tW2)}</td>
+      <td>${fmt(tW3)}</td>
+      <td style="font-weight:700; font-size:13px;">${fmt(tW4)}</td>
+      <td style="color:var(--gold-dim); font-size:13px;">${fmt(tAcum)}</td>
+      <td>${renderSparkline(tW1, tW2, tW3, tW4)}</td>
+    </tr>`;
 
-    document.getElementById('tableBody').innerHTML = rows + totalRow;
-  }
+  document.getElementById('tableBody').innerHTML = rows + totalRow;
 }
 
 function renderAll(){
   renderKPIs();
-  renderRanking();
   renderTable();
 }
 
 function setZone(z, btn){
-  zone = z;
+  activeZone = z;
   document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderAll();
 }
 
-function setMode(m, btn){
-  mode = m;
-  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+function setIndex(idx, btn){
+  activeIndex = idx;
+  document.querySelectorAll('#groupIndex .toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderAll();
 }
 
-// INICIAR DE FORMA SEGURA
+// INICIAR
 try {
   if (sessionStorage.getItem('luz_authenticated') === 'true') {
     unlockDashboard();
   }
 } catch(e) {}
 </script>
-
 </body>
 </html>
