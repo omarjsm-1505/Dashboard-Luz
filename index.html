@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Comparativo Promedio Diario</title>
+<title>Luz · Análisis Charcutería La Carlota</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -50,7 +50,7 @@
     pointer-events: none;
   }
 
-  /* PANTALLA DE ACCESO RESTRENGIDO */
+  /* PANTALLA DE ACCESO RESTRINGIDO */
   .auth-overlay {
     position: fixed; inset: 0; z-index: 9999;
     background: var(--bg);
@@ -111,7 +111,7 @@
 
   .control-grid{
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap:14px;
     margin-bottom:28px;
   }
@@ -129,10 +129,13 @@
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
   .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
   .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
+  }
+  .select-tipo {
+    border: none; background: transparent; color: var(--text); font-family: 'Inter'; font-weight: 600; font-size: 13px; outline: none; cursor: pointer;
   }
 
   .section-box{ margin-bottom:34px; }
@@ -142,37 +145,21 @@
   .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px; }
   .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
   .kpi-card.neg{ border-left-color:var(--warn); }
-  .kpi-card.pos{ border-left-color:var(--good); }
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
-  .kpi-sub{ font-size:10.5px; color:var(--muted); }
-
-  .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
-  .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
-  .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
-  .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
-  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--warn), #E59A6D); border-radius:5px; transition:width 0.3s ease; }
-  .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
-  .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
+  .kpi-value{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; color:var(--text); margin:5px 0 2px; }
+  .kpi-sub{ font-size:11px; color:var(--muted); }
 
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:620px; }
-  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
-  th:first-child{ text-align:left; }
-  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); vertical-align:middle; }
-  td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
-  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
+  table{ width:100%; border-collapse:collapse; min-width:800px; }
+  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:left; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
+  td{ padding:12px 14px; font-size:12px; text-align:left; border-bottom:1px solid var(--line); font-family:'Inter'; color:var(--text); font-weight:500; }
+  td.numeric{ font-family:'JetBrains Mono', monospace; text-align:right; font-weight:600; }
+  th.numeric{ text-align:right; }
 
-  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
+  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:4px 8px; border-radius:100px; text-transform:uppercase; display:inline-block; }
   .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
   .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
-
-  /* ESTILOS PARA VISTA TODAS (APILADA) */
-  .stacked-cell { display:flex; flex-direction:column; gap:4px; text-align:right; width:100%; min-width:90px; }
-  .st-row { display:flex; justify-content:space-between; gap:10px; align-items:center; }
-  .st-lbl { color:var(--muted); font-size:9.5px; text-transform:uppercase; }
-  .st-val { font-weight:600; font-family:'JetBrains Mono', monospace; color:var(--text); font-size:11.5px; }
-  .st-var { justify-content:flex-end; border-top:1px dashed rgba(140,29,64,0.15); padding-top:4px; margin-top:2px; font-weight:700; font-family:'JetBrains Mono', monospace; font-size:12px; }
+  .badge.neutral{ background:#E0E0E0; color:#424242; border:1px solid #BDBDBD; }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
@@ -184,9 +171,9 @@
   <div class="auth-card">
     <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
     <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al panel comparativo.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" autocomplete="off" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Ingresar al Comparativo</button>
+    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo.</p>
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
+    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
     <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
   </div>
 </div>
@@ -194,7 +181,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ COMPARATIVO DIARIO · JUNIO VS JULIO 2026</span>
+    <span>◆ INVENTARIO CHARCUTERÍA · ACTUALIZADO AGOSTO 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
@@ -202,77 +189,71 @@
 
     <section class="hero">
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Análisis de Desempeño</p>
-      <h1>Comparativo <em>Promedio Diario</em></h1>
-      <p class="hero-sub">Evaluación normalizada (Junio 30 días vs Julio 31 días)</p>
-      <div class="corte-pill">◆ Cierres Oficiales <b>Consolidados</b></div>
+      <p class="eyebrow">Análisis de Operaciones</p>
+      <h1>Análisis Charcutería <em>Suc. La Carlota</em></h1>
+      <p class="hero-sub">Inventario, Estatus y Categorización de Artículos</p>
+      <div class="corte-pill">◆ Data Activa <b>Agosto 2026</b></div>
     </section>
 
-    <!-- CONTROLES -->
+    <!-- CONTROLES DINÁMICOS -->
     <div class="control-grid">
       <div class="ctrl-box">
-        <span class="ctrl-title">Zona Comercial</span>
-        <div class="toggle-group" id="groupZone">
-          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
-          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
-          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+        <span class="ctrl-title">Categoría Principal</span>
+        <div class="toggle-group" id="groupCategory">
+          <button class="toggle-btn active" onclick="setCategory('Todas', this)">Todas</button>
+          <button class="toggle-btn" onclick="setCategory('EMBUTIDOS', this)">Embutidos</button>
+          <button class="toggle-btn" onclick="setCategory('QUESO', this)">Quesos</button>
+          <button class="toggle-btn" onclick="setCategory('LÁCTEOS', this)">Lácteos</button>
         </div>
       </div>
-      <div class="ctrl-box">
-        <span class="ctrl-title">Métrica Diaria</span>
-        <div class="toggle-group" id="groupMode">
-          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
-          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
-          <button class="toggle-btn" onclick="setMode('ticket', this)">Costo Prom.</button>
-          <button class="toggle-btn" onclick="setMode('all', this)">Todas</button>
-        </div>
+      <div class="ctrl-box" style="justify-content: flex-start; gap: 15px;">
+        <span class="ctrl-title">Filtrar por Tipo</span>
+        <select id="typeFilter" class="select-tipo" onchange="setType(this.value)">
+          <option value="Todos">Todos los tipos</option>
+        </select>
       </div>
     </div>
 
-    <!-- KPIS -->
+    <!-- KPIS DE RESUMEN -->
     <div class="section-box">
-      <h2 class="sec-title">Rendimiento Promedio por Día</h2>
-      <span class="sec-sub">Totales de la cadena (o zona filtrada) promediados por los días de cada mes</span>
+      <h2 class="sec-title">Resumen de Artículos</h2>
+      <span class="sec-sub">Métricas dinámicas calculadas según el filtro actual</span>
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
-    <!-- RANKING -->
+    <!-- DESPLIEGUE DE PRODUCTOS -->
     <div class="section-box">
-      <h2 class="sec-title">Ranking de Retención/Crecimiento</h2>
-      <span class="sec-sub" id="rankSub">% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)</span>
-      <div id="rankingList"></div>
-    </div>
-
-    <!-- TABLA -->
-    <div class="section-box">
-      <h2 class="sec-title">Detalle Sucursales</h2>
-      <span class="sec-sub">Comparación directa de promedios diarios normalizados</span>
+      <h2 class="sec-title">Despliegue de Productos</h2>
+      <span class="sec-sub">Catálogo completo de la sucursal La Carlota</span>
 
       <div class="tbl-wrap">
         <table>
-          <thead id="tableHead"></thead>
+          <thead>
+            <tr>
+              <th>Nombre del Producto</th>
+              <th>Categoría</th>
+              <th>Tipo</th>
+              <th style="text-align:center;">Medición</th>
+              <th class="numeric">Días Inv.</th>
+              <th style="text-align:center;">Estatus</th>
+            </tr>
+          </thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
     </div>
 
-    <footer>LUZ · COMPARATIVO DIARIO_2026</footer>
+    <footer>LUZ · ANÁLISIS SUCURSAL LA CARLOTA</footer>
   </div>
 </div>
 <script>
-// BLOQUEO SEGURO - IGNORARÁ LOS ERRORES DEL NAVEGADOR
+// CLAVE DE ACCESO
+const SECRET_KEY = "Luz2026";
+
 function checkAuth() {
-  const inputEl = document.getElementById('passInput');
-  const pass = inputEl ? inputEl.value.trim().toLowerCase() : '';
-  
-  if (pass === 'luz2026' || pass === 'l2026' || pass === '2026') {
-    // Si el teléfono bloquea la memoria local (muy común en móviles o archivos sueltos), 
-    // el try/catch evitará que el código se congele y te dejará entrar directo.
-    try { 
-      sessionStorage.setItem('luz_authenticated', 'true'); 
-    } catch(e) {
-      console.warn("Navegador bloquea sesión, procediendo directo...");
-    }
+  const pass = document.getElementById('passInput').value;
+  if (pass === SECRET_KEY) {
+    sessionStorage.setItem('luz_authenticated', 'true');
     unlockDashboard();
   } else {
     document.getElementById('authError').style.display = 'block';
@@ -286,276 +267,278 @@ function handleKeyPress(e) {
 function unlockDashboard() {
   document.getElementById('authOverlay').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
-  renderAll();
+  initDashboard();
 }
 
-const DAYS_JUN = 30;
-const DAYS_JUL = 31;
-
+// DATOS DINÁMICOS EXTRÍDOS DEL PDF
 const rawData = [
-  {n:"Carlota", zone:"este", v_jun:1126130, v_jul:1143104, u_jun:488215, u_jul:494157},
-  {n:"Chacao", zone:"oeste", v_jun:542118, v_jul:530351, u_jun:272509, u_jul:271951},
-  {n:"Dos Caminos", zone:"oeste", v_jun:329196, v_jul:300398, u_jun:159694, u_jul:153507},
-  {n:"Florida", zone:"oeste", v_jun:706422, v_jul:709754, u_jun:325384, u_jul:335034},
-  {n:"Luz Quick Rest", zone:"oeste", v_jun:188305, v_jul:171371, u_jun:95526, u_jul:88043},
-  {n:"Llanito", zone:"este", v_jun:526614, v_jul:466184, u_jun:249268, u_jul:225555},
-  {n:"Marques", zone:"este", v_jun:160683, v_jul:151972, u_jun:80278, u_jul:78053},
-  {n:"Pedregal", zone:"oeste", v_jun:347661, v_jul:329829, u_jun:173787, u_jul:169460},
-  {n:"San Antonio", zone:"este", v_jun:474525, v_jul:498267, u_jun:216927, u_jul:235125},
-  {n:"Urbina", zone:"este", v_jun:666929, v_jul:629883, u_jun:299775, u_jul:294799}
+  {n:"SUERO CREMOSO DON PELAYO 900ML", p:"No Pesable", c:"LÁCTEOS", t:"SUERO", d:0},
+  {n:"PECHUGA DE PAVO INCARAGUANO", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:0},
+  {n:"QUESO CREMA PAISA 200G", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:0},
+  {n:"QUESO CREMA UPACA 200G", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:0},
+  {n:"CREMA DE LECHE UPACA 200G", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:0},
+  {n:"PECHUGA DE PAVO CHARVENCA KG", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:0},
+  {n:"QUESO PECORINO CASENTINO ENTERO G", p:"Pesable", c:"QUESO", t:"MADURADO", d:0},
+  {n:"JAMON TENDER PLUMROSE G", p:"Pesable", c:"EMBUTIDOS", t:"AHUMADO", d:0},
+  {n:"MORTADELA ITALIANA CON PISTACHO LPRADO G", p:"Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:2},
+  {n:"PECHUGA DE POLLO PUNTA DE MONTE 800G", p:"No Pesable", c:"EMBUTIDOS", t:"POLLO", d:167},
+  {n:"QUESO FUNDIDO CHEDDAR DI FIORE 200G", p:"No Pesable", c:"QUESO", t:"FUNDIDO", d:146},
+  {n:"MINI JAMON DE PIERNA COCIDO LPRADO KG", p:"Pesable", c:"EMBUTIDOS", t:"PIERNA", d:94},
+  {n:"QUESO MUNSTER LOS FRAILES KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:65},
+  {n:"MINI PECHUGA DE PAVO LPRADO KG", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:67},
+  {n:"QUESO PECORINO FLOR DE ARAGUA C/PPORC KG", p:"Pesable", c:"QUESO", t:"MADURADO", d:64},
+  {n:"QUESO PIRINEO REDOND FRAILES K", p:"Pesable", c:"QUESO", t:"AMARILLO", d:61},
+  {n:"DELICIAS DE POLLO ALIMETCA KG", p:"Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:48},
+  {n:"BOLOGNA POLLO LPRADO K", p:"Pesable", c:"EMBUTIDOS", t:"BOLOGNA", d:46},
+  {n:"SALCHICHA COCIDA TIPO WIENER LPRADO 440GR", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:41},
+  {n:"JAMON DE ESPALDA LPRADO", p:"Pesable", c:"EMBUTIDOS", t:"ESPALDA", d:37},
+  {n:"MORTADELA DE POLLO ALIBAL ESPECIAL 700g", p:"No Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:35},
+  {n:"JAMON COCIDO SUPERIOR PUROLOMO 800GR", p:"No Pesable", c:"EMBUTIDOS", t:"PIERNA", d:33},
+  {n:"SALCHICHA COCIDA LPRADO TIPO VIENA 440G", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:31},
+  {n:"JAMON PIERNA MOVILLA EXTRA KG", p:"Pesable", c:"EMBUTIDOS", t:"PIERNA", d:30},
+  {n:"JAMON AREPERO LPRADO KG", p:"Pesable", c:"EMBUTIDOS", t:"AREPERO", d:29},
+  {n:"SALCHICHA PLUMROSE WIENERS CORTA 270g", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:28},
+  {n:"QUESO BLANCO MONTE SANO KG", p:"Pesable", c:"QUESO", t:"PASTEURIZADO", d:27},
+  {n:"SALCHICHA COCIDA TIPO WIENER LPRADO 220GR", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:27},
+  {n:"SALCHICHA COCIDA LPRADO DE POLLO 440G", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:27},
+  {n:"QUESO BUFFALA BUFALINDA KG", p:"Pesable", c:"QUESO", t:"BUFALA", d:27},
+  {n:"MANTEQUILLA A GRANEL SIN SAL KG", p:"Pesable", c:"LÁCTEOS", t:"UNTABLES", d:26},
+  {n:"PECHUGA DE PAVO ALIMETCA AHUMADA KG", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:25},
+  {n:"SALCHICHA PARRILLERA FINA HIERVAS ALIMETCA", p:"Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:25},
+  {n:"MANTEQUILLA CON SAL ZARCO 200G", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:25},
+  {n:"QUESO MOZZARELLA NAPOLITANA K", p:"Pesable", c:"QUESO", t:"MOZZARELA", d:24},
+  {n:"QUESO PALMITO KG", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:24},
+  {n:"MORTADELA PUNTA DE MONTE ESPECIAL KG", p:"Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:24},
+  {n:"MORTADELA DE POLLO PUNTA DE MONTE 800G", p:"No Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:23},
+  {n:"JAMON COCIDO SUPERIOR PUROLOMO 400 GR", p:"No Pesable", c:"EMBUTIDOS", t:"PIERNA", d:23},
+  {n:"PECHUGA DE POLLO LPRADO SUPERIOR KG", p:"Pesable", c:"EMBUTIDOS", t:"POLLO", d:23},
+  {n:"QUESO NICOTANO", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:21},
+  {n:"PEPPERONI KG", p:"Pesable", c:"EMBUTIDOS", t:"PEPPERONI", d:23},
+  {n:"QUESO REQUESON KG", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:22},
+  {n:"MANTEQUILLA SIN SAL ZARCO 200G", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:22},
+  {n:"QUESO AMARILLO CHEDDYS KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:22},
+  {n:"QUESO BLANCO ESPECIAL DEL CAMPO G", p:"Pesable", c:"QUESO", t:"PASTEURIZADO", d:21},
+  {n:"QUESOS MIX RALLADO MONTESANO 50GR", p:"No Pesable", c:"QUESO", t:"RALLADO", d:20},
+  {n:"SUERO DE LECHE CHERRY 700ML", p:"No Pesable", c:"LÁCTEOS", t:"SUERO", d:19},
+  {n:"MANTEQUILLA MONTE ADENTRO SIN SAL 200G", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:19},
+  {n:"MATEQUILLA CON AJO Y PEREJIL 200GR", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:19},
+  {n:"BOLOGNA PIMENTON Y ACEITUNA LPRADO KG", p:"Pesable", c:"EMBUTIDOS", t:"BOLOGNA", d:19},
+  {n:"JAMON AHUMADO SHOULDER LPRADO KG", p:"Pesable", c:"EMBUTIDOS", t:"AHUMADO", d:18},
+  {n:"PASTA HIGADO OSCAR MAYER 55100 113g", p:"No Pesable", c:"EMBUTIDOS", t:"UNTABLES", d:18},
+  {n:"QUESO MOZZARELLA DEL CAMPO KG", p:"Pesable", c:"QUESO", t:"MOZZARELA", d:17},
+  {n:"MORTADELA EXTRA LPRADO KG", p:"Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:11},
+  {n:"PASTA HIGADO OSCAR MAYER 55101 226g", p:"No Pesable", c:"EMBUTIDOS", t:"UNTABLES", d:17},
+  {n:"MANTEQUILLA MONTE ADENTRO 200G", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:12},
+  {n:"TOCINETA REBANADA PLUMROSE KG", p:"Pesable", c:"EMBUTIDOS", t:"TOCINETA", d:16},
+  {n:"SALCHICHA TIPO POLACA ALIMETCA KG", p:"Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:15},
+  {n:"QUESO MOZZARELLA MONTE SANO KG", p:"Pesable", c:"QUESO", t:"MOZZARELA", d:15},
+  {n:"PECHUGA PAVO PUNTA DE MONTE KG", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:15},
+  {n:"PECHUGA DE POLLO PUNTA DE MONTE 400 GR", p:"No Pesable", c:"EMBUTIDOS", t:"POLLO", d:15},
+  {n:"QUESO CREMA SAN MIGUEL 250 GR", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:15},
+  {n:"MANTEQUILLA A GRANEL CON SAL KG", p:"Pesable", c:"LÁCTEOS", t:"UNTABLES", d:14},
+  {n:"JAMON DE PIERNA LPRADO COCIDO KG", p:"Pesable", c:"EMBUTIDOS", t:"PIERNA", d:14},
+  {n:"MORTADELA DE POLLO ALIBAL KG", p:"Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:14},
+  {n:"QUESO PALMIBUFALA KG", p:"Pesable", c:"QUESO", t:"BUFALA", d:14},
+  {n:"QUESO MERIDEÑO KG", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:14},
+  {n:"QUESO CREMA NATISIMA 250G", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:11},
+  {n:"PECHUGA DE PAVO PUNTA DE MONTE 400GR", p:"No Pesable", c:"EMBUTIDOS", t:"PAVO", d:12},
+  {n:"SALCHICHA COCIDA TIPO WIENER LPRADO 225GR", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:12},
+  {n:"QUESO AMARILLO LOS FRAILES KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:11},
+  {n:"PECHUGA DE PAVO LPRADO KG", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:11},
+  {n:"QUESO AMARILLO FUNDIDO DEL CAMPO KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:11},
+  {n:"CUAJADA KG", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:10},
+  {n:"MORTADELA POLLO ALIBAL 500GR", p:"No Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:10},
+  {n:"TOCINETA MOVILLA AHUMADA REBANADA 250G", p:"No Pesable", c:"EMBUTIDOS", t:"TOCINETA", d:10},
+  {n:"QUESO CREMA KG", p:"Pesable", c:"QUESO", t:"UNTABLES", d:9},
+  {n:"JAMON PIERNA PUROLOMO SUPERIOR .96 K", p:"Pesable", c:"EMBUTIDOS", t:"PIERNA", d:9},
+  {n:"MORTADELA POLLO PUNTA DE MONTE KG", p:"Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:9},
+  {n:"QUESO AMARILLO CALICANTO KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:9},
+  {n:"CREMA DE LECHE LA PREFERIDA 400G", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:9},
+  {n:"MORTADELA TAPARA ALIMETCA KG", p:"Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:8},
+  {n:"QUESO MOZZARELLA CAMPANARIO KG", p:"Pesable", c:"QUESO", t:"MOZZARELA", d:8},
+  {n:"QUESO CABRA G", p:"Pesable", c:"QUESO", t:"CABRA", d:8},
+  {n:"CREMA DE LECHE SANTA MARIA 250 GR", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:8},
+  {n:"CREMA DE LECHE PURISIMA 500GR", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:7},
+  {n:"SALCHICHA FIESTA COCIDA TIPO VIENA CORTA 270g", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:7},
+  {n:"JAMON PIERNA DON DIEGO KG", p:"Pesable", c:"EMBUTIDOS", t:"PIERNA", d:6},
+  {n:"QUESO GOUDA MONTE SANO KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:6},
+  {n:"QUESO MOZZARELLA SANTA MARIA KG", p:"Pesable", c:"QUESO", t:"MOZZARELA", d:6},
+  {n:"PECHUGA PAVO MOVILLA KG", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:6},
+  {n:"QUESO MOZARELLA BUFALINDA JUNIOR 300g", p:"No Pesable", c:"QUESO", t:"MOZZARELA", d:5},
+  {n:"JAMON PIERNA ESTANDAR ALIBAL .865 KG", p:"Pesable", c:"EMBUTIDOS", t:"PIERNA", d:5},
+  {n:"QUESO MOZARELLA BUFALINDA BOCCONCINE 240g", p:"No Pesable", c:"QUESO", t:"MOZZARELA", d:4},
+  {n:"CREMA DE LECHE PURISIMA 250GR", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:4},
+  {n:"QUESO PARMESANO DUCAL RALLADO 100GR", p:"No Pesable", c:"QUESO", t:"MADURADO", d:5},
+  {n:"QUESO DE BUFALA FRESKITO KG", p:"Pesable", c:"QUESO", t:"BUFALA", d:5},
+  {n:"QUESO SANTA BARBARA KG", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:5},
+  {n:"SALCHICHA FIESTA TIPO VIENA LARGA 450g", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:5},
+  {n:"QUESO BLANCO PASTEURIZADO SAN JUAN KG", p:"Pesable", c:"QUESO", t:"PASTEURIZADO", d:4},
+  {n:"TOCINETA AHUMADA S/CUERO 31126 KG", p:"Pesable", c:"EMBUTIDOS", t:"TOCINETA", d:4},
+  {n:"SUERO CREMOSO SAN JUAN 900ML", p:"No Pesable", c:"LÁCTEOS", t:"SUERO", d:3},
+  {n:"QUESO PALMIZULIA KG", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:3},
+  {n:"QUESO AMARILLO SAN JUAN KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:3},
+  {n:"QUESO CREMA BUFIKRIM NATURA 250g", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:2},
+  {n:"QUESO TELITA G", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:2},
+  {n:"PECORINO RALLADO S/P TOSCANO 100GR", p:"No Pesable", c:"QUESO", t:"MADURADO", d:2},
+  {n:"CREMA DE LECHE NATISIMA 250g", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:2},
+  {n:"MORTADELA CON PISTACHO PUROLOMO KG", p:"Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:2},
+  {n:"CREMA DE LECHE LALO 250GR", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:1},
+  {n:"MANTEQUILLA SIN SAL PURISIMA 200G", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:1},
+  {n:"QUESO BOCCONCINI CALICANTO 340G", p:"No Pesable", c:"QUESO", t:"MOZZARELA", d:1},
+  {n:"QUESO MOZARELLA SAN JUAN KG", p:"Pesable", c:"QUESO", t:"MOZZARELA", d:1},
+  {n:"QUESO GUAYANES KG", p:"Pesable", c:"QUESO", t:"ARTESANALES", d:1},
+  {n:"SALCHICHA PLUMROSE COCIDA WIENERS LARGA 450g", p:"No Pesable", c:"EMBUTIDOS", t:"SALCHICHA", d:1},
+  {n:"TOCINETA AHUMADA REBANADA COCHON 200GR", p:"No Pesable", c:"EMBUTIDOS", t:"TOCINETA", d:0},
+  {n:"JAMON ESPALDA ALIBAL AHUMADA KG", p:"Pesable", c:"EMBUTIDOS", t:"ESPALDA", d:0},
+  {n:"QUESO MOZZARELLA PIZZA RIKA KG", p:"Pesable", c:"QUESO", t:"MOZZARELA", d:0},
+  {n:"MANTEQUILLA CON SAL PURISIMA 200G", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:0},
+  {n:"QUESO CREMA GABY 250", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:0},
+  {n:"CREMA LECHE QUENACA 250", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:0},
+  {n:"MANTEQUILLA CAMPESTRE BARRA 200G", p:"No Pesable", c:"LÁCTEOS", t:"UNTABLES", d:0},
+  {n:"QUESO CREMA BUFIKRIM TOMATE SECO/ALBAHAC 250g", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:0},
+  {n:"QUESO CREMA BUFIKRIM CIBOULETTE/AJO 250", p:"No Pesable", c:"QUESO", t:"UNTABLES", d:0},
+  {n:"QUESO FACILISTAS KRAFT 340g", p:"No Pesable", c:"QUESO", t:"FUNDIDO", d:0},
+  {n:"MORTADELA ESPECIAL PLUMROSE 800G", p:"No Pesable", c:"EMBUTIDOS", t:"MORTADELA", d:0},
+  {n:"PECHUGA DE PAVO PUNTA DE MONTE 300GR", p:"No Pesable", c:"EMBUTIDOS", t:"PAVO", d:0},
+  {n:"PARMESANO CAMPANARIO KG", p:"Pesable", c:"QUESO", t:"MADURADO", d:0},
+  {n:"JAMON PIERNA PLUMROSE KG", p:"Pesable", c:"EMBUTIDOS", t:"PIERNA", d:0},
+  {n:"QUESO GOUDA CAMPO RICO KG", p:"Pesable", c:"QUESO", t:"AMARILLO", d:0},
+  {n:"QUESO PECORINO SIN PIMIENTA BOLA QUENACA KG", p:"Pesable", c:"QUESO", t:"MADURADO", d:0},
+  {n:"PECHUGA PAVO ESTANDAR CHARVENCA KG", p:"Pesable", c:"EMBUTIDOS", t:"PAVO", d:0},
+  {n:"QUESO PARMESANO BOLA QUENACA KG", p:"Pesable", c:"QUESO", t:"MADURADO", d:0},
+  {n:"PECORINO RALLADO C/P TOSCANO 100GR", p:"No Pesable", c:"QUESO", t:"MADURADO", d:0},
+  {n:"CREMA DE LECHE SANTA MARIA TINA 500 GR", p:"No Pesable", c:"LÁCTEOS", t:"CREMA DE LECHE", d:0},
+  {n:"QUESO PECORINO S/P FLOR DE ARAGUA KG", p:"Pesable", c:"QUESO", t:"MADURADO", d:0}
 ];
 
-let mode = 'valor';
-let zone = 'todas';
+let activeCategory = 'Todas';
+let activeType = 'Todos';
 
 function getFilteredData(){
-  return zone === 'todas' ? rawData : rawData.filter(d => d.zone === zone);
-}
-
-// Calculadora Base
-function calcMetrics(d, currentMode) {
-  let m_jun, m_jul;
-  if (currentMode === 'valor') {
-    m_jun = d.v_jun / DAYS_JUN;
-    m_jul = d.v_jul / DAYS_JUL;
-  } else if (currentMode === 'unidades') {
-    m_jun = d.u_jun / DAYS_JUN;
-    m_jul = d.u_jul / DAYS_JUL;
-  } else if (currentMode === 'ticket') {
-    m_jun = d.v_jun / d.u_jun;
-    m_jul = d.v_jul / d.u_jul;
-  }
-  const diff = m_jul - m_jun;
-  const growthPct = m_jun ? (m_jul / m_jun) * 100 : 0; 
-  const varPct = m_jun ? (diff / m_jun) * 100 : 0;     
-  return { m_jun, m_jul, diff, varPct, growthPct };
-}
-
-function getTotals(list){
-  let v_jun = 0, v_jul = 0, u_jun = 0, u_jul = 0;
-  list.forEach(d => {
-    v_jun += d.v_jun; v_jul += d.v_jul; u_jun += d.u_jun; u_jul += d.u_jul;
+  return rawData.filter(d => {
+    const matchCat = activeCategory === 'Todas' || d.c === activeCategory;
+    const matchType = activeType === 'Todos' || d.t === activeType;
+    return matchCat && matchType;
   });
-  return {
-    v: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'valor'),
-    u: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'unidades'),
-    t: calcMetrics({v_jun, v_jul, u_jun, u_jul}, 'ticket'),
-    single: mode !== 'all' ? calcMetrics({v_jun, v_jul, u_jun, u_jul}, mode) : null
-  };
 }
 
-// Formateadores
-function fmtMetric(val, type) {
-  const current = type || mode;
-  if (current === 'valor') return "$" + Math.round(val || 0).toLocaleString('es-VE');
-  if (current === 'unidades') return Math.round(val || 0).toLocaleString('es-VE') + " u";
-  if (current === 'ticket') return "$" + (val || 0).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
+function updateTypeDropdown() {
+  const select = document.getElementById('typeFilter');
+  // Mantener los tipos según la categoría actual
+  let types = new Set();
+  rawData.forEach(d => {
+    if (activeCategory === 'Todas' || d.c === activeCategory) {
+      types.add(d.t);
+    }
+  });
+  
+  const sortedTypes = Array.from(types).sort();
+  select.innerHTML = '<option value="Todos">Todos los tipos</option>' + 
+    sortedTypes.map(t => `<option value="${t}">${t}</option>`).join('');
+  
+  activeType = 'Todos';
 }
 
-function fmtSigned(val, type) {
-  const current = type || mode;
-  const sign = (val > 0 && current !== 'ticket') ? '+' : '';
-  return sign + fmtMetric(val, current);
-}
+function renderKPIs(){
+  const f = getFilteredData();
+  
+  const total = f.length;
+  const pesables = f.filter(d => d.p === 'Pesable').length;
+  const noPesables = total - pesables;
+  
+  const conInv = f.filter(d => d.d > 0).length;
+  const sinInv = total - conInv;
+  
+  const invMenos10 = f.filter(d => d.d > 0 && d.d < 10).length;
+  const invMas90 = f.filter(d => d.d > 90).length;
+  
+  let catSub = "";
+  if(activeCategory === 'Todas'){
+    const emb = f.filter(d => d.c === 'EMBUTIDOS').length;
+    const que = f.filter(d => d.c === 'QUESO').length;
+    const lac = f.filter(d => d.c === 'LÁCTEOS').length;
+    catSub = `Emb: ${emb} | Que: ${que} | Lác: ${lac}`;
+  } else {
+    catSub = `Filtrado por: ${activeCategory}`;
+  }
 
-// Celda Apilada (Para modo TODAS)
-function renderStackedCell(metrics, type) {
-  const color = metrics.diff >= 0 ? 'var(--good)' : 'var(--warn)';
-  const sign = metrics.varPct > 0 ? '+' : '';
-  return `
-    <div class="stacked-cell">
-      <div class="st-row"><span class="st-lbl">Jun</span><span class="st-val">${fmtMetric(metrics.m_jun, type)}</span></div>
-      <div class="st-row"><span class="st-lbl">Jul</span><span class="st-val">${fmtMetric(metrics.m_jul, type)}</span></div>
-      <div class="st-row st-var" style="color:${color}">${sign}${metrics.varPct.toFixed(2).replace('.', ',')}%</div>
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-title">Total Artículos</div>
+      <div class="kpi-value">${total}</div>
+      <div class="kpi-sub">${catSub}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Medición</div>
+      <div class="kpi-value">${pesables} <span style="font-size:14px;color:var(--muted)">/ ${noPesables}</span></div>
+      <div class="kpi-sub">Pesables / No Pesables</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Estatus General</div>
+      <div class="kpi-value" style="color:var(--good);">${conInv} <span style="font-size:14px;color:var(--danger)">/ ${sinInv}</span></div>
+      <div class="kpi-sub">Con Inventario / Sin Inventario</div>
+    </div>
+    <div class="kpi-card ${invMenos10 > 0 ? 'neg' : ''}">
+      <div class="kpi-title">Riesgo Quiebre</div>
+      <div class="kpi-value">${invMenos10}</div>
+      <div class="kpi-sub">Items con < 10 Días Inv.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Sobre Stock</div>
+      <div class="kpi-value">${invMas90}</div>
+      <div class="kpi-sub">Items con > 90 Días Inv.</div>
     </div>
   `;
 }
 
-function renderKPIs(){
-  const t = getTotals(getFilteredData());
-  
-  if (mode === 'all') {
-    document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card ${t.v.diff < 0 ? 'neg' : 'pos'}">
-        <div class="kpi-title">Var. Valor Diario</div>
-        <div class="kpi-value">${t.v.varPct > 0 ? '+' : ''}${t.v.varPct.toFixed(2).replace('.',',')}%</div>
-        <div class="kpi-sub">Julio vs Junio</div>
-      </div>
-      <div class="kpi-card ${t.u.diff < 0 ? 'neg' : 'pos'}">
-        <div class="kpi-title">Var. Unid. Diarias</div>
-        <div class="kpi-value">${t.u.varPct > 0 ? '+' : ''}${t.u.varPct.toFixed(2).replace('.',',')}%</div>
-        <div class="kpi-sub">Julio vs Junio</div>
-      </div>
-      <div class="kpi-card ${t.t.diff < 0 ? 'neg' : 'pos'}">
-        <div class="kpi-title">Var. Costo Prom.</div>
-        <div class="kpi-value">${t.t.varPct > 0 ? '+' : ''}${t.t.varPct.toFixed(2).replace('.',',')}%</div>
-        <div class="kpi-sub">Julio vs Junio</div>
-      </div>
-    `;
-  } else {
-    const s = t.single;
-    const isNeg = s.diff < 0;
-    document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card">
-        <div class="kpi-title">Día Prom. Junio</div>
-        <div class="kpi-value">${fmtMetric(s.m_jun)}</div>
-        <div class="kpi-sub">Base 30 días</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Día Prom. Julio</div>
-        <div class="kpi-value">${fmtMetric(s.m_jul)}</div>
-        <div class="kpi-sub">Base 31 días</div>
-      </div>
-      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
-        <div class="kpi-title">Variación Neta</div>
-        <div class="kpi-value">${fmtSigned(s.diff)}</div>
-        <div class="kpi-sub">${isNeg ? 'Contracción diaria' : 'Crecimiento diario'}</div>
-      </div>
-      <div class="kpi-card ${isNeg ? 'neg' : 'pos'}">
-        <div class="kpi-title">Variación %</div>
-        <div class="kpi-value">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</div>
-        <div class="kpi-sub">Frente al mes anterior</div>
-      </div>
-    `;
-  }
-}
-
-function renderRanking(){
-  const filtered = getFilteredData();
-  const rankMode = mode === 'all' ? 'valor' : mode; 
-  
-  if(mode === 'all'){
-    document.getElementById('rankSub').textContent = "% de retención basado en VALOR $ (Julio vs Junio)";
-  } else {
-    document.getElementById('rankSub').textContent = "% del promedio diario de Julio vs Junio (Verde = Crecimiento > 100%)";
-  }
-
-  const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, rankMode) }));
-  const sorted = calculated.sort((a,b) => b.growthPct - a.growthPct);
-  
-  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
-    const isGrowth = d.growthPct >= 100;
-    const barWidth = Math.min(d.growthPct, 100); 
-    return `
-    <div class="rank-row">
-      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-      <span class="rank-name">${d.n}</span>
-      <div class="bar-bg">
-        <div class="bar-fill ${isGrowth ? 'top' : ''}" style="width:${barWidth}%;"></div>
-      </div>
-      <span class="rank-pct">${d.growthPct.toFixed(2).replace('.', ',')}%</span>
-    </div>`;
-  }).join('');
-}
-
 function renderTable(){
-  const filtered = getFilteredData();
-  const t = getTotals(filtered);
+  const f = getFilteredData();
   
-  if (mode === 'all') {
-    document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-align:right;">Prom. Valor $</th>
-        <th style="text-align:right;">Prom. Unidades</th>
-        <th style="text-align:right;">Costo Prom.</th>
-      </tr>
-    `;
-    
-    const rows = filtered.map(d => {
-      const v = calcMetrics(d, 'valor');
-      const u = calcMetrics(d, 'unidades');
-      const tk = calcMetrics(d, 'ticket');
-      return `
-      <tr>
-        <td>${d.n}</td>
-        <td>${renderStackedCell(v, 'valor')}</td>
-        <td>${renderStackedCell(u, 'unidades')}</td>
-        <td>${renderStackedCell(tk, 'ticket')}</td>
-      </tr>`;
-    }).join('');
+  // Ordenar primero los que tienen inventario por cantidad de días (mayor a menor), y luego los de 0
+  const sorted = [...f].sort((a,b) => b.d - a.d);
 
-    const totalRow = `
-      <tr class="total-row">
-        <td>TOTAL CONS.</td>
-        <td>${renderStackedCell(t.v, 'valor')}</td>
-        <td>${renderStackedCell(t.u, 'unidades')}</td>
-        <td>${renderStackedCell(t.t, 'ticket')}</td>
-      </tr>`;
+  const rows = sorted.map(d => {
+    const badge = d.d > 0 ? '<span class="badge meta">Con Stock</span>' : '<span class="badge neutral">Sin Stock</span>';
+    return `
+    <tr>
+      <td>${d.n}</td>
+      <td>${d.c}</td>
+      <td>${d.t}</td>
+      <td style="text-align:center;">${d.p}</td>
+      <td class="numeric">${d.d}</td>
+      <td style="text-align:center;">${badge}</td>
+    </tr>`;
+  }).join('');
 
-    document.getElementById('tableBody').innerHTML = rows + totalRow;
-    
-  } else {
-    document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-align:center;">Estatus</th>
-        <th>Prom. Junio</th>
-        <th>Prom. Julio</th>
-        <th>Var. Neta</th>
-        <th>Var. %</th>
-      </tr>
-    `;
-    
-    const calculated = filtered.map(d => ({ n: d.n, ...calcMetrics(d, mode) }));
-    const rows = calculated.map(d => {
-      const isGrowth = d.diff >= 0;
-      const badge = isGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>';
-      const color = isGrowth ? 'var(--good)' : 'var(--warn)';
-      return `
-      <tr>
-        <td>${d.n}</td>
-        <td style="text-align:center;">${badge}</td>
-        <td>${fmtMetric(d.m_jun)}</td>
-        <td>${fmtMetric(d.m_jul)}</td>
-        <td style="color:${color};">${fmtSigned(d.diff)}</td>
-        <td style="color:${color}; font-weight:700;">${d.varPct > 0 ? '+' : ''}${d.varPct.toFixed(2).replace('.', ',')}%</td>
-      </tr>`;
-    }).join('');
-
-    const s = t.single;
-    const isTotalGrowth = s.diff >= 0;
-    const tColor = isTotalGrowth ? 'var(--good)' : 'var(--warn)';
-    const totalRow = `
-      <tr class="total-row">
-        <td>TOTAL CONSOLIDADO</td>
-        <td style="text-align:center;">${isTotalGrowth ? '<span class="badge meta">Sube</span>' : '<span class="badge obs">Baja</span>'}</td>
-        <td>${fmtMetric(s.m_jun)}</td>
-        <td>${fmtMetric(s.m_jul)}</td>
-        <td style="color:${tColor};">${fmtSigned(s.diff)}</td>
-        <td style="color:${tColor}; font-weight:700;">${s.varPct > 0 ? '+' : ''}${s.varPct.toFixed(2).replace('.', ',')}%</td>
-      </tr>`;
-
-    document.getElementById('tableBody').innerHTML = rows + totalRow;
-  }
+  document.getElementById('tableBody').innerHTML = rows;
 }
 
-function renderAll(){
+function initDashboard() {
+  updateTypeDropdown();
   renderKPIs();
-  renderRanking();
   renderTable();
 }
 
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
+function setCategory(cat, btn){
+  activeCategory = cat;
+  document.querySelectorAll('#groupCategory .toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderAll();
+  
+  updateTypeDropdown(); // Reset and update sub-filter
+  renderKPIs();
+  renderTable();
 }
 
-function setMode(m, btn){
-  mode = m;
-  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
+function setType(type){
+  activeType = type;
+  renderKPIs();
+  renderTable();
 }
 
-// INICIAR DE FORMA SEGURA
-try {
-  if (sessionStorage.getItem('luz_authenticated') === 'true') {
-    unlockDashboard();
-  }
-} catch(e) {}
+// VERIFICAR AUTENTICACIÓN INICIAL
+if (sessionStorage.getItem('luz_authenticated') === 'true') {
+  unlockDashboard();
+}
 </script>
 
 </body>
