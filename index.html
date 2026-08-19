@@ -127,9 +127,9 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
   .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
   }
   .toggle-btn.active{
     background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
@@ -146,7 +146,7 @@
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  .rank-row{ display:grid; grid-template-columns: 24px 120px 1fr 55px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 70px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
   .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
   .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
   .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
@@ -211,10 +211,11 @@
         </div>
       </div>
       <div class="ctrl-box">
-        <span class="ctrl-title">Métrica</span>
+        <span class="ctrl-title">Métrica / Cinta</span>
         <div class="toggle-group" id="groupMode">
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Precio Vta. Prom.</button>
         </div>
       </div>
     </div>
@@ -229,7 +230,7 @@
     <!-- RANKING -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Cumplimiento de mayor a menor</span>
+      <span class="sec-sub">Indicador consolidado</span>
       <div id="rankingList"></div>
     </div>
 
@@ -240,17 +241,7 @@
 
       <div class="tbl-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Sucursal</th>
-              <th style="text-align:center;">Estatus</th>
-              <th>Presupuesto</th>
-              <th>Cumplido</th>
-              <th>%</th>
-              <th>Proyección</th>
-              <th>Diferencia</th>
-            </tr>
-          </thead>
+          <thead id="tableHead"></thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
@@ -287,23 +278,25 @@ function unlockDashboard() {
 const EXPECTED_PCT = 58.06;
 
 const data = [
-  {n:"Carlota", zone:"este", vp:1131254, vc:618259, vpct:54.65, vproy:1064780, vdiff:-66474, up:505599, uc:272731, upct:53.94, uproy:469703, udiff:-35896},
-  {n:"Chacao", zone:"oeste", vp:524853, vc:311972, vpct:59.44, vproy:537285, vdiff:12432, up:278248, uc:166259, upct:59.75, uproy:286335, udiff:8087},
-  {n:"Dos Caminos", zone:"oeste", vp:297284, vc:169536, vpct:57.03, vproy:291979, vdiff:-5305, up:157062, uc:88645, upct:56.44, uproy:152666, udiff:-4396},
-  {n:"Florida", zone:"oeste", vp:702396, vc:411106, vpct:58.53, vproy:708016, vdiff:5620, up:342792, uc:196396, upct:57.29, uproy:338238, udiff:-4554},
-  {n:"Luz Quick Rest", zone:"oeste", vp:169594, vc:100014, vpct:58.97, vproy:172246, vdiff:2652, up:90081, uc:51375, upct:57.03, uproy:88479, udiff:-1602},
-  {n:"Llanito", zone:"este", vp:461358, vc:269130, vpct:58.33, vproy:463502, vdiff:2144, up:230778, uc:134328, upct:58.21, uproy:231343, udiff:565},
-  {n:"Marques", zone:"este", vp:150397, vc:83165, vpct:55.30, vproy:143229, vdiff:-7168, up:79860, uc:44002, upct:55.10, uproy:75781, udiff:-4079},
-  {n:"Pedregal", zone:"oeste", vp:326410, vc:186224, vpct:57.05, vproy:320719, vdiff:-5691, up:173384, uc:97911, upct:56.47, uproy:168625, udiff:-4759},
-  {n:"San Antonio", zone:"este", vp:493102, vc:287896, vpct:58.38, vproy:495821, vdiff:2719, up:240570, uc:138607, upct:57.62, uproy:238712, udiff:-1858},
-  {n:"Urbina", zone:"este", vp:623353, vc:341549, vpct:54.79, vproy:588223, vdiff:-35130, up:301625, uc:164796, upct:54.64, uproy:283815, udiff:-17810}
+  {n:"Carlota", zone:"este", vp:1131254, vc:618259, vpct:54.65, vproy:1064780, vdiff:-66474, up:505599, uc:272731, upct:53.94, uproy:469707, udiff:-35896},
+  {n:"Chacao", zone:"oeste", vp:524853, vc:311972, vpct:59.44, vproy:537285, vdiff:12432, up:278248, uc:166259, upct:59.75, uproy:286336, udiff:8087},
+  {n:"Dos Caminos", zone:"oeste", vp:297284, vc:169536, vpct:57.03, vproy:291978, vdiff:-5305, up:157062, uc:88645, upct:56.44, uproy:152666, udiff:-4396},
+  {n:"Florida", zone:"oeste", vp:702396, vc:411106, vpct:58.53, vproy:708016, vdiff:5619, up:342792, uc:196396, upct:57.29, uproy:338238, udiff:-4554},
+  {n:"Luz Quick Rest", zone:"oeste", vp:169594, vc:100014, vpct:58.97, vproy:172246, vdiff:-7165, up:90081, uc:51375, upct:57.03, uproy:88480, udiff:-1601},
+  {n:"Llanito", zone:"este", vp:461358, vc:269130, vpct:58.33, vproy:463502, vdiff:2652, up:230778, uc:134328, upct:58.21, uproy:231342, udiff:564},
+  {n:"Marques", zone:"este", vp:150397, vc:83165, vpct:55.30, vproy:143229, vdiff:2144, up:79860, uc:44002, upct:55.10, uproy:75780, udiff:-4080},
+  {n:"Pedregal", zone:"oeste", vp:326410, vc:186224, vpct:57.05, vproy:326719, vdiff:-5691, up:173384, uc:97911, upct:56.47, uproy:168625, udiff:-4759},
+  {n:"San Antonio", zone:"este", vp:493102, vc:287896, vpct:58.38, vproy:495820, vdiff:2719, up:240570, uc:138607, upct:57.62, uproy:238713, udiff:1857},
+  {n:"Urbina", zone:"este", vp:623353, vc:341549, vpct:54.79, vproy:588274, vdiff:35129, up:301625, uc:164796, upct:54.64, uproy:283815, udiff:-17810}
 ];
 
 let mode = 'valor';
 let zone = 'todas';
 
-function fmt(n){ return Math.round(n || 0).toLocaleString('es-VE'); }
-function fmtSigned(n){ return ((n || 0) >= 0 ? '+' : '') + Math.round(n || 0).toLocaleString('es-VE'); }
+function fmt(n, decimals = 0){ 
+  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
+}
+function fmtSigned(n, decimals = 0){ return ((n || 0) >= 0 ? '+' : '') + fmt(n, decimals); }
 
 function getFilteredData(){
   return zone === 'todas' ? data : data.filter(d => d.zone === zone);
@@ -311,19 +304,58 @@ function getFilteredData(){
 
 function getTotals(list){
   let p = 0, c = 0, proy = 0, diff = 0;
-  const isVal = (mode === 'valor');
+  let total_vp = 0, total_vc = 0, total_up = 0, total_uc = 0;
+  
   list.forEach(d => {
-    p += isVal ? d.vp : d.up;
-    c += isVal ? d.vc : d.uc;
-    proy += isVal ? d.vproy : d.uproy;
-    diff += isVal ? d.vdiff : d.udiff;
+    if(mode === 'valor' || mode === 'costoPromedio') {
+      p += d.vp; c += d.vc; proy += d.vproy; diff += d.vdiff;
+    } else {
+      p += d.up; c += d.uc; proy += d.uproy; diff += d.udiff;
+    }
+    total_vp += d.vp; total_vc += d.vc; total_up += d.up; total_uc += d.uc;
   });
+  
   const pct = p ? (c / p * 100) : 0;
-  return { p, c, pct, proy, diff };
+  const costoPromedio = total_uc > 0 ? (total_vc / total_uc) : 0;
+  const costoPromedioPpto = total_up > 0 ? (total_vp / total_up) : 0;
+  
+  return { p, c, pct, proy, diff, vp: total_vp, vc: total_vc, up: total_up, uc: total_uc, costoPromedio, costoPromedioPpto };
 }
 
 function renderKPIs(){
   const t = getTotals(getFilteredData());
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Ppto</div>
+        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
+        <div class="kpi-sub">Presupuesto Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Vta. Prom. Real</div>
+        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+        <div class="kpi-sub">Cumplido Dólar / Unidades</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Dólar</div>
+        <div class="kpi-value">$${fmt(t.vc)}</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Cumplido Unidades</div>
+        <div class="kpi-value">${fmt(t.uc)} u</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Valla Día 18</div>
+        <div class="kpi-value">58,06%</div>
+        <div class="kpi-sub">Meta teórica hoy</div>
+      </div>
+    `;
+    return;
+  }
+
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   
@@ -358,6 +390,31 @@ function renderKPIs(){
 
 function renderRanking(){
   const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    const sorted = [...filtered].sort((a,b) => {
+      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
+      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
+      return cpB - cpA;
+    });
+    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
+    
+    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const barWidth = Math.min((cp / maxCp) * 100, 100);
+      return `
+      <div class="rank-row">
+        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="rank-name">${d.n}</span>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${barWidth}%;"></div>
+        </div>
+        <span class="rank-pct">$${fmt(cp, 2)}</span>
+      </div>`;
+    }).join('');
+    return;
+  }
+
   const pctKey = mode === 'valor' ? 'vpct' : 'upct';
   const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
   
@@ -377,6 +434,65 @@ function renderRanking(){
 
 function renderTable(){
   const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:center;">Estatus</th>
+        <th>Cumplido Dólar</th>
+        <th>Cumplido Unidades</th>
+        <th>Precio Vta. Prom. (Real)</th>
+        <th>Precio Vta. Prom. (Ppto)</th>
+        <th>Variación Precio</th>
+      </tr>
+    `;
+
+    const rows = filtered.map(d => {
+      const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
+      const varCosto = cpReal - cpPpto;
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
+        <td>$${fmt(d.vc)}</td>
+        <td>${fmt(d.uc)} u</td>
+        <td>$${fmt(cpReal, 2)}</td>
+        <td>$${fmt(cpPpto, 2)}</td>
+        <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
+      </tr>`;
+    }).join('');
+
+    const t = getTotals(filtered);
+    const varCostoT = t.costoPromedio - t.costoPromedioPpto;
+    const totalRow = `
+      <tr class="total-row">
+        <td>TOTAL CONSOLIDADO</td>
+        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
+        <td>$${fmt(t.vc)}</td>
+        <td>${fmt(t.uc)} u</td>
+        <td>$${fmt(t.costoPromedio, 2)}</td>
+        <td>$${fmt(t.costoPromedioPpto, 2)}</td>
+        <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
+      </tr>`;
+
+    document.getElementById('tableBody').innerHTML = rows + totalRow;
+    return;
+  }
+
+  document.getElementById('tableHead').innerHTML = `
+    <tr>
+      <th>Sucursal</th>
+      <th style="text-align:center;">Estatus</th>
+      <th>Presupuesto</th>
+      <th>Cumplido</th>
+      <th>%</th>
+      <th>Proyección</th>
+      <th>Diferencia</th>
+    </tr>
+  `;
+
   const unit = mode === 'valor' ? '$' : '';
   const sfx = mode === 'unidades' ? ' u' : '';
   const pKey = mode === 'valor' ? 'vp' : 'up';
