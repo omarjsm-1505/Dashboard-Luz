@@ -50,7 +50,7 @@
     pointer-events: none;
   }
 
-  /* PANTALLA DE ACCESO RESTRENGIDO */
+  /* PANTALLA DE ACCESO RESTRINGIDO */
   .auth-overlay {
     position: fixed; inset: 0; z-index: 9999;
     background: var(--bg);
@@ -139,14 +139,15 @@
   .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
   .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
 
-  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:24px; }
+  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:24px; }
   .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
   .kpi-card.neg{ border-left-color:var(--warn); }
+  .kpi-card.accent{ border-left-color:var(--wine); background:var(--card-hi); }
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 70px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 75px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
   .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
   .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
   .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
@@ -196,7 +197,7 @@
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Unidades - Valor $</p>
+      <p class="hero-sub">Unidades - Valor $ - Costo Promedio</p>
       <div class="corte-pill">◆ Corte al <b>19 de agosto, 2026</b></div>
     </section>
 
@@ -215,7 +216,7 @@
         <div class="toggle-group" id="groupMode">
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
-          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Precio Vta. Prom.</button>
+          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Costo Promedio</button>
         </div>
       </div>
     </div>
@@ -230,7 +231,7 @@
     <!-- RANKING -->
     <div class="section-box">
       <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Indicador consolidado</span>
+      <span class="sec-sub">Indicador comparativo de rendimiento</span>
       <div id="rankingList"></div>
     </div>
 
@@ -326,24 +327,30 @@ function renderKPIs(){
   const t = getTotals(getFilteredData());
   
   if(mode === 'costoPromedio'){
+    const varCosto = t.costoPromedio - t.costoPromedioPpto;
     document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card">
-        <div class="kpi-title">Precio Vta. Prom. Ppto</div>
-        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
-        <div class="kpi-sub">Presupuesto Dólar / Unidades</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Precio Vta. Prom. Real</div>
+      <div class="kpi-card accent">
+        <div class="kpi-title">Costo Promedio Real</div>
         <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-        <div class="kpi-sub">Cumplido Dólar / Unidades</div>
+        <div class="kpi-sub">Venta $ / Unidades vendidas</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Total Cumplido Dólar</div>
+        <div class="kpi-title">Costo Promedio Ppto</div>
+        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
+        <div class="kpi-sub">Meta teórica por artículo</div>
+      </div>
+      <div class="kpi-card ${varCosto < 0 ? 'neg' : ''}">
+        <div class="kpi-title">Variación Costo</div>
+        <div class="kpi-value">$${fmtSigned(varCosto, 2)}</div>
+        <div class="kpi-sub">${varCosto >= 0 ? 'Por encima de ppto' : 'Por debajo de ppto'}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Ventas Cumplidas</div>
         <div class="kpi-value">$${fmt(t.vc)}</div>
         <div class="kpi-sub">Acumulado a la fecha</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Total Cumplido Unidades</div>
+        <div class="kpi-title">Unidades Cumplidas</div>
         <div class="kpi-value">${fmt(t.uc)} u</div>
         <div class="kpi-sub">Acumulado a la fecha</div>
       </div>
@@ -379,6 +386,11 @@ function renderKPIs(){
       <div class="kpi-title">Diferencia</div>
       <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
       <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
+    </div>
+    <div class="kpi-card accent">
+      <div class="kpi-title">Costo Promedio</div>
+      <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+      <div class="kpi-sub">Ppto: $${fmt(t.costoPromedioPpto, 2)}</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Valla Día 19</div>
@@ -440,11 +452,11 @@ function renderTable(){
       <tr>
         <th>Sucursal</th>
         <th style="text-align:center;">Estatus</th>
-        <th>Cumplido Dólar</th>
-        <th>Cumplido Unidades</th>
-        <th>Precio Vta. Prom. (Real)</th>
-        <th>Precio Vta. Prom. (Ppto)</th>
-        <th>Variación Precio</th>
+        <th>Ventas $</th>
+        <th>Unidades</th>
+        <th>Costo Prom. Real</th>
+        <th>Costo Prom. Ppto</th>
+        <th>Variación</th>
       </tr>
     `;
 
