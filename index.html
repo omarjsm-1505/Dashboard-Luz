@@ -3,230 +3,572 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Dashboard Tridimensional</title>
+<title>Luz · Dashboard Ejecutivo de Presupuesto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F8F6F2; --card:#FFFFFF; --card-hi:#F3EFEA; --line: rgba(140,29,64,0.12);
-    --wine:#8C1D40; --wine-light:#B4213F; --wine-bg: rgba(140,29,64,0.06);
-    --gold:#C59B27; --gold-dim:#8A6D1B; --text:#2B2627; --muted:#6E6366;
-    --good:#2E7D32; --good-bg: rgba(46,125,50,0.1);
-    --warn:#D97A46; --warn-bg: rgba(217,122,70,0.12); --danger:#C14646;
+    --bg:#F8F6F2;
+    --card:#FFFFFF;
+    --card-hi:#F3EFEA;
+    --line: rgba(140,29,64,0.12);
+    --wine:#8C1D40;
+    --wine-light:#B4213F;
+    --wine-bg: rgba(140,29,64,0.06);
+    --gold:#C59B27;
+    --gold-dim:#8A6D1B;
+    --text:#2B2627;
+    --muted:#6E6366;
+    --good:#2E7D32;
+    --good-bg: rgba(46,125,50,0.1);
+    --warn:#D97A46;
+    --warn-bg: rgba(217,122,70,0.12);
+    --danger:#C14646;
   }
   *{box-sizing:border-box;}
-  body{ margin:0; background-color: var(--bg); color:var(--text); font-family:'Inter', sans-serif; min-height: 100vh; -webkit-font-smoothing:antialiased; }
-  body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)), url('1275044.jpg'); background-repeat: no-repeat; background-position: center center; background-size: 550px auto; opacity: 0.6; z-index: -1; pointer-events: none; }
-  
-  .wrap{max-width:1080px; margin:0 auto; padding:20px 20px 80px;}
-  .corte-bar{ position:sticky; top:0; z-index:50; background:linear-gradient(90deg, #641024, var(--wine), #641024); border-bottom:2px solid var(--gold); color:#FFFFFF; font-family:'JetBrains Mono', monospace; font-size:11px; padding:9px 18px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
-  .btn-print{ background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; border-radius:100px; cursor:pointer; }
-  
+  body{
+    margin:0;
+    background-color: var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+      linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)),
+      url('1275044.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 550px auto;
+    opacity: 0.6;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* PANTALLA DE ACCESO RESTRINGIDO */
+  .auth-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .auth-card {
+    background: var(--card); border: 1px solid var(--line);
+    padding: 36px 28px; border-radius: 20px; text-align: center;
+    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
+  }
+  .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
+  .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
+  .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
+  .auth-input {
+    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
+    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
+    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
+  }
+  .auth-input:focus { border-color: var(--wine); }
+  .auth-btn {
+    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
+    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .auth-btn:hover { background: var(--wine-light); }
+  .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
+
+  /* CONTENIDO PRINCIPAL */
+  .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
+
+  .corte-bar{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(90deg, #641024, var(--wine), #641024);
+    border-bottom:2px solid var(--gold);
+    color:#FFFFFF;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    padding:9px 18px;
+    display:flex; justify-content:space-between; align-items:center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  }
+  .corte-bar b{ color:var(--gold);}
+  .btn-print{ 
+    background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; 
+    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; 
+    border-radius:100px; cursor:pointer; transition:background 0.2s;
+  }
+
   .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
-  .logo-header { height: 52px; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
+  .logo-header { height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
   .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
   h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
   h1 em{ font-style:italic; color:var(--wine); }
-  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; }
+  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0.5px; }
+  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+  .corte-pill b{ color:var(--gold-dim); }
 
-  /* KPIS GLOBALES */
-  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:28px; }
-  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; border-left:4px solid var(--wine); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
-  .kpi-card.target { border-left-color: var(--gold); background: var(--card-hi); }
-  .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .kpi-value{ font-family:'Fraunces', serif; font-size:24px; font-weight:700; color:var(--text); margin:6px 0 2px; }
-  .kpi-sub{ font-size:11px; color:var(--muted); font-weight:500; }
+  .control-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .ctrl-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
+  .toggle-btn{
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+  }
+  .toggle-btn.active{
+    background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
+  }
 
-  /* CONTROLES DE ORDENAMIENTO */
-  .controls { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; align-items:center; background:var(--card); padding:12px 18px; border-radius:12px; border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,0.02);}
-  .ctrl-lbl { font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--wine); font-weight:700; text-transform:uppercase; margin-right:10px; }
-  .toggle-btn{ border:1px solid var(--line); background:var(--card-hi); color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease; }
-  .toggle-btn.active{ background:var(--wine); color:#FFFFFF; border-color:var(--wine); box-shadow:0 2px 8px rgba(140,29,64,0.3); }
+  .section-box{ margin-bottom:34px; }
+  .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
+  .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
 
-  /* MATRIZ DE BARRAS */
-  .bars-container { display:flex; flex-direction:column; gap:16px; }
-  .branch-card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.03); position:relative; overflow:hidden; transition:transform 0.2s;}
-  .branch-card:hover { transform:translateY(-2px); border-color:var(--wine-light); }
-  
-  .branch-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:14px; }
-  .branch-name { font-family:'Fraunces', serif; font-size:18px; font-weight:700; color:var(--text); margin:0; }
-  
-  .ticket-badge { background:var(--good-bg); color:var(--good); padding:4px 10px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:700; border:1px solid rgba(46,125,50,0.2); }
-  .ticket-badge.high { background:var(--warn-bg); color:var(--warn); border-color:rgba(217,122,70,0.3); }
+  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:24px; }
+  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
+  .kpi-card.neg{ border-left-color:var(--warn); }
+  .kpi-card.accent{ border-left-color:var(--wine); background:var(--card-hi); }
+  .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
+  .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  /* PISTAS DE PROGRESO */
-  .track-group { margin-bottom:10px; position:relative; }
-  .track-group:last-child { margin-bottom:0; }
-  .track-lbl { display:flex; justify-content:space-between; font-size:11px; font-weight:600; color:var(--muted); margin-bottom:4px; text-transform:uppercase; font-family:'Inter'; }
-  .track-lbl b { color:var(--text); font-family:'JetBrains Mono', monospace; font-size:12px; }
-  
-  .track-bg { height:12px; background:var(--card-hi); border-radius:6px; position:relative; overflow:hidden; border:1px inset rgba(0,0,0,0.05); }
-  .track-fill { height:100%; border-radius:6px; transition:width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-  .fill-val { background:linear-gradient(90deg, var(--wine-light), var(--wine)); }
-  .fill-uni { background:linear-gradient(90deg, #E59A6D, var(--warn)); }
-  .fill-ok { background:linear-gradient(90deg, #4CAF50, var(--good)); }
+  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 75px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
+  .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
+  .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
+  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--wine), var(--wine-light)); border-radius:5px; transition:width 0.3s ease; }
+  .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
+  .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
-  /* LÍNEA DE VALLA TEÓRICA */
-  .target-line { position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--good); z-index:10; border-radius:2px; box-shadow:0 0 4px rgba(46,125,50,0.5); }
-  .target-label { position:absolute; top:-16px; font-size:9px; color:var(--good); font-weight:700; transform:translateX(-50%); }
+  .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
+  table{ width:100%; border-collapse:collapse; min-width:620px; }
+  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
+  th:first-child{ text-align:left; }
+  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
+  td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
+  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
+
+  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
+  .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
+  .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
 
-<div class="corte-bar">
-  <span>◆ ANÁLISIS 3D DE DESEMPEÑO</span>
-  <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
+<!-- OVERLAY DE BLOQUEO POR CLAVE -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
+    <h2 class="auth-title">Automercado Luz</h2>
+    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
+    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
+    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
+  </div>
 </div>
 
-<div class="wrap">
-  <section class="hero">
-    <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-    <p class="eyebrow">Visualizador Interactivo</p>
-    <h1>Matriz <em>Tridimensional</em></h1>
-    <p class="hero-sub">Cruce de Valor, Volumen y Costo Promedio (Corte: 21 de Agosto de 2026)</p>
-  </section>
-
-  <!-- KPIS -->
-  <div class="kpis-grid">
-    <div class="kpi-card target">
-      <div class="kpi-title">Valla Teórica (Mes)</div>
-      <div class="kpi-value" id="kpiTarget">67.74%</div>
-      <div class="kpi-sub">Día 21 de 31</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Cumplimiento General ($)</div>
-      <div class="kpi-value" id="kpiVal">66.14%</div>
-      <div class="kpi-sub">$3.227.436 Acumulados</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Cumplimiento General (Uds)</div>
-      <div class="kpi-value" id="kpiUni">65.42%</div>
-      <div class="kpi-sub">1.569.965 Uds Rotadas</div>
-    </div>
+<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
+<div id="mainContent" style="display:none;">
+  <div class="corte-bar">
+    <span>◆ SEGUIMIENTO LUZ · 22 DE AGOSTO DE 2026</span>
+    <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
-  <!-- CONTROLES -->
-  <div class="controls">
-    <span class="ctrl-lbl">Ordenar Ranking por:</span>
-    <button class="toggle-btn active" onclick="sortData('vpct', this)">🏆 % Valor ($)</button>
-    <button class="toggle-btn" onclick="sortData('upct', this)">📦 % Unidades</button>
-    <button class="toggle-btn" onclick="sortData('ticket', this)">🏷️ Ticket (Costo Promedio)</button>
-  </div>
+  <div class="wrap">
 
-  <!-- CONTENEDOR DE GRÁFICOS DINÁMICOS -->
-  <div class="bars-container" id="dashboardBars">
-    <!-- Se inyecta via JS -->
-  </div>
+    <section class="hero">
+      <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
+      <p class="eyebrow">Automercado Luz</p>
+      <h1>Seguimiento <em>presupuesto</em></h1>
+      <p class="hero-sub">Unidades - Valor $ - Costo Promedio</p>
+      <div class="corte-pill">◆ Corte al <b>22 de agosto, 2026</b></div>
+    </section>
 
-  <footer>LUZ · DASHBOARD INTERACTIVO_2026</footer>
+    <!-- CONTROLES -->
+    <div class="control-grid">
+      <div class="ctrl-box">
+        <span class="ctrl-title">Zona Comercial</span>
+        <div class="toggle-group" id="groupZone">
+          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
+          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
+          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+        </div>
+      </div>
+      <div class="ctrl-box">
+        <span class="ctrl-title">Métrica / Cinta</span>
+        <div class="toggle-group" id="groupMode">
+          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
+          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Costo Promedio</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIS -->
+    <div class="section-box">
+      <h2 class="sec-title">Resumen del mes</h2>
+      <span class="sec-sub">Totales consolidados a la fecha de corte</span>
+      <div class="kpis-grid" id="kpiGrid"></div>
+    </div>
+
+    <!-- RANKING -->
+    <div class="section-box">
+      <h2 class="sec-title">Ranking por sucursal</h2>
+      <span class="sec-sub">Indicador comparativo de rendimiento</span>
+      <div id="rankingList"></div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="section-box">
+      <h2 class="sec-title">Detalle completo</h2>
+      <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>LUZ · SEGUIMIENTO_AGOSTO_2026</footer>
+  </div>
 </div>
-
 <script>
-// BASE DE DATOS AL 21/08
-const TARGET = 67.74; 
+// CLAVE DE ACCESO
+const SECRET_KEY = "Luz2026";
 
-const rawData = [
-  {n:"Carlota", vp:1131254, vc:725900, up:505599, uc:316507},
-  {n:"Chacao", vp:524853, vc:367126, up:278248, uc:195440},
-  {n:"Dos Caminos", vp:297284, vc:196994, up:157062, uc:103291},
-  {n:"Florida", vp:702396, vc:474495, up:342792, uc:227193},
-  {n:"Luz Quick Rest", vp:169594, vc:118073, up:90081, uc:60583},
-  {n:"Llanito", vp:461358, vc:305594, up:230778, uc:152314},
-  {n:"Marques", vp:150397, vc:96084, up:79860, uc:50848},
-  {n:"Pedregal", vp:326410, vc:215668, up:173384, uc:113294},
-  {n:"San Antonio", vp:493102, vc:335882, up:240570, uc:161750},
-  {n:"Urbina", vp:623353, vc:391620, up:301625, uc:188744}
-];
-
-// Procesar cálculos (Aristas)
-const processedData = rawData.map(d => {
-  const vpct = (d.vc / d.vp) * 100;
-  const upct = (d.uc / d.up) * 100;
-  const ticket = d.vc / d.uc;
-  return { ...d, vpct, upct, ticket };
-});
-
-let currentSort = 'vpct';
-
-function fmt(num) {
-  return num.toLocaleString('es-VE');
+function checkAuth() {
+  const pass = document.getElementById('passInput').value;
+  if (pass === SECRET_KEY) {
+    sessionStorage.setItem('luz_authenticated', 'true');
+    unlockDashboard();
+  } else {
+    document.getElementById('authError').style.display = 'block';
+  }
 }
 
-function renderDashboard() {
-  const container = document.getElementById('dashboardBars');
+function handleKeyPress(e) {
+  if (e.key === 'Enter') checkAuth();
+}
+
+function unlockDashboard() {
+  document.getElementById('authOverlay').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  renderAll();
+}
+
+// LÓGICA DEL DASHBOARD
+const EXPECTED_PCT = 70.96; // 22 días de 31
+
+const data = [
+  {n:"Carlota", zone:"este", vp:1131254, vc:767104, vpct:67.81, vproy:1080919, vdiff:-50335, up:505599, uc:336352, upct:66.53, uproy:473951, udiff:-31648},
+  {n:"Chacao", zone:"oeste", vp:524853, vc:387502, vpct:73.83, vproy:546026, vdiff:21173, up:278248, uc:206513, upct:74.22, uproy:290996, udiff:12748},
+  {n:"Dos Caminos", zone:"oeste", vp:297284, vc:208338, vpct:70.08, vproy:293567, vdiff:-3717, up:157062, uc:109245, upct:69.56, uproy:153936, udiff:-3126},
+  {n:"Florida", zone:"oeste", vp:702396, vc:502800, vpct:71.58, vproy:708491, vdiff:6095, up:342792, uc:241102, upct:70.33, uproy:339735, udiff:-3057},
+  {n:"Luz Quick Rest", zone:"oeste", vp:169594, vc:123847, vpct:73.03, vproy:174512, vdiff:4918, up:90081, uc:63688, upct:70.7, uproy:89742, udiff:-339},
+  {n:"Llanito", zone:"este", vp:461358, vc:323523, vpct:70.12, vproy:455873, vdiff:-5485, up:230778, uc:161713, upct:70.07, uproy:227868, udiff:-2910},
+  {n:"Marques", zone:"este", vp:150397, vc:101409, vpct:67.43, vproy:142894, vdiff:-7503, up:79860, uc:53760, upct:67.32, uproy:75753, udiff:-4107},
+  {n:"Pedregal", zone:"oeste", vp:326410, vc:228603, vpct:70.04, vproy:322122, vdiff:-4288, up:173384, uc:119949, upct:69.18, uproy:169019, udiff:-4365},
+  {n:"San Antonio", zone:"este", vp:493102, vc:354625, vpct:71.92, vproy:499699, vdiff:6597, up:240570, uc:171087, upct:71.12, uproy:241077, udiff:507},
+  {n:"Urbina", zone:"este", vp:623353, vc:417319, vpct:66.95, vproy:588040, vdiff:-35313, up:301625, uc:201470, upct:66.79, uproy:283890, udiff:-17735}
+];
+
+let mode = 'valor';
+let zone = 'todas';
+
+function fmt(n, decimals = 0){ 
+  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
+}
+function fmtSigned(n, decimals = 0){ return ((n || 0) >= 0 ? '+' : '') + fmt(n, decimals); }
+
+function getFilteredData(){
+  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
+}
+
+function getTotals(list){
+  let p = 0, c = 0, proy = 0, diff = 0;
+  let total_vp = 0, total_vc = 0, total_up = 0, total_uc = 0;
   
-  // Ordenar
-  const sorted = [...processedData].sort((a, b) => b[currentSort] - a[currentSort]);
+  list.forEach(d => {
+    if(mode === 'valor' || mode === 'costoPromedio') {
+      p += d.vp; c += d.vc; proy += d.vproy; diff += d.vdiff;
+    } else {
+      p += d.up; c += d.uc; proy += d.uproy; diff += d.udiff;
+    }
+    total_vp += d.vp; total_vc += d.vc; total_up += d.up; total_uc += d.uc;
+  });
+  
+  const pct = p ? (c / p * 100) : 0;
+  const costoPromedio = total_uc > 0 ? (total_vc / total_uc) : 0;
+  const costoPromedioPpto = total_up > 0 ? (total_vp / total_up) : 0;
+  
+  return { p, c, pct, proy, diff, vp: total_vp, vc: total_vc, up: total_up, uc: total_uc, costoPromedio, costoPromedioPpto };
+}
 
-  container.innerHTML = sorted.map((d, i) => {
-    // Definir colores según meta
-    const vClass = d.vpct >= TARGET ? 'fill-ok' : 'fill-val';
-    const uClass = d.upct >= TARGET ? 'fill-ok' : 'fill-uni';
-    
-    // Etiqueta de ticket alta o normal (> $2.00 se considera ticket alto para resaltar)
-    const tBadge = d.ticket >= 2.05 ? 'high' : '';
-    const tIcon = d.ticket >= 2.05 ? '📈' : '🏷️';
-
-    return `
-    <div class="branch-card" style="animation: fadeIn ${0.2 + (i*0.05)}s ease forwards;">
-      <div class="branch-head">
-        <h3 class="branch-name">
-          <span style="color:var(--gold); margin-right:5px;">${i+1}.</span>${d.n}
-        </h3>
-        <div class="ticket-badge ${tBadge}" title="Costo Promedio (Valor/Unidades)">
-          ${tIcon} Costo Prom: $${d.ticket.toFixed(2).replace('.',',')}
-        </div>
+function renderKPIs(){
+  const t = getTotals(getFilteredData());
+  
+  if(mode === 'costoPromedio'){
+    const varCosto = t.costoPromedio - t.costoPromedioPpto;
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card accent">
+        <div class="kpi-title">Costo Promedio Real</div>
+        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+        <div class="kpi-sub">Venta $ / Unidades vendidas</div>
       </div>
-
-      <!-- Barra de Valor -->
-      <div class="track-group">
-        <div class="track-lbl">
-          <span>Cumplimiento <b>Valor ($)</b></span>
-          <b>${d.vpct.toFixed(2).replace('.',',')}%</b>
-        </div>
-        <div class="track-bg">
-          <div class="target-line" style="left: ${TARGET}%;"></div>
-          <div class="track-fill ${vClass}" style="width: ${Math.min(d.vpct, 100)}%;"></div>
-        </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Costo Promedio Ppto</div>
+        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
+        <div class="kpi-sub">Meta teórica por artículo</div>
       </div>
-
-      <!-- Barra de Unidades -->
-      <div class="track-group">
-        <div class="track-lbl">
-          <span>Cumplimiento <b>Unidades</b></span>
-          <b>${d.upct.toFixed(2).replace('.',',')}%</b>
-        </div>
-        <div class="track-bg">
-          <div class="target-line" style="left: ${TARGET}%;"></div>
-          <div class="track-fill ${uClass}" style="width: ${Math.min(d.upct, 100)}%;"></div>
-        </div>
+      <div class="kpi-card ${varCosto < 0 ? 'neg' : ''}">
+        <div class="kpi-title">Variación Costo</div>
+        <div class="kpi-value">$${fmtSigned(varCosto, 2)}</div>
+        <div class="kpi-sub">${varCosto >= 0 ? 'Por encima de ppto' : 'Por debajo de ppto'}</div>
       </div>
-    </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Ventas Cumplidas</div>
+        <div class="kpi-value">$${fmt(t.vc)}</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Unidades Cumplidas</div>
+        <div class="kpi-value">${fmt(t.uc)} u</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Valla Día 22</div>
+        <div class="kpi-value">70,96%</div>
+        <div class="kpi-sub">Meta teórica hoy</div>
+      </div>
     `;
+    return;
+  }
+
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-title">Presupuesto</div>
+      <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
+      <div class="kpi-sub">Meta del mes</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Cumplido</div>
+      <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
+      <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Proyección Cierre</div>
+      <div class="kpi-value">${unit}${fmt(t.proy)}${sfx}</div>
+      <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
+    </div>
+    <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
+      <div class="kpi-title">Diferencia</div>
+      <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
+      <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
+    </div>
+    <div class="kpi-card accent">
+      <div class="kpi-title">Costo Promedio</div>
+      <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+      <div class="kpi-sub">Ppto: $${fmt(t.costoPromedioPpto, 2)}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Valla Día 22</div>
+      <div class="kpi-value">70,96%</div>
+      <div class="kpi-sub">Meta teórica hoy</div>
+    </div>
+  `;
+}
+
+function renderRanking(){
+  const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    const sorted = [...filtered].sort((a,b) => {
+      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
+      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
+      return cpB - cpA;
+    });
+    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
+    
+    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const barWidth = Math.min((cp / maxCp) * 100, 100);
+      return `
+      <div class="rank-row">
+        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="rank-name">${d.n}</span>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${barWidth}%;"></div>
+        </div>
+        <span class="rank-pct">$${fmt(cp, 2)}</span>
+      </div>`;
+    }).join('');
+    return;
+  }
+
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
+  
+  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+    const pct = d[pctKey];
+    return `
+    <div class="rank-row">
+      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="rank-name">${d.n}</span>
+      <div class="bar-bg">
+        <div class="bar-fill ${pct >= EXPECTED_PCT ? 'top' : ''}" style="width:${Math.min(pct, 100)}%;"></div>
+      </div>
+      <span class="rank-pct">${pct.toFixed(2).replace('.', ',')}%</span>
+    </div>`;
   }).join('');
 }
 
-function sortData(key, btn) {
-  currentSort = key;
-  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderDashboard();
+function renderTable(){
+  const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    document.getElementById('tableHead').innerHTML = `
+      <tr>
+        <th>Sucursal</th>
+        <th style="text-align:center;">Estatus</th>
+        <th>Ventas $</th>
+        <th>Unidades</th>
+        <th>Costo Prom. Real</th>
+        <th>Costo Prom. Ppto</th>
+        <th>Variación</th>
+      </tr>
+    `;
+
+    const rows = filtered.map(d => {
+      const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
+      const varCosto = cpReal - cpPpto;
+      return `
+      <tr>
+        <td>${d.n}</td>
+        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
+        <td>$${fmt(d.vc)}</td>
+        <td>${fmt(d.uc)} u</td>
+        <td>$${fmt(cpReal, 2)}</td>
+        <td>$${fmt(cpPpto, 2)}</td>
+        <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
+      </tr>`;
+    }).join('');
+
+    const t = getTotals(filtered);
+    const varCostoT = t.costoPromedio - t.costoPromedioPpto;
+    const totalRow = `
+      <tr class="total-row">
+        <td>TOTAL CONSOLIDADO</td>
+        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
+        <td>$${fmt(t.vc)}</td>
+        <td>${fmt(t.uc)} u</td>
+        <td>$${fmt(t.costoPromedio, 2)}</td>
+        <td>$${fmt(t.costoPromedioPpto, 2)}</td>
+        <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
+      </tr>`;
+
+    document.getElementById('tableBody').innerHTML = rows + totalRow;
+    return;
+  }
+
+  document.getElementById('tableHead').innerHTML = `
+    <tr>
+      <th>Sucursal</th>
+      <th style="text-align:center;">Estatus</th>
+      <th>Presupuesto</th>
+      <th>Cumplido</th>
+      <th>%</th>
+      <th>Proyección</th>
+      <th>Diferencia</th>
+    </tr>
+  `;
+
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  const pKey = mode === 'valor' ? 'vp' : 'up';
+  const cKey = mode === 'valor' ? 'vc' : 'uc';
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
+  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
+
+  const rows = filtered.map(d => {
+    const pct = d[pctKey];
+    const diff = d[diffKey];
+    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    return `
+    <tr>
+      <td>${d.n}</td>
+      <td style="text-align:center;">${badge}</td>
+      <td>${unit}${fmt(d[pKey])}${sfx}</td>
+      <td>${unit}${fmt(d[cKey])}${sfx}</td>
+      <td>${pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
+      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
+    </tr>`;
+  }).join('');
+
+  const t = getTotals(filtered);
+  const totalRow = `
+    <tr class="total-row">
+      <td>TOTAL CONSOLIDADO</td>
+      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
+      <td>${unit}${fmt(t.p)}${sfx}</td>
+      <td>${unit}${fmt(t.c)}${sfx}</td>
+      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
+      <td>${unit}${fmt(t.proy)}${sfx}</td>
+      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
+    </tr>`;
+
+  document.getElementById('tableBody').innerHTML = rows + totalRow;
 }
 
-// Estilo para animación de entrada
-const style = document.createElement('style');
-style.innerHTML = `
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-`;
-document.head.appendChild(style);
+function renderAll(){
+  renderKPIs();
+  renderRanking();
+  renderTable();
+}
 
-// Inicializar
-renderDashboard();
+function setZone(z, btn){
+  zone = z;
+  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+// VERIFICAR AUTENTICACIÓN INICIAL
+if (sessionStorage.getItem('luz_authenticated') === 'true') {
+  unlockDashboard();
+}
 </script>
+
 </body>
 </html>
