@@ -14,7 +14,7 @@
     --line: rgba(140,29,64,0.12);
     --wine:#8C1D40;
     --wine-light:#B4213F;
-    --wine-bg: rgba(140,29,64,0.05);
+    --wine-bg: rgba(140,29,64,0.06);
     --gold:#C59B27;
     --gold-dim:#8A6D1B;
     --text:#2B2627;
@@ -155,18 +155,18 @@
   .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
+  /* ESTILOS DE LA TABLA LIMPIA ORIGINAL */
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:960px; }
-  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:10px 12px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
-  th.group-head{ text-align:center; font-size:11px; padding:8px; border-bottom:1px solid var(--wine); }
-  td{ padding:10px 12px; font-size:11.5px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
+  table{ width:100%; border-collapse:collapse; min-width:880px; }
+  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
+  th:first-child{ text-align:left; }
+  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
   td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
-  tr.total-row td{ font-weight:700; border-top:2px solid var(--wine); }
+  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
 
   .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
   .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
   .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
-  .badge.gen{ background:var(--wine-bg); color:var(--wine); border:1px solid var(--wine); }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
@@ -198,7 +198,7 @@
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Unidades - Valor $ - Costo Promedio (Visión 360°)</p>
+      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio</p>
       <div class="corte-pill">◆ Corte al <b>22 de agosto, 2026</b></div>
     </section>
 
@@ -236,10 +236,10 @@
       <div id="rankingList"></div>
     </div>
 
-    <!-- TABLA 360 -->
+    <!-- TABLA LIMPIA UNIFICADA -->
     <div class="section-box">
-      <h2 class="sec-title">Desglose 360° por Sucursal</h2>
-      <span class="sec-sub">Análisis unificado de Aristas Numéricas ($, Unidades, C. Promedio)</span>
+      <h2 class="sec-title">Detalle completo (360°)</h2>
+      <span class="sec-sub">Consolidado general de aristas por sucursal</span>
 
       <div class="tbl-wrap">
         <table>
@@ -448,25 +448,18 @@ function renderRanking(){
 function renderTable(){
   const filtered = getFilteredData();
   
-  // TABLA UNIFICADA 360° (Siempre muestra las tres aristas)
+  // TABLA PLANA Y LIMPIA (Muestra las tres aristas sin alterar el CSS original)
   document.getElementById('tableHead').innerHTML = `
     <tr>
-      <th rowspan="2" style="text-align:left; vertical-align:bottom;">Sucursal</th>
-      <th rowspan="2" style="text-align:center; vertical-align:bottom;">Estatus</th>
-      <th colspan="3" class="group-head" style="background:var(--wine-bg); color:var(--wine);">VALOR $</th>
-      <th colspan="3" class="group-head">UNIDADES</th>
-      <th colspan="3" class="group-head" style="background:var(--wine-bg); color:var(--wine);">COSTO PROMEDIO</th>
-    </tr>
-    <tr>
-      <th style="background:var(--wine-bg);">Ppto</th>
-      <th style="background:var(--wine-bg);">Real</th>
-      <th style="background:var(--wine-bg);">% Cump.</th>
-      <th>Ppto</th>
-      <th>Real</th>
-      <th>% Cump.</th>
-      <th style="background:var(--wine-bg);">Ppto</th>
-      <th style="background:var(--wine-bg);">Real</th>
-      <th style="background:var(--wine-bg);">Var</th>
+      <th>Sucursal</th>
+      <th style="text-align:center;">Estatus</th>
+      <th>Cump. $</th>
+      <th>% Val.</th>
+      <th>Cump. U.</th>
+      <th>% Unid.</th>
+      <th>C. Prom. Real</th>
+      <th>C. Prom. Ppto</th>
+      <th>Var. Costo</th>
     </tr>
   `;
 
@@ -475,25 +468,20 @@ function renderTable(){
     const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
     const varCosto = cpReal - cpPpto;
     
-    // El badge se rige por el cumplimiento en valor $ frente a la valla
+    // Estatus basado en cumplimiento $ vs la valla del día
     const badge = d.vpct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
     
     return `
     <tr>
       <td>${d.n}</td>
       <td style="text-align:center;">${badge}</td>
-      
-      <td style="background:var(--wine-bg);">$${fmt(d.vp)}</td>
-      <td style="background:var(--wine-bg);">$${fmt(d.vc)}</td>
-      <td style="background:var(--wine-bg); font-weight:700; color:${d.vpct >= EXPECTED_PCT ? 'var(--good)' : 'var(--warn)'};">${d.vpct.toFixed(2).replace('.', ',')}%</td>
-      
-      <td>${fmt(d.up)}</td>
+      <td>$${fmt(d.vc)}</td>
+      <td>${d.vpct.toFixed(2).replace('.', ',')}%</td>
       <td>${fmt(d.uc)}</td>
-      <td style="font-weight:700; color:${d.upct >= EXPECTED_PCT ? 'var(--good)' : 'var(--warn)'};">${d.upct.toFixed(2).replace('.', ',')}%</td>
-      
-      <td style="background:var(--wine-bg);">$${fmt(cpPpto, 2)}</td>
-      <td style="background:var(--wine-bg);">$${fmt(cpReal, 2)}</td>
-      <td style="background:var(--wine-bg); color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
+      <td>${d.upct.toFixed(2).replace('.', ',')}%</td>
+      <td>$${fmt(cpReal, 2)}</td>
+      <td>$${fmt(cpPpto, 2)}</td>
+      <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
     </tr>`;
   }).join('');
 
@@ -505,19 +493,14 @@ function renderTable(){
   const totalRow = `
     <tr class="total-row">
       <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge gen">Global</span></td>
-      
-      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.vp)}</td>
-      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.vc)}</td>
-      <td style="background:var(--wine-bg); color:var(--wine); font-weight:700;">${pctValorT.toFixed(2).replace('.', ',')}%</td>
-      
-      <td style="color:var(--text);">${fmt(t.up)}</td>
-      <td style="color:var(--text);">${fmt(t.uc)}</td>
-      <td style="color:var(--text); font-weight:700;">${pctUnidT.toFixed(2).replace('.', ',')}%</td>
-      
-      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.costoPromedioPpto, 2)}</td>
-      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.costoPromedio, 2)}</td>
-      <td style="background:var(--wine-bg); color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
+      <td style="text-align:center;"><span class="badge obs">Global</span></td>
+      <td>$${fmt(t.vc)}</td>
+      <td>${pctValorT.toFixed(2).replace('.', ',')}%</td>
+      <td>${fmt(t.uc)}</td>
+      <td>${pctUnidT.toFixed(2).replace('.', ',')}%</td>
+      <td>$${fmt(t.costoPromedio, 2)}</td>
+      <td>$${fmt(t.costoPromedioPpto, 2)}</td>
+      <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
     </tr>`;
 
   document.getElementById('tableBody').innerHTML = rows + totalRow;
