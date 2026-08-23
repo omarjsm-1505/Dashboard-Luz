@@ -14,7 +14,7 @@
     --line: rgba(140,29,64,0.12);
     --wine:#8C1D40;
     --wine-light:#B4213F;
-    --wine-bg: rgba(140,29,64,0.06);
+    --wine-bg: rgba(140,29,64,0.05);
     --gold:#C59B27;
     --gold-dim:#8A6D1B;
     --text:#2B2627;
@@ -156,16 +156,17 @@
   .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:620px; }
-  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
-  th:first-child{ text-align:left; }
-  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
+  table{ width:100%; border-collapse:collapse; min-width:960px; }
+  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:10px 12px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
+  th.group-head{ text-align:center; font-size:11px; padding:8px; border-bottom:1px solid var(--wine); }
+  td{ padding:10px 12px; font-size:11.5px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
   td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
-  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
+  tr.total-row td{ font-weight:700; border-top:2px solid var(--wine); }
 
   .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
   .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
   .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
+  .badge.gen{ background:var(--wine-bg); color:var(--wine); border:1px solid var(--wine); }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
@@ -197,7 +198,7 @@
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Unidades - Valor $ - Costo Promedio</p>
+      <p class="hero-sub">Unidades - Valor $ - Costo Promedio (Visión 360°)</p>
       <div class="corte-pill">◆ Corte al <b>22 de agosto, 2026</b></div>
     </section>
 
@@ -212,7 +213,7 @@
         </div>
       </div>
       <div class="ctrl-box">
-        <span class="ctrl-title">Métrica / Cinta</span>
+        <span class="ctrl-title">Resumen / Ranking</span>
         <div class="toggle-group" id="groupMode">
           <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
           <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
@@ -235,10 +236,10 @@
       <div id="rankingList"></div>
     </div>
 
-    <!-- TABLA -->
+    <!-- TABLA 360 -->
     <div class="section-box">
-      <h2 class="sec-title">Detalle completo</h2>
-      <span class="sec-sub">Presupuesto y ejecución por sucursal</span>
+      <h2 class="sec-title">Desglose 360° por Sucursal</h2>
+      <span class="sec-sub">Análisis unificado de Aristas Numéricas ($, Unidades, C. Promedio)</span>
 
       <div class="tbl-wrap">
         <table>
@@ -276,14 +277,14 @@ function unlockDashboard() {
 }
 
 // LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 70.96; // 22 días de 31
+const EXPECTED_PCT = 70.96; 
 
 const data = [
   {n:"Carlota", zone:"este", vp:1131254, vc:767104, vpct:67.81, vproy:1080919, vdiff:-50335, up:505599, uc:336352, upct:66.53, uproy:473951, udiff:-31648},
   {n:"Chacao", zone:"oeste", vp:524853, vc:387502, vpct:73.83, vproy:546026, vdiff:21173, up:278248, uc:206513, upct:74.22, uproy:290996, udiff:12748},
   {n:"Dos Caminos", zone:"oeste", vp:297284, vc:208338, vpct:70.08, vproy:293567, vdiff:-3717, up:157062, uc:109245, upct:69.56, uproy:153936, udiff:-3126},
   {n:"Florida", zone:"oeste", vp:702396, vc:502800, vpct:71.58, vproy:708491, vdiff:6095, up:342792, uc:241102, upct:70.33, uproy:339735, udiff:-3057},
-  {n:"Luz Quick Rest", zone:"oeste", vp:169594, vc:123847, vpct:73.03, vproy:174512, vdiff:4918, up:90081, uc:63688, upct:70.7, uproy:89742, udiff:-339},
+  {n:"Luz Quick Rest", zone:"oeste", vp:169594, vc:123847, vpct:73.03, vproy:174512, vdiff:4918, up:90081, uc:63688, upct:70.70, uproy:89742, udiff:-339},
   {n:"Llanito", zone:"este", vp:461358, vc:323523, vpct:70.12, vproy:455873, vdiff:-5485, up:230778, uc:161713, upct:70.07, uproy:227868, udiff:-2910},
   {n:"Marques", zone:"este", vp:150397, vc:101409, vpct:67.43, vproy:142894, vdiff:-7503, up:79860, uc:53760, upct:67.32, uproy:75753, udiff:-4107},
   {n:"Pedregal", zone:"oeste", vp:326410, vc:228603, vpct:70.04, vproy:322122, vdiff:-4288, up:173384, uc:119949, upct:69.18, uproy:169019, udiff:-4365},
@@ -447,98 +448,76 @@ function renderRanking(){
 function renderTable(){
   const filtered = getFilteredData();
   
-  if(mode === 'costoPromedio'){
-    document.getElementById('tableHead').innerHTML = `
-      <tr>
-        <th>Sucursal</th>
-        <th style="text-align:center;">Estatus</th>
-        <th>Ventas $</th>
-        <th>Unidades</th>
-        <th>Costo Prom. Real</th>
-        <th>Costo Prom. Ppto</th>
-        <th>Variación</th>
-      </tr>
-    `;
-
-    const rows = filtered.map(d => {
-      const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
-      const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
-      const varCosto = cpReal - cpPpto;
-      return `
-      <tr>
-        <td>${d.n}</td>
-        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
-        <td>$${fmt(d.vc)}</td>
-        <td>${fmt(d.uc)} u</td>
-        <td>$${fmt(cpReal, 2)}</td>
-        <td>$${fmt(cpPpto, 2)}</td>
-        <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
-      </tr>`;
-    }).join('');
-
-    const t = getTotals(filtered);
-    const varCostoT = t.costoPromedio - t.costoPromedioPpto;
-    const totalRow = `
-      <tr class="total-row">
-        <td>TOTAL CONSOLIDADO</td>
-        <td style="text-align:center;"><span class="badge meta">Cinta</span></td>
-        <td>$${fmt(t.vc)}</td>
-        <td>${fmt(t.uc)} u</td>
-        <td>$${fmt(t.costoPromedio, 2)}</td>
-        <td>$${fmt(t.costoPromedioPpto, 2)}</td>
-        <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
-      </tr>`;
-
-    document.getElementById('tableBody').innerHTML = rows + totalRow;
-    return;
-  }
-
+  // TABLA UNIFICADA 360° (Siempre muestra las tres aristas)
   document.getElementById('tableHead').innerHTML = `
     <tr>
-      <th>Sucursal</th>
-      <th style="text-align:center;">Estatus</th>
-      <th>Presupuesto</th>
-      <th>Cumplido</th>
-      <th>%</th>
-      <th>Proyección</th>
-      <th>Diferencia</th>
+      <th rowspan="2" style="text-align:left; vertical-align:bottom;">Sucursal</th>
+      <th rowspan="2" style="text-align:center; vertical-align:bottom;">Estatus</th>
+      <th colspan="3" class="group-head" style="background:var(--wine-bg); color:var(--wine);">VALOR $</th>
+      <th colspan="3" class="group-head">UNIDADES</th>
+      <th colspan="3" class="group-head" style="background:var(--wine-bg); color:var(--wine);">COSTO PROMEDIO</th>
+    </tr>
+    <tr>
+      <th style="background:var(--wine-bg);">Ppto</th>
+      <th style="background:var(--wine-bg);">Real</th>
+      <th style="background:var(--wine-bg);">% Cump.</th>
+      <th>Ppto</th>
+      <th>Real</th>
+      <th>% Cump.</th>
+      <th style="background:var(--wine-bg);">Ppto</th>
+      <th style="background:var(--wine-bg);">Real</th>
+      <th style="background:var(--wine-bg);">Var</th>
     </tr>
   `;
 
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
-  const pKey = mode === 'valor' ? 'vp' : 'up';
-  const cKey = mode === 'valor' ? 'vc' : 'uc';
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const proyKey = mode === 'valor' ? 'vproy' : 'uproy';
-  const diffKey = mode === 'valor' ? 'vdiff' : 'udiff';
-
   const rows = filtered.map(d => {
-    const pct = d[pctKey];
-    const diff = d[diffKey];
-    const badge = pct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
+    const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
+    const varCosto = cpReal - cpPpto;
+    
+    // El badge se rige por el cumplimiento en valor $ frente a la valla
+    const badge = d.vpct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    
     return `
     <tr>
       <td>${d.n}</td>
       <td style="text-align:center;">${badge}</td>
-      <td>${unit}${fmt(d[pKey])}${sfx}</td>
-      <td>${unit}${fmt(d[cKey])}${sfx}</td>
-      <td>${pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(d[proyKey])}${sfx}</td>
-      <td style="color:${diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(diff)}${sfx}</td>
+      
+      <td style="background:var(--wine-bg);">$${fmt(d.vp)}</td>
+      <td style="background:var(--wine-bg);">$${fmt(d.vc)}</td>
+      <td style="background:var(--wine-bg); font-weight:700; color:${d.vpct >= EXPECTED_PCT ? 'var(--good)' : 'var(--warn)'};">${d.vpct.toFixed(2).replace('.', ',')}%</td>
+      
+      <td>${fmt(d.up)}</td>
+      <td>${fmt(d.uc)}</td>
+      <td style="font-weight:700; color:${d.upct >= EXPECTED_PCT ? 'var(--good)' : 'var(--warn)'};">${d.upct.toFixed(2).replace('.', ',')}%</td>
+      
+      <td style="background:var(--wine-bg);">$${fmt(cpPpto, 2)}</td>
+      <td style="background:var(--wine-bg);">$${fmt(cpReal, 2)}</td>
+      <td style="background:var(--wine-bg); color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
     </tr>`;
   }).join('');
 
   const t = getTotals(filtered);
+  const varCostoT = t.costoPromedio - t.costoPromedioPpto;
+  const pctValorT = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
+  const pctUnidT = t.up > 0 ? (t.uc / t.up * 100) : 0;
+
   const totalRow = `
     <tr class="total-row">
       <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge obs">Obs.</span></td>
-      <td>${unit}${fmt(t.p)}${sfx}</td>
-      <td>${unit}${fmt(t.c)}${sfx}</td>
-      <td>${t.pct.toFixed(2).replace('.', ',')}%</td>
-      <td>${unit}${fmt(t.proy)}${sfx}</td>
-      <td style="color:${t.diff >= 0 ? 'var(--good)' : 'var(--warn)'};">${unit}${fmtSigned(t.diff)}${sfx}</td>
+      <td style="text-align:center;"><span class="badge gen">Global</span></td>
+      
+      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.vp)}</td>
+      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.vc)}</td>
+      <td style="background:var(--wine-bg); color:var(--wine); font-weight:700;">${pctValorT.toFixed(2).replace('.', ',')}%</td>
+      
+      <td style="color:var(--text);">${fmt(t.up)}</td>
+      <td style="color:var(--text);">${fmt(t.uc)}</td>
+      <td style="color:var(--text); font-weight:700;">${pctUnidT.toFixed(2).replace('.', ',')}%</td>
+      
+      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.costoPromedioPpto, 2)}</td>
+      <td style="background:var(--wine-bg); color:var(--wine);">$${fmt(t.costoPromedio, 2)}</td>
+      <td style="background:var(--wine-bg); color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
     </tr>`;
 
   document.getElementById('tableBody').innerHTML = rows + totalRow;
