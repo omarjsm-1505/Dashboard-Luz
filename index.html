@@ -3,229 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Dashboard Tridimensional</title>
+<title>Luz · Tablero Gerencial (Esquema Consolidado)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#F8F6F2; --card:#FFFFFF; --card-hi:#F3EFEA; --line: rgba(140,29,64,0.12);
-    --wine:#8C1D40; --wine-light:#B4213F; --wine-bg: rgba(140,29,64,0.06);
-    --gold:#C59B27; --gold-dim:#8A6D1B; --text:#2B2627; --muted:#6E6366;
-    --good:#2E7D32; --good-bg: rgba(46,125,50,0.1);
-    --warn:#D97A46; --warn-bg: rgba(217,122,70,0.12); --danger:#C14646;
+  :root {
+    --bg: #F4F7F9; --surface: #FFFFFF; --border: #E2E8F0;
+    --primary: #0F172A; --primary-light: #334155; --accent: #0284C7;
+    --text: #1E293B; --text-light: #64748B;
+    --up: #16A34A; --up-bg: #DCFCE7; 
+    --down: #DC2626; --down-bg: #FEE2E2;
   }
-  *{box-sizing:border-box;}
-  body{ margin:0; background-color: var(--bg); color:var(--text); font-family:'Inter', sans-serif; min-height: 100vh; -webkit-font-smoothing:antialiased; }
-  body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)), url('1275044.jpg'); background-repeat: no-repeat; background-position: center center; background-size: 550px auto; opacity: 0.6; z-index: -1; pointer-events: none; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
   
-  .wrap{max-width:1080px; margin:0 auto; padding:20px 20px 80px;}
-  .corte-bar{ position:sticky; top:0; z-index:50; background:linear-gradient(90deg, #641024, var(--wine), #641024); border-bottom:2px solid var(--gold); color:#FFFFFF; font-family:'JetBrains Mono', monospace; font-size:11px; padding:9px 18px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
-  .btn-print{ background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; border-radius:100px; cursor:pointer; }
+  .topbar { background: var(--primary); color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
+  .btn-print { background: var(--accent); color: #FFF; border: none; padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; }
   
-  .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
-  .logo-header { height: 52px; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
-  .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
-  h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
-  h1 em{ font-style:italic; color:var(--wine); }
-  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; }
-
-  /* KPIS GLOBALES */
-  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:28px; }
-  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; border-left:4px solid var(--wine); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
-  .kpi-card.target { border-left-color: var(--gold); background: var(--card-hi); }
-  .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .kpi-value{ font-family:'Fraunces', serif; font-size:24px; font-weight:700; color:var(--text); margin:6px 0 2px; }
-  .kpi-sub{ font-size:11px; color:var(--muted); font-weight:500; }
-
-  /* CONTROLES DE ORDENAMIENTO */
-  .controls { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; align-items:center; background:var(--card); padding:12px 18px; border-radius:12px; border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,0.02);}
-  .ctrl-lbl { font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--wine); font-weight:700; text-transform:uppercase; margin-right:10px; }
-  .toggle-btn{ border:1px solid var(--line); background:var(--card-hi); color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease; }
-  .toggle-btn.active{ background:var(--wine); color:#FFFFFF; border-color:var(--wine); box-shadow:0 2px 8px rgba(140,29,64,0.3); }
-
-  /* MATRIZ DE BARRAS */
-  .bars-container { display:flex; flex-direction:column; gap:16px; }
-  .branch-card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.03); position:relative; overflow:hidden; transition:transform 0.2s;}
-  .branch-card:hover { transform:translateY(-2px); border-color:var(--wine-light); }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
   
-  .branch-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:14px; }
-  .branch-name { font-family:'Fraunces', serif; font-size:18px; font-weight:700; color:var(--text); margin:0; }
+  .header { margin-bottom: 24px; }
+  .header h1 { margin: 0 0 4px; font-size: 22px; color: var(--primary); letter-spacing: -0.5px; }
+  .header p { margin: 0; font-size: 13px; color: var(--text-light); }
   
-  .ticket-badge { background:var(--good-bg); color:var(--good); padding:4px 10px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:700; border:1px solid rgba(46,125,50,0.2); }
-  .ticket-badge.high { background:var(--warn-bg); color:var(--warn); border-color:rgba(217,122,70,0.3); }
-
-  /* PISTAS DE PROGRESO */
-  .track-group { margin-bottom:10px; position:relative; }
-  .track-group:last-child { margin-bottom:0; }
-  .track-lbl { display:flex; justify-content:space-between; font-size:11px; font-weight:600; color:var(--muted); margin-bottom:4px; text-transform:uppercase; font-family:'Inter'; }
-  .track-lbl b { color:var(--text); font-family:'JetBrains Mono', monospace; font-size:12px; }
+  /* PESTAÑAS (TABS) */
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--border); }
+  .tab-btn { background: transparent; border: none; padding: 10px 20px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; position: relative; transition: color 0.2s; }
+  .tab-btn.active { color: var(--accent); }
+  .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--accent); border-radius: 2px 2px 0 0; }
   
-  .track-bg { height:12px; background:var(--card-hi); border-radius:6px; position:relative; overflow:hidden; border:1px inset rgba(0,0,0,0.05); }
-  .track-fill { height:100%; border-radius:6px; transition:width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-  .fill-val { background:linear-gradient(90deg, var(--wine-light), var(--wine)); }
-  .fill-uni { background:linear-gradient(90deg, #E59A6D, var(--warn)); }
-  .fill-ok { background:linear-gradient(90deg, #4CAF50, var(--good)); }
-
-  /* LÍNEA DE VALLA TEÓRICA */
-  .target-line { position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--good); z-index:10; border-radius:2px; box-shadow:0 0 4px rgba(46,125,50,0.5); }
-  .target-label { position:absolute; top:-16px; font-size:9px; color:var(--good); font-weight:700; transform:translateX(-50%); }
-
-  footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
+  /* TABLA GERENCIAL */
+  .table-wrapper { background: var(--surface); border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; min-width: 750px; text-align: right; }
+  th { background: #F8FAFC; color: var(--text-light); font-size: 11px; text-transform: uppercase; font-weight: 600; padding: 14px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; position: sticky; left: 0; background: inherit; z-index: 2; }
+  th:first-child { background: #F8FAFC; }
+  
+  td { padding: 12px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--primary-light); }
+  tbody tr { background: var(--surface); transition: background 0.15s; }
+  tbody tr:hover { background: #F1F5F9; }
+  
+  .cell-branch { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .badge-zone { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: #E2E8F0; color: var(--text-light); text-transform: uppercase; font-family: 'Inter'; }
+  
+  /* MICRO BARRAS INLINE */
+  .pct-cell { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+  .bar-bg { width: 50px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  
+  .gap-pos { color: var(--up); background: var(--up-bg); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; display: inline-block; }
+  .gap-neg { color: var(--down); background: var(--down-bg); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; display: inline-block; }
+  
+  tfoot tr { background: var(--primary) !important; color: #FFF; }
+  tfoot td { color: #FFF; font-weight: 700; border-bottom: none; }
+  tfoot th:first-child { background: var(--primary); }
+  
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="corte-bar">
-  <span>◆ ANÁLISIS 3D DE DESEMPEÑO</span>
-  <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
+<div class="topbar">
+  <span>📊 DASHBOARD LUZ: ESQUEMA CONSOLIDADO</span>
+  <button class="btn-print" onclick="window.print()">Exportar PDF</button>
 </div>
 
-<div class="wrap">
-  <section class="hero">
-    <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-    <p class="eyebrow">Visualizador Interactivo</p>
-    <h1>Matriz <em>Tridimensional</em></h1>
-    <p class="hero-sub">Cruce de Valor, Volumen y Costo Promedio (Corte: 22 de Agosto de 2026)</p>
-  </section>
-
-  <!-- KPIS -->
-  <div class="kpis-grid">
-    <div class="kpi-card target">
-      <div class="kpi-title">Valla Teórica (Mes)</div>
-      <div class="kpi-value" id="kpiTarget">70.97%</div>
-      <div class="kpi-sub">Día 22 de 31</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Cumplimiento General ($)</div>
-      <div class="kpi-value" id="kpiVal">69.98%</div>
-      <div class="kpi-sub">$3.415.070 Acumulados</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Cumplimiento General (Uds)</div>
-      <div class="kpi-value" id="kpiUni">69.37%</div>
-      <div class="kpi-sub">1.664.880 Uds Rotadas</div>
-    </div>
+<div class="container">
+  <div class="header">
+    <h1>Seguimiento de Presupuesto</h1>
+    <p>Corte al: <b>25 de Agosto de 2026</b> | Valla Teórica: <b style="color:var(--accent)">80.65%</b></p>
   </div>
 
-  <!-- CONTROLES -->
-  <div class="controls">
-    <span class="ctrl-lbl">Ordenar Ranking por:</span>
-    <button class="toggle-btn active" onclick="sortData('vpct', this)">🏆 % Valor ($)</button>
-    <button class="toggle-btn" onclick="sortData('upct', this)">📦 % Unidades</button>
-    <button class="toggle-btn" onclick="sortData('ticket', this)">🏷️ Ticket (Costo Promedio)</button>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="setMode('valor', this)">💵 VALOR ($)</button>
+    <button class="tab-btn" onclick="setMode('unidades', this)">📦 UNIDADES</button>
   </div>
 
-  <!-- CONTENEDOR DE GRÁFICOS DINÁMICOS -->
-  <div class="bars-container" id="dashboardBars">
-    <!-- Se inyecta via JS -->
+  <div class="table-container">
+    <div class="table-wrapper">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th>Sucursal</th>
+            <th>Presupuesto</th>
+            <th>Cumplimiento</th>
+            <th>% Cump.</th>
+            <th>% Part.</th>
+            <th>Proyección</th>
+            <th>Brecha (Ppto)</th>
+          </tr>
+        </thead>
+        <tbody id="tBody"></tbody>
+        <tfoot id="tFoot"></tfoot>
+      </table>
+    </div>
   </div>
-
-  <footer>LUZ · DASHBOARD INTERACTIVO_2026</footer>
 </div>
 <script>
-// BASE DE DATOS AL 22/08
-const TARGET = 70.97; 
-
-const rawData = [
-  {n:"Carlota", vp:1131254, vc:767104, up:505599, uc:336352},
-  {n:"Chacao", vp:524853, vc:387502, up:278248, uc:206513},
-  {n:"Dos Caminos", vp:297284, vc:208338, up:157062, uc:109245},
-  {n:"Florida", vp:702396, vc:502800, up:342792, uc:241102},
-  {n:"Luz Quick Rest", vp:169594, vc:123847, up:90081, uc:63688},
-  {n:"Llanito", vp:461358, vc:323523, up:230778, uc:161713},
-  {n:"Marques", vp:150397, vc:101409, up:79860, uc:53760},
-  {n:"Pedregal", vp:326410, vc:228603, up:173384, uc:119949},
-  {n:"San Antonio", vp:493102, vc:354625, up:240570, uc:171087},
-  {n:"Urbina", vp:623353, vc:417319, up:301625, uc:201470}
+// Base de datos matriz PDF (Corte 25/08)
+const db = [
+  { n: 'Carlota', zone: 'ESTE', vp: 1131254, vc: 869182, vpct: 76.83, vpart: 22.43, vproy: 1077786, vgap: -53468, up: 505599, uc: 385793, upct: 76.30, upart: 20.36, uproy: 478383, ugap: -27216 },
+  { n: 'Chacao', zone: 'OESTE', vp: 524853, vc: 438656, vpct: 83.58, vpart: 11.32, vproy: 543933, vgap: 19080, up: 278248, uc: 233551, upct: 83.94, upart: 12.33, uproy: 289603, ugap: 11355 },
+  { n: 'Dos Caminos', zone: 'OESTE', vp: 297284, vc: 235566, vpct: 79.24, vpart: 6.08, vproy: 292102, vgap: -5182, up: 157062, uc: 123388, upct: 78.56, upart: 6.51, uproy: 153001, ugap: -4061 },
+  { n: 'Florida', zone: 'OESTE', vp: 702396, vc: 571798, vpct: 81.41, vpart: 14.76, vproy: 709030, vgap: 6634, up: 342792, uc: 274680, upct: 80.13, upart: 14.50, uproy: 340603, ugap: -2189 },
+  { n: 'Luz Quick Rest', zone: 'OESTE', vp: 169594, vc: 140045, vpct: 82.58, vpart: 3.61, vproy: 173656, vgap: 4062, up: 90081, uc: 72334, upct: 80.30, upart: 3.82, uproy: 89694, ugap: -387 },
+  { n: 'Llanito', zone: 'ESTE', vp: 461358, vc: 368165, vpct: 79.80, vpart: 9.50, vproy: 456525, vgap: -4833, up: 230778, uc: 184021, upct: 79.74, upart: 9.71, uproy: 228186, ugap: -2592 },
+  { n: 'Marques', zone: 'ESTE', vp: 150397, vc: 114944, vpct: 76.43, vpart: 2.97, vproy: 142531, vgap: -7866, up: 79860, uc: 60961, upct: 76.33, upart: 3.22, uproy: 75592, ugap: -4268 },
+  { n: 'Pedregal', zone: 'OESTE', vp: 326410, vc: 258418, vpct: 79.17, vpart: 6.67, vproy: 320438, vgap: -5972, up: 173384, uc: 135391, upct: 78.09, upart: 7.15, uproy: 167885, ugap: -5499 },
+  { n: 'San Antonio', zone: 'ESTE', vp: 493102, vc: 406713, vpct: 82.48, vpart: 10.50, vproy: 504324, vgap: 11222, up: 240570, uc: 196559, upct: 81.71, upart: 10.38, uproy: 243733, ugap: 3163 },
+  { n: 'Urbina', zone: 'ESTE', vp: 623353, vc: 471364, vpct: 75.62, vpart: 12.16, vproy: 584491, vgap: -38862, up: 301625, uc: 227827, upct: 75.53, upart: 12.03, uproy: 282505, ugap: -19120 }
 ];
 
-// Procesar cálculos (Aristas)
-const processedData = rawData.map(d => {
-  const vpct = (d.vc / d.vp) * 100;
-  const upct = (d.uc / d.up) * 100;
-  const ticket = d.vc / d.uc;
-  return { ...d, vpct, upct, ticket };
-});
+let mode = 'valor'; // valor o unidades
 
-let currentSort = 'vpct';
+function fmt(n) { return n.toLocaleString('es-VE'); }
+function fmtS(n) { return (n > 0 ? '+' : '') + n.toLocaleString('es-VE'); }
 
-function fmt(num) {
-  return num.toLocaleString('es-VE');
-}
-
-function renderDashboard() {
-  const container = document.getElementById('dashboardBars');
+function renderTable() {
+  const tBody = document.getElementById('tBody');
+  const tFoot = document.getElementById('tFoot');
   
-  // Ordenar
-  const sorted = [...processedData].sort((a, b) => b[currentSort] - a[currentSort]);
+  let html = '';
+  let totP = 0, totC = 0, totProy = 0, totGap = 0;
 
-  container.innerHTML = sorted.map((d, i) => {
-    // Definir colores según meta
-    const vClass = d.vpct >= TARGET ? 'fill-ok' : 'fill-val';
-    const uClass = d.upct >= TARGET ? 'fill-ok' : 'fill-uni';
+  // Ordenar de mayor a menor cumplimiento para mantener jerarquía
+  const sortedDb = [...db].sort((a,b) => (mode === 'valor' ? b.vpct - a.vpct : b.upct - a.upct));
+
+  sortedDb.forEach(r => {
+    let p, c, pct, part, proy, gap, prefix;
+    if(mode === 'valor') {
+      p = r.vp; c = r.vc; pct = r.vpct; part = r.vpart; proy = r.vproy; gap = r.vgap; prefix = '$';
+    } else {
+      p = r.up; c = r.uc; pct = r.upct; part = r.upart; proy = r.uproy; gap = r.ugap; prefix = '';
+    }
     
-    // Etiqueta de ticket alta o normal (> $2.05 se considera ticket alto para resaltar)
-    const tBadge = d.ticket >= 2.05 ? 'high' : '';
-    const tIcon = d.ticket >= 2.05 ? '📈' : '🏷️';
+    totP += p; totC += c; totProy += proy; totGap += gap;
+    
+    const gapClass = gap > 0 ? 'gap-pos' : 'gap-neg';
+    const barColor = pct >= 80.65 ? 'var(--up)' : 'var(--accent)';
 
-    return `
-    <div class="branch-card" style="animation: fadeIn ${0.2 + (i*0.05)}s ease forwards;">
-      <div class="branch-head">
-        <h3 class="branch-name">
-          <span style="color:var(--gold); margin-right:5px;">${i+1}.</span>${d.n}
-        </h3>
-        <div class="ticket-badge ${tBadge}" title="Costo Promedio (Valor/Unidades)">
-          ${tIcon} Costo Prom: $${d.ticket.toFixed(2).replace('.',',')}
-        </div>
-      </div>
-
-      <!-- Barra de Valor -->
-      <div class="track-group">
-        <div class="track-lbl">
-          <span>Cumplimiento <b>Valor ($)</b></span>
-          <b>${d.vpct.toFixed(2).replace('.',',')}%</b>
-        </div>
-        <div class="track-bg">
-          <div class="target-line" style="left: ${TARGET}%;"></div>
-          <div class="track-fill ${vClass}" style="width: ${Math.min(d.vpct, 100)}%;"></div>
-        </div>
-      </div>
-
-      <!-- Barra de Unidades -->
-      <div class="track-group">
-        <div class="track-lbl">
-          <span>Cumplimiento <b>Unidades</b></span>
-          <b>${d.upct.toFixed(2).replace('.',',')}%</b>
-        </div>
-        <div class="track-bg">
-          <div class="target-line" style="left: ${TARGET}%;"></div>
-          <div class="track-fill ${uClass}" style="width: ${Math.min(d.upct, 100)}%;"></div>
-        </div>
-      </div>
-    </div>
+    html += `
+      <tr>
+        <td>
+          <div class="cell-branch">
+            ${r.n} <span class="badge-zone">${r.zone}</span>
+          </div>
+        </td>
+        <td>${prefix}${fmt(p)}</td>
+        <td style="color:var(--text); font-weight:700;">${prefix}${fmt(c)}</td>
+        <td>
+          <div class="pct-cell">
+            <span>${pct.toFixed(2).replace('.',',')}%</span>
+            <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(pct, 100)}%; background:${barColor};"></div></div>
+          </div>
+        </td>
+        <td style="color:var(--text-light);">${part.toFixed(2).replace('.',',')}%</td>
+        <td>${prefix}${fmt(proy)}</td>
+        <td><span class="${gapClass}">${prefix}${fmtS(gap)}</span></td>
+      </tr>
     `;
-  }).join('');
+  });
+
+  tBody.innerHTML = html;
+
+  // Totales
+  const totPct = (totC / totP) * 100;
+  const totGapClass = totGap > 0 ? 'gap-pos' : 'gap-neg';
+  const tPrefix = mode === 'valor' ? '$' : '';
+
+  tFoot.innerHTML = `
+    <tr>
+      <td>TOTAL GENERAL</td>
+      <td>${tPrefix}${fmt(totP)}</td>
+      <td>${tPrefix}${fmt(totC)}</td>
+      <td>${totPct.toFixed(2).replace('.',',')}%</td>
+      <td>100,00%</td>
+      <td>${tPrefix}${fmt(totProy)}</td>
+      <td><span class="${totGapClass}" style="background:transparent; color:#FFF; border:1px solid rgba(255,255,255,0.4);">${tPrefix}${fmtS(totGap)}</span></td>
+    </tr>
+  `;
 }
 
-function sortData(key, btn) {
-  currentSort = key;
-  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+function setMode(newMode, btn) {
+  mode = newMode;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderDashboard();
+  renderTable();
 }
 
-// Estilo para animación de entrada
-const style = document.createElement('style');
-style.innerHTML = `
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-`;
-document.head.appendChild(style);
-
-// Inicializar
-renderDashboard();
+renderTable();
 </script>
 </body>
 </html>
