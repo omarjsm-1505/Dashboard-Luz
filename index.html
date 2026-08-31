@@ -73,7 +73,7 @@
 <div class="container">
   <div class="header">
     <h1>Seguimiento de Presupuesto</h1>
-    <p>Corte al: <b>29 de Agosto de 2026</b> | Valla Teórica: <b style="color:var(--accent)">93.55%</b></p>
+    <p>Corte al: <b>30 de Agosto de 2026</b> | Valla Teórica: <b style="color:var(--accent)">96.77%</b></p>
   </div>
 
   <div class="tabs">
@@ -102,18 +102,18 @@
   </div>
 </div>
 <script>
-// Base de datos matriz PDF (Corte 29/08)
+// Base de datos matriz PDF (Corte 30/08)
 const db = [
-  { n: 'Carlota', zone: 'ESTE', vp: 1131254, vc: 1015269, vpct: 89.75, vpart: 22.31, vproy: 1085288, vgap: -45966, up: 505599, uc: 454901, upct: 89.97, upart: 20.37, uproy: 486273, ugap: -19326 },
-  { n: 'Chacao', zone: 'OESTE', vp: 524853, vc: 517583, vpct: 98.61, vpart: 11.38, vproy: 553278, vgap: 28425, up: 278248, uc: 275368, upct: 98.96, upart: 12.33, uproy: 294359, ugap: 16111 },
-  { n: 'Dos Caminos', zone: 'OESTE', vp: 297284, vc: 277782, vpct: 93.44, vpart: 6.11, vproy: 296939, vgap: -345, up: 157062, uc: 145426, upct: 92.59, upart: 6.51, uproy: 155455, ugap: -1607 },
-  { n: 'Florida', zone: 'OESTE', vp: 702396, vc: 669525, vpct: 95.32, vpart: 14.72, vproy: 715699, vgap: 13303, up: 342792, uc: 323552, upct: 94.39, upart: 14.49, uproy: 345866, ugap: 3074 },
-  { n: 'Luz Quick Rest', zone: 'OESTE', vp: 169594, vc: 166043, vpct: 97.91, vpart: 3.65, vproy: 177494, vgap: 7900, up: 90081, uc: 85531, upct: 94.95, upart: 3.83, uproy: 91430, ugap: 1349 },
-  { n: 'Llanito', zone: 'ESTE', vp: 461358, vc: 432169, vpct: 93.67, vpart: 9.50, vproy: 461974, vgap: 616, up: 230778, uc: 217743, upct: 94.35, upart: 9.75, uproy: 232760, ugap: 1982 },
-  { n: 'Marques', zone: 'ESTE', vp: 150397, vc: 134159, vpct: 89.20, vpart: 2.95, vproy: 143411, vgap: -6986, up: 79860, uc: 70998, upct: 88.90, upart: 3.18, uproy: 75894, ugap: -3966 },
-  { n: 'Pedregal', zone: 'OESTE', vp: 326410, vc: 304371, vpct: 93.25, vpart: 6.69, vproy: 325362, vgap: -1048, up: 173384, uc: 159524, upct: 92.01, upart: 7.14, uproy: 170526, ugap: -2858 },
-  { n: 'San Antonio', zone: 'ESTE', vp: 493102, vc: 479552, vpct: 97.25, vpart: 10.54, vproy: 512625, vgap: 19523, up: 240570, uc: 231800, upct: 96.35, upart: 10.38, uproy: 247786, ugap: 7216 },
-  { n: 'Urbina', zone: 'ESTE', vp: 623353, vc: 553493, vpct: 88.79, vpart: 12.16, vproy: 591665, vgap: -31688, up: 301625, uc: 268399, upct: 88.98, upart: 12.02, uproy: 286909, ugap: -14716 }
+  { n: 'Carlota', zone: 'ESTE', vp: 1131254, vc: 1053939, vpct: 93.17, vpart: 22.27, vproy: 1089070, vgap: -42184, up: 505599, uc: 473234, upct: 93.60, upart: 20.34, uproy: 489008, ugap: -16591 },
+  { n: 'Chacao', zone: 'OESTE', vp: 524853, vc: 536560, vpct: 102.23, vpart: 11.34, vproy: 554445, vgap: 29592, up: 278248, uc: 285198, upct: 102.50, upart: 12.26, uproy: 294705, ugap: 16457 },
+  { n: 'Dos Caminos', zone: 'OESTE', vp: 297284, vc: 286031, vpct: 96.21, vpart: 6.04, vproy: 295565, vgap: -1719, up: 157062, uc: 149784, upct: 95.37, upart: 6.44, uproy: 154777, ugap: -2285 },
+  { n: 'Florida', zone: 'OESTE', vp: 702396, vc: 702700, vpct: 100.04, vpart: 14.85, vproy: 726123, vgap: 23727, up: 342792, uc: 340055, upct: 99.20, upart: 14.62, uproy: 351390, ugap: 8598 },
+  { n: 'Luz Quick Rest', zone: 'OESTE', vp: 169594, vc: 171141, vpct: 100.91, vpart: 3.62, vproy: 176846, vgap: 7252, up: 90081, uc: 88347, upct: 98.08, upart: 3.80, uproy: 91292, ugap: 1211 },
+  { n: 'Llanito', zone: 'ESTE', vp: 461358, vc: 451973, vpct: 97.97, vpart: 9.55, vproy: 467039, vgap: 5681, up: 230778, uc: 228022, upct: 98.81, upart: 9.80, uproy: 235623, ugap: 4845 },
+  { n: 'Marques', zone: 'ESTE', vp: 150397, vc: 139367, vpct: 92.67, vpart: 2.94, vproy: 144013, vgap: -6384, up: 79860, uc: 73781, upct: 92.39, upart: 3.17, uproy: 76240, ugap: -3620 },
+  { n: 'Pedregal', zone: 'OESTE', vp: 326410, vc: 313969, vpct: 96.19, vpart: 6.63, vproy: 324435, vgap: -1975, up: 173384, uc: 164746, upct: 95.02, upart: 7.08, uproy: 170238, ugap: -3146 },
+  { n: 'San Antonio', zone: 'ESTE', vp: 493102, vc: 497538, vpct: 100.90, vpart: 10.51, vproy: 514123, vgap: 21021, up: 240570, uc: 240487, upct: 99.97, upart: 10.34, uproy: 248503, ugap: 7933 },
+  { n: 'Urbina', zone: 'ESTE', vp: 623353, vc: 579512, vpct: 92.97, vpart: 12.24, vproy: 598829, vgap: -24524, up: 301625, uc: 282469, upct: 93.65, upart: 12.14, uproy: 291885, ugap: -9740 }
 ];
 
 let mode = 'valor'; // valor o unidades
@@ -142,7 +142,8 @@ function renderTable() {
     totP += p; totC += c; totProy += proy; totGap += gap;
     
     const gapClass = gap > 0 ? 'gap-pos' : 'gap-neg';
-    const barColor = pct >= 93.55 ? 'var(--up)' : 'var(--accent)';
+    // Indicador verde si supera el 96.77% (Valla)
+    const barColor = pct >= 96.77 ? 'var(--up)' : 'var(--accent)';
 
     html += `
       <tr>
