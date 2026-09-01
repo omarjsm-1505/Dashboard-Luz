@@ -3,198 +3,534 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Tablero Gerencial (Cierre de Mes)</title>
+<title>Luz · Dashboard Ejecutivo de Presupuesto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #F4F7F9; --surface: #FFFFFF; --border: #E2E8F0;
-    --primary: #0F172A; --primary-light: #334155; --accent: #0284C7;
-    --text: #1E293B; --text-light: #64748B;
-    --up: #16A34A; --up-bg: #DCFCE7; 
-    --down: #DC2626; --down-bg: #FEE2E2;
+  :root{
+    --bg:#F8F6F2;
+    --card:#FFFFFF;
+    --card-hi:#F3EFEA;
+    --line: rgba(140,29,64,0.12);
+    --wine:#8C1D40;
+    --wine-light:#B4213F;
+    --wine-bg: rgba(140,29,64,0.06);
+    --gold:#C59B27;
+    --gold-dim:#8A6D1B;
+    --text:#2B2627;
+    --muted:#6E6366;
+    --good:#2E7D32;
+    --good-bg: rgba(46,125,50,0.1);
+    --warn:#D97A46;
+    --warn-bg: rgba(217,122,70,0.12);
+    --danger:#C14646;
   }
-  * { box-sizing: border-box; }
-  body { margin: 0; background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-  
-  .topbar { background: var(--primary); color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
-  .btn-print { background: var(--accent); color: #FFF; border: none; padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; }
-  
-  .container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
-  
-  .header { margin-bottom: 24px; }
-  .header h1 { margin: 0 0 4px; font-size: 22px; color: var(--primary); letter-spacing: -0.5px; }
-  .header p { margin: 0; font-size: 13px; color: var(--text-light); }
-  
-  /* PESTAÑAS (TABS) */
-  .tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--border); }
-  .tab-btn { background: transparent; border: none; padding: 10px 20px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; position: relative; transition: color 0.2s; }
-  .tab-btn.active { color: var(--accent); }
-  .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--accent); border-radius: 2px 2px 0 0; }
-  
-  /* TABLA GERENCIAL */
-  .table-wrapper { background: var(--surface); border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; min-width: 750px; text-align: right; }
-  th { background: #F8FAFC; color: var(--text-light); font-size: 11px; text-transform: uppercase; font-weight: 600; padding: 14px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  th:first-child, td:first-child { text-align: left; position: sticky; left: 0; background: inherit; z-index: 2; }
-  th:first-child { background: #F8FAFC; }
-  
-  td { padding: 12px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--primary-light); }
-  tbody tr { background: var(--surface); transition: background 0.15s; }
-  tbody tr:hover { background: #F1F5F9; }
-  
-  .cell-branch { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-  .badge-zone { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: #E2E8F0; color: var(--text-light); text-transform: uppercase; font-family: 'Inter'; }
-  
-  /* MICRO BARRAS INLINE */
-  .pct-cell { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-  .bar-bg { width: 50px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-  .bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
-  
-  .gap-pos { color: var(--up); background: var(--up-bg); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; display: inline-block; }
-  .gap-neg { color: var(--down); background: var(--down-bg); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; display: inline-block; }
-  
-  tfoot tr { background: var(--primary) !important; color: #FFF; }
-  tfoot td { color: #FFF; font-weight: 700; border-bottom: none; }
-  tfoot th:first-child { background: var(--primary); }
-  
-  @media (max-width: 600px) {
-    .container { padding: 12px; }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background-color: var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing:antialiased;
   }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+      linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)),
+      url('1275044.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 550px auto;
+    opacity: 0.6;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* PANTALLA DE ACCESO RESTRINGIDO */
+  .auth-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .auth-card {
+    background: var(--card); border: 1px solid var(--line);
+    padding: 36px 28px; border-radius: 20px; text-align: center;
+    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
+  }
+  .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
+  .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
+  .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
+  .auth-input {
+    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
+    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
+    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
+  }
+  .auth-input:focus { border-color: var(--wine); }
+  .auth-btn {
+    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
+    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .auth-btn:hover { background: var(--wine-light); }
+  .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
+
+  /* CONTENIDO PRINCIPAL */
+  .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
+
+  .corte-bar{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(90deg, #641024, var(--wine), #641024);
+    border-bottom:2px solid var(--gold);
+    color:#FFFFFF;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    padding:9px 18px;
+    display:flex; justify-content:space-between; align-items:center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  }
+  .corte-bar b{ color:var(--gold);}
+  .btn-print{ 
+    background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; 
+    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; 
+    border-radius:100px; cursor:pointer; transition:background 0.2s;
+  }
+
+  .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
+  .logo-header { height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
+  .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
+  h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
+  h1 em{ font-style:italic; color:var(--wine); }
+  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0.5px; }
+  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+  .corte-pill b{ color:var(--gold-dim); }
+
+  .control-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .ctrl-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
+  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
+  .toggle-btn{
+    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
+  }
+  .toggle-btn.active{
+    background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
+  }
+
+  .section-box{ margin-bottom:34px; }
+  .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
+  .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
+
+  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:24px; }
+  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
+  .kpi-card.neg{ border-left-color:var(--warn); }
+  .kpi-card.accent{ border-left-color:var(--wine); background:var(--card-hi); }
+  .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
+  .kpi-sub{ font-size:10.5px; color:var(--muted); }
+
+  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 75px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
+  .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
+  .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
+  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--wine), var(--wine-light)); border-radius:5px; transition:width 0.3s ease; }
+  .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
+  .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
+
+  /* ESTILOS DE LA TABLA LIMPIA ORIGINAL */
+  .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
+  table{ width:100%; border-collapse:collapse; min-width:880px; }
+  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
+  th:first-child{ text-align:left; }
+  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
+  td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
+  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
+
+  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
+  .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
+  .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
+
+  footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <span>📊 DASHBOARD LUZ: CIERRE DEFINITIVO</span>
-  <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+<!-- OVERLAY DE BLOQUEO POR CLAVE -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
+    <h2 class="auth-title">Automercado Luz</h2>
+    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
+    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
+    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
+    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
+  </div>
 </div>
 
-<div class="container">
-  <div class="header">
-    <h1>Cierre de Presupuesto - Agosto 2026</h1>
-    <p>Corte al: <b>31 de Agosto de 2026</b> | Valla Teórica Final: <b style="color:var(--up)">100.00%</b></p>
+<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
+<div id="mainContent" style="display:none;">
+  <div class="corte-bar">
+    <span>◆ CIERRE DE MES LUZ · AGOSTO DE 2026</span>
+    <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="setMode('valor', this)">💵 VALOR ($)</button>
-    <button class="tab-btn" onclick="setMode('unidades', this)">📦 UNIDADES</button>
-  </div>
+  <div class="wrap">
 
-  <div class="table-container">
-    <div class="table-wrapper">
-      <table id="mainTable">
-        <thead>
-          <tr>
-            <th>Sucursal</th>
-            <th>Presupuesto</th>
-            <th>Cumplimiento</th>
-            <th>% Cump.</th>
-            <th>% Part.</th>
-            <th>Cierre Final</th>
-            <th>Brecha (Ppto)</th>
-          </tr>
-        </thead>
-        <tbody id="tBody"></tbody>
-        <tfoot id="tFoot"></tfoot>
-      </table>
+    <section class="hero">
+      <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
+      <p class="eyebrow">Automercado Luz</p>
+      <h1>Seguimiento <em>presupuesto</em></h1>
+      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio</p>
+      <div class="corte-pill">◆ Cierre Final <b>Agosto 2026</b></div>
+    </section>
+
+    <!-- CONTROLES -->
+    <div class="control-grid">
+      <div class="ctrl-box">
+        <span class="ctrl-title">Zona Comercial</span>
+        <div class="toggle-group" id="groupZone">
+          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
+          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
+          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+        </div>
+      </div>
+      <div class="ctrl-box">
+        <span class="ctrl-title">Resumen / Ranking</span>
+        <div class="toggle-group" id="groupMode">
+          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
+          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
+          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Costo Promedio</button>
+        </div>
+      </div>
     </div>
+
+    <!-- KPIS -->
+    <div class="section-box">
+      <h2 class="sec-title">Resumen del mes</h2>
+      <span class="sec-sub">Totales consolidados a la fecha de corte</span>
+      <div class="kpis-grid" id="kpiGrid"></div>
+    </div>
+
+    <!-- RANKING -->
+    <div class="section-box">
+      <h2 class="sec-title">Ranking por sucursal</h2>
+      <span class="sec-sub">Indicador comparativo de rendimiento</span>
+      <div id="rankingList"></div>
+    </div>
+
+    <!-- TABLA LIMPIA UNIFICADA -->
+    <div class="section-box">
+      <h2 class="sec-title">Detalle completo (360°)</h2>
+      <span class="sec-sub">Consolidado general de aristas por sucursal</span>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>LUZ · CIERRE_AGOSTO_2026</footer>
   </div>
 </div>
 <script>
-// Base de datos matriz PDF (Cierre Definitivo 31/08)
-const db = [
-  { n: 'Carlota', zone: 'ESTE', vp: 1131254, vc: 1086752, vpct: 96.07, vpart: 22.24, vproy: 1086752, vgap: -44502, up: 505599, uc: 487889, upct: 96.50, upart: 20.31, uproy: 487889, ugap: -17710 },
-  { n: 'Chacao', zone: 'OESTE', vp: 524853, vc: 555333, vpct: 105.81, vpart: 11.36, vproy: 555333, vgap: 30480, up: 278248, uc: 294887, upct: 105.98, upart: 12.28, uproy: 294887, ugap: 16639 },
-  { n: 'Dos Caminos', zone: 'OESTE', vp: 297284, vc: 296174, vpct: 99.63, vpart: 6.06, vproy: 296174, vgap: -1110, up: 157062, uc: 154704, upct: 98.50, upart: 6.44, uproy: 154704, ugap: -2358 },
-  { n: 'Florida', zone: 'OESTE', vp: 702396, vc: 722869, vpct: 102.91, vpart: 14.79, vproy: 722869, vgap: 20473, up: 342792, uc: 349830, upct: 102.05, upart: 14.56, uproy: 349830, ugap: 7038 },
-  { n: 'Luz Quick Rest', zone: 'OESTE', vp: 169594, vc: 177934, vpct: 104.92, vpart: 3.64, vproy: 177934, vgap: 8340, up: 90081, uc: 91687, upct: 101.78, upart: 3.82, uproy: 91687, ugap: 1606 },
-  { n: 'Llanito', zone: 'ESTE', vp: 461358, vc: 467249, vpct: 101.28, vpart: 9.56, vproy: 467249, vgap: 5891, up: 230778, uc: 236371, upct: 102.42, upart: 9.84, uproy: 236371, ugap: 5593 },
-  { n: 'Marques', zone: 'ESTE', vp: 150397, vc: 143724, vpct: 95.56, vpart: 2.94, vproy: 143724, vgap: -6673, up: 79860, uc: 75991, upct: 95.16, upart: 3.16, uproy: 75991, ugap: -3869 },
-  { n: 'Pedregal', zone: 'OESTE', vp: 326410, vc: 323934, vpct: 99.24, vpart: 6.63, vproy: 323934, vgap: -2476, up: 173384, uc: 169952, upct: 98.02, upart: 7.08, uproy: 169952, ugap: -3432 },
-  { n: 'San Antonio', zone: 'ESTE', vp: 493102, vc: 514370, vpct: 104.31, vpart: 10.53, vproy: 514370, vgap: 21268, up: 240570, uc: 249020, upct: 103.51, upart: 10.37, uproy: 249020, ugap: 8450 },
-  { n: 'Urbina', zone: 'ESTE', vp: 623353, vc: 598774, vpct: 96.06, vpart: 12.25, vproy: 598774, vgap: -24579, up: 301625, uc: 291628, upct: 96.69, upart: 12.14, uproy: 291628, ugap: -9997 }
+// CLAVE DE ACCESO
+const SECRET_KEY = "Luz2026";
+
+function checkAuth() {
+  const pass = document.getElementById('passInput').value;
+  if (pass === SECRET_KEY) {
+    sessionStorage.setItem('luz_authenticated', 'true');
+    unlockDashboard();
+  } else {
+    document.getElementById('authError').style.display = 'block';
+  }
+}
+
+function handleKeyPress(e) {
+  if (e.key === 'Enter') checkAuth();
+}
+
+function unlockDashboard() {
+  document.getElementById('authOverlay').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  renderAll();
+}
+
+// LÓGICA DEL DASHBOARD
+const EXPECTED_PCT = 100.00; // Cierre de mes
+
+const data = [
+  {n:"Carlota", zone:"este", vp:1131254, vc:1086752, vpct:96.07, vproy:1086752, vdiff:-44502, up:505599, uc:487889, upct:96.50, uproy:487889, udiff:-17710},
+  {n:"Chacao", zone:"oeste", vp:524853, vc:555333, vpct:105.81, vproy:555333, vdiff:30480, up:278248, uc:294887, upct:105.98, uproy:294887, udiff:16639},
+  {n:"Dos Caminos", zone:"oeste", vp:297284, vc:296174, vpct:99.63, vproy:296174, vdiff:-1110, up:157062, uc:154704, upct:98.50, uproy:154704, udiff:-2358},
+  {n:"Florida", zone:"oeste", vp:702396, vc:722869, vpct:102.91, vproy:722869, vdiff:20473, up:342792, uc:349830, upct:102.05, uproy:349830, udiff:7038},
+  {n:"Luz Quick Rest", zone:"oeste", vp:169594, vc:177934, vpct:104.92, vproy:177934, vdiff:8340, up:90081, uc:91687, upct:101.78, uproy:91687, udiff:1606},
+  {n:"Llanito", zone:"este", vp:461358, vc:467249, vpct:101.28, vproy:467249, vdiff:5891, up:230778, uc:236371, upct:102.42, uproy:236371, udiff:5593},
+  {n:"Marques", zone:"este", vp:150397, vc:143724, vpct:95.56, vproy:143724, vdiff:-6673, up:79860, uc:75991, upct:95.16, uproy:75991, udiff:-3869},
+  {n:"Pedregal", zone:"oeste", vp:326410, vc:323934, vpct:99.24, vproy:323934, vdiff:-2476, up:173384, uc:169952, upct:98.02, uproy:169952, udiff:-3432},
+  {n:"San Antonio", zone:"este", vp:493102, vc:514370, vpct:104.31, vproy:514370, vdiff:21268, up:240570, uc:249020, upct:103.51, uproy:249020, udiff:8450},
+  {n:"Urbina", zone:"este", vp:623353, vc:598774, vpct:96.06, vproy:598774, vdiff:-24579, up:301625, uc:291628, upct:96.69, uproy:291628, udiff:-9997}
 ];
 
-let mode = 'valor'; // valor o unidades
+let mode = 'valor';
+let zone = 'todas';
 
-function fmt(n) { return n.toLocaleString('es-VE'); }
-function fmtS(n) { return (n > 0 ? '+' : '') + n.toLocaleString('es-VE'); }
+function fmt(n, decimals = 0){ 
+  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
+}
+function fmtSigned(n, decimals = 0){ return ((n || 0) >= 0 ? '+' : '') + fmt(n, decimals); }
 
-function renderTable() {
-  const tBody = document.getElementById('tBody');
-  const tFoot = document.getElementById('tFoot');
+function getFilteredData(){
+  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
+}
+
+function getTotals(list){
+  let p = 0, c = 0, proy = 0, diff = 0;
+  let total_vp = 0, total_vc = 0, total_up = 0, total_uc = 0;
   
-  let html = '';
-  let totP = 0, totC = 0, totProy = 0, totGap = 0;
-
-  // Ordenar de mayor a menor cumplimiento para el cierre
-  const sortedDb = [...db].sort((a,b) => (mode === 'valor' ? b.vpct - a.vpct : b.upct - a.upct));
-
-  sortedDb.forEach(r => {
-    let p, c, pct, part, proy, gap, prefix;
-    if(mode === 'valor') {
-      p = r.vp; c = r.vc; pct = r.vpct; part = r.vpart; proy = r.vproy; gap = r.vgap; prefix = '$';
+  list.forEach(d => {
+    if(mode === 'valor' || mode === 'costoPromedio') {
+      p += d.vp; c += d.vc; proy += d.vproy; diff += d.vdiff;
     } else {
-      p = r.up; c = r.uc; pct = r.upct; part = r.upart; proy = r.uproy; gap = r.ugap; prefix = '';
+      p += d.up; c += d.uc; proy += d.uproy; diff += d.udiff;
     }
-    
-    totP += p; totC += c; totProy += proy; totGap += gap;
-    
-    const gapClass = gap > 0 ? 'gap-pos' : 'gap-neg';
-    // Verde si superó el 100%
-    const barColor = pct >= 100 ? 'var(--up)' : 'var(--accent)';
-
-    html += `
-      <tr>
-        <td>
-          <div class="cell-branch">
-            ${r.n} <span class="badge-zone">${r.zone}</span>
-          </div>
-        </td>
-        <td>${prefix}${fmt(p)}</td>
-        <td style="color:var(--text); font-weight:700;">${prefix}${fmt(c)}</td>
-        <td>
-          <div class="pct-cell">
-            <span>${pct.toFixed(2).replace('.',',')}%</span>
-            <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(pct, 100)}%; background:${barColor};"></div></div>
-          </div>
-        </td>
-        <td style="color:var(--text-light);">${part.toFixed(2).replace('.',',')}%</td>
-        <td>${prefix}${fmt(proy)}</td>
-        <td><span class="${gapClass}">${prefix}${fmtS(gap)}</span></td>
-      </tr>
-    `;
+    total_vp += d.vp; total_vc += d.vc; total_up += d.up; total_uc += d.uc;
   });
+  
+  const pct = p ? (c / p * 100) : 0;
+  const costoPromedio = total_uc > 0 ? (total_vc / total_uc) : 0;
+  const costoPromedioPpto = total_up > 0 ? (total_vp / total_up) : 0;
+  
+  return { p, c, pct, proy, diff, vp: total_vp, vc: total_vc, up: total_up, uc: total_uc, costoPromedio, costoPromedioPpto };
+}
 
-  tBody.innerHTML = html;
+function renderKPIs(){
+  const t = getTotals(getFilteredData());
+  
+  if(mode === 'costoPromedio'){
+    const varCosto = t.costoPromedio - t.costoPromedioPpto;
+    document.getElementById('kpiGrid').innerHTML = `
+      <div class="kpi-card accent">
+        <div class="kpi-title">Costo Promedio Real</div>
+        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+        <div class="kpi-sub">Venta $ / Unidades vendidas</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Costo Promedio Ppto</div>
+        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
+        <div class="kpi-sub">Meta teórica por artículo</div>
+      </div>
+      <div class="kpi-card ${varCosto < 0 ? 'neg' : ''}">
+        <div class="kpi-title">Variación Costo</div>
+        <div class="kpi-value">$${fmtSigned(varCosto, 2)}</div>
+        <div class="kpi-sub">${varCosto >= 0 ? 'Por encima de ppto' : 'Por debajo de ppto'}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Ventas Cumplidas</div>
+        <div class="kpi-value">$${fmt(t.vc)}</div>
+        <div class="kpi-sub">Cierre Final</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Unidades Cumplidas</div>
+        <div class="kpi-value">${fmt(t.uc)} u</div>
+        <div class="kpi-sub">Cierre Final</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Valla Cierre</div>
+        <div class="kpi-value">100,00%</div>
+        <div class="kpi-sub">Meta teórica hoy</div>
+      </div>
+    `;
+    return;
+  }
 
-  // Totales
-  const totPct = (totC / totP) * 100;
-  const totGapClass = totGap > 0 ? 'gap-pos' : 'gap-neg';
-  const tPrefix = mode === 'valor' ? '$' : '';
-
-  tFoot.innerHTML = `
-    <tr>
-      <td>CIERRE GENERAL</td>
-      <td>${tPrefix}${fmt(totP)}</td>
-      <td>${tPrefix}${fmt(totC)}</td>
-      <td>${totPct.toFixed(2).replace('.',',')}%</td>
-      <td>100,00%</td>
-      <td>${tPrefix}${fmt(totProy)}</td>
-      <td><span class="${totGapClass}" style="background:transparent; color:#FFF; border:1px solid rgba(255,255,255,0.4);">${tPrefix}${fmtS(totGap)}</span></td>
-    </tr>
+  const unit = mode === 'valor' ? '$' : '';
+  const sfx = mode === 'unidades' ? ' u' : '';
+  
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-title">Presupuesto</div>
+      <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
+      <div class="kpi-sub">Meta del mes</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Cierre Final</div>
+      <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
+      <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Proyección Cierre</div>
+      <div class="kpi-value">${unit}${fmt(t.proy)}${sfx}</div>
+      <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
+    </div>
+    <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
+      <div class="kpi-title">Diferencia Final</div>
+      <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
+      <div class="kpi-sub">${t.diff < 0 ? 'Brecha final' : 'Superávit'}</div>
+    </div>
+    <div class="kpi-card accent">
+      <div class="kpi-title">Costo Promedio</div>
+      <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
+      <div class="kpi-sub">Ppto: $${fmt(t.costoPromedioPpto, 2)}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Valla Cierre</div>
+      <div class="kpi-value">100,00%</div>
+      <div class="kpi-sub">Meta teórica hoy</div>
+    </div>
   `;
 }
 
-function setMode(newMode, btn) {
-  mode = newMode;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function renderRanking(){
+  const filtered = getFilteredData();
+  
+  if(mode === 'costoPromedio'){
+    const sorted = [...filtered].sort((a,b) => {
+      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
+      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
+      return cpB - cpA;
+    });
+    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
+    
+    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
+      const barWidth = Math.min((cp / maxCp) * 100, 100);
+      return `
+      <div class="rank-row">
+        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="rank-name">${d.n}</span>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${barWidth}%;"></div>
+        </div>
+        <span class="rank-pct">$${fmt(cp, 2)}</span>
+      </div>`;
+    }).join('');
+    return;
+  }
+
+  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
+  const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
+  
+  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
+    const pct = d[pctKey];
+    return `
+    <div class="rank-row">
+      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="rank-name">${d.n}</span>
+      <div class="bar-bg">
+        <div class="bar-fill ${pct >= EXPECTED_PCT ? 'top' : ''}" style="width:${Math.min(pct, 100)}%;"></div>
+      </div>
+      <span class="rank-pct">${pct.toFixed(2).replace('.', ',')}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTable(){
+  const filtered = getFilteredData();
+  
+  // TABLA PLANA Y LIMPIA (Muestra las tres aristas sin alterar el CSS original)
+  document.getElementById('tableHead').innerHTML = `
+    <tr>
+      <th>Sucursal</th>
+      <th style="text-align:center;">Estatus</th>
+      <th>Cump. $</th>
+      <th>% Val.</th>
+      <th>Cump. U.</th>
+      <th>% Unid.</th>
+      <th>C. Prom. Real</th>
+      <th>C. Prom. Ppto</th>
+      <th>Var. Costo</th>
+    </tr>
+  `;
+
+  const rows = filtered.map(d => {
+    const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
+    const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
+    const varCosto = cpReal - cpPpto;
+    
+    // Estatus basado en cumplimiento $ vs la valla del día
+    const badge = d.vpct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
+    
+    return `
+    <tr>
+      <td>${d.n}</td>
+      <td style="text-align:center;">${badge}</td>
+      <td>$${fmt(d.vc)}</td>
+      <td>${d.vpct.toFixed(2).replace('.', ',')}%</td>
+      <td>${fmt(d.uc)}</td>
+      <td>${d.upct.toFixed(2).replace('.', ',')}%</td>
+      <td>$${fmt(cpReal, 2)}</td>
+      <td>$${fmt(cpPpto, 2)}</td>
+      <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
+    </tr>`;
+  }).join('');
+
+  const t = getTotals(filtered);
+  const varCostoT = t.costoPromedio - t.costoPromedioPpto;
+  const pctValorT = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
+  const pctUnidT = t.up > 0 ? (t.uc / t.up * 100) : 0;
+
+  const totalRow = `
+    <tr class="total-row">
+      <td>TOTAL CONSOLIDADO</td>
+      <td style="text-align:center;"><span class="badge obs">Global</span></td>
+      <td>$${fmt(t.vc)}</td>
+      <td>${pctValorT.toFixed(2).replace('.', ',')}%</td>
+      <td>${fmt(t.uc)}</td>
+      <td>${pctUnidT.toFixed(2).replace('.', ',')}%</td>
+      <td>$${fmt(t.costoPromedio, 2)}</td>
+      <td>$${fmt(t.costoPromedioPpto, 2)}</td>
+      <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
+    </tr>`;
+
+  document.getElementById('tableBody').innerHTML = rows + totalRow;
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRanking();
   renderTable();
 }
 
-renderTable();
+function setZone(z, btn){
+  zone = z;
+  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+// VERIFICAR AUTENTICACIÓN INICIAL
+if (sessionStorage.getItem('luz_authenticated') === 'true') {
+  unlockDashboard();
+}
 </script>
+
 </body>
 </html>
