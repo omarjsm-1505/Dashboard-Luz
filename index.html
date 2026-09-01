@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Tablero Gerencial (Esquema Consolidado)</title>
+<title>Luz · Tablero Gerencial (Cierre de Mes)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -66,14 +66,14 @@
 <body>
 
 <div class="topbar">
-  <span>📊 DASHBOARD LUZ: ESQUEMA CONSOLIDADO</span>
+  <span>📊 DASHBOARD LUZ: CIERRE DEFINITIVO</span>
   <button class="btn-print" onclick="window.print()">Exportar PDF</button>
 </div>
 
 <div class="container">
   <div class="header">
-    <h1>Seguimiento de Presupuesto</h1>
-    <p>Corte al: <b>30 de Agosto de 2026</b> | Valla Teórica: <b style="color:var(--accent)">96.77%</b></p>
+    <h1>Cierre de Presupuesto - Agosto 2026</h1>
+    <p>Corte al: <b>31 de Agosto de 2026</b> | Valla Teórica Final: <b style="color:var(--up)">100.00%</b></p>
   </div>
 
   <div class="tabs">
@@ -91,7 +91,7 @@
             <th>Cumplimiento</th>
             <th>% Cump.</th>
             <th>% Part.</th>
-            <th>Proyección</th>
+            <th>Cierre Final</th>
             <th>Brecha (Ppto)</th>
           </tr>
         </thead>
@@ -102,18 +102,18 @@
   </div>
 </div>
 <script>
-// Base de datos matriz PDF (Corte 30/08)
+// Base de datos matriz PDF (Cierre Definitivo 31/08)
 const db = [
-  { n: 'Carlota', zone: 'ESTE', vp: 1131254, vc: 1053939, vpct: 93.17, vpart: 22.27, vproy: 1089070, vgap: -42184, up: 505599, uc: 473234, upct: 93.60, upart: 20.34, uproy: 489008, ugap: -16591 },
-  { n: 'Chacao', zone: 'OESTE', vp: 524853, vc: 536560, vpct: 102.23, vpart: 11.34, vproy: 554445, vgap: 29592, up: 278248, uc: 285198, upct: 102.50, upart: 12.26, uproy: 294705, ugap: 16457 },
-  { n: 'Dos Caminos', zone: 'OESTE', vp: 297284, vc: 286031, vpct: 96.21, vpart: 6.04, vproy: 295565, vgap: -1719, up: 157062, uc: 149784, upct: 95.37, upart: 6.44, uproy: 154777, ugap: -2285 },
-  { n: 'Florida', zone: 'OESTE', vp: 702396, vc: 702700, vpct: 100.04, vpart: 14.85, vproy: 726123, vgap: 23727, up: 342792, uc: 340055, upct: 99.20, upart: 14.62, uproy: 351390, ugap: 8598 },
-  { n: 'Luz Quick Rest', zone: 'OESTE', vp: 169594, vc: 171141, vpct: 100.91, vpart: 3.62, vproy: 176846, vgap: 7252, up: 90081, uc: 88347, upct: 98.08, upart: 3.80, uproy: 91292, ugap: 1211 },
-  { n: 'Llanito', zone: 'ESTE', vp: 461358, vc: 451973, vpct: 97.97, vpart: 9.55, vproy: 467039, vgap: 5681, up: 230778, uc: 228022, upct: 98.81, upart: 9.80, uproy: 235623, ugap: 4845 },
-  { n: 'Marques', zone: 'ESTE', vp: 150397, vc: 139367, vpct: 92.67, vpart: 2.94, vproy: 144013, vgap: -6384, up: 79860, uc: 73781, upct: 92.39, upart: 3.17, uproy: 76240, ugap: -3620 },
-  { n: 'Pedregal', zone: 'OESTE', vp: 326410, vc: 313969, vpct: 96.19, vpart: 6.63, vproy: 324435, vgap: -1975, up: 173384, uc: 164746, upct: 95.02, upart: 7.08, uproy: 170238, ugap: -3146 },
-  { n: 'San Antonio', zone: 'ESTE', vp: 493102, vc: 497538, vpct: 100.90, vpart: 10.51, vproy: 514123, vgap: 21021, up: 240570, uc: 240487, upct: 99.97, upart: 10.34, uproy: 248503, ugap: 7933 },
-  { n: 'Urbina', zone: 'ESTE', vp: 623353, vc: 579512, vpct: 92.97, vpart: 12.24, vproy: 598829, vgap: -24524, up: 301625, uc: 282469, upct: 93.65, upart: 12.14, uproy: 291885, ugap: -9740 }
+  { n: 'Carlota', zone: 'ESTE', vp: 1131254, vc: 1086752, vpct: 96.07, vpart: 22.24, vproy: 1086752, vgap: -44502, up: 505599, uc: 487889, upct: 96.50, upart: 20.31, uproy: 487889, ugap: -17710 },
+  { n: 'Chacao', zone: 'OESTE', vp: 524853, vc: 555333, vpct: 105.81, vpart: 11.36, vproy: 555333, vgap: 30480, up: 278248, uc: 294887, upct: 105.98, upart: 12.28, uproy: 294887, ugap: 16639 },
+  { n: 'Dos Caminos', zone: 'OESTE', vp: 297284, vc: 296174, vpct: 99.63, vpart: 6.06, vproy: 296174, vgap: -1110, up: 157062, uc: 154704, upct: 98.50, upart: 6.44, uproy: 154704, ugap: -2358 },
+  { n: 'Florida', zone: 'OESTE', vp: 702396, vc: 722869, vpct: 102.91, vpart: 14.79, vproy: 722869, vgap: 20473, up: 342792, uc: 349830, upct: 102.05, upart: 14.56, uproy: 349830, ugap: 7038 },
+  { n: 'Luz Quick Rest', zone: 'OESTE', vp: 169594, vc: 177934, vpct: 104.92, vpart: 3.64, vproy: 177934, vgap: 8340, up: 90081, uc: 91687, upct: 101.78, upart: 3.82, uproy: 91687, ugap: 1606 },
+  { n: 'Llanito', zone: 'ESTE', vp: 461358, vc: 467249, vpct: 101.28, vpart: 9.56, vproy: 467249, vgap: 5891, up: 230778, uc: 236371, upct: 102.42, upart: 9.84, uproy: 236371, ugap: 5593 },
+  { n: 'Marques', zone: 'ESTE', vp: 150397, vc: 143724, vpct: 95.56, vpart: 2.94, vproy: 143724, vgap: -6673, up: 79860, uc: 75991, upct: 95.16, upart: 3.16, uproy: 75991, ugap: -3869 },
+  { n: 'Pedregal', zone: 'OESTE', vp: 326410, vc: 323934, vpct: 99.24, vpart: 6.63, vproy: 323934, vgap: -2476, up: 173384, uc: 169952, upct: 98.02, upart: 7.08, uproy: 169952, ugap: -3432 },
+  { n: 'San Antonio', zone: 'ESTE', vp: 493102, vc: 514370, vpct: 104.31, vpart: 10.53, vproy: 514370, vgap: 21268, up: 240570, uc: 249020, upct: 103.51, upart: 10.37, uproy: 249020, ugap: 8450 },
+  { n: 'Urbina', zone: 'ESTE', vp: 623353, vc: 598774, vpct: 96.06, vpart: 12.25, vproy: 598774, vgap: -24579, up: 301625, uc: 291628, upct: 96.69, upart: 12.14, uproy: 291628, ugap: -9997 }
 ];
 
 let mode = 'valor'; // valor o unidades
@@ -128,7 +128,7 @@ function renderTable() {
   let html = '';
   let totP = 0, totC = 0, totProy = 0, totGap = 0;
 
-  // Ordenar de mayor a menor cumplimiento para mantener jerarquía
+  // Ordenar de mayor a menor cumplimiento para el cierre
   const sortedDb = [...db].sort((a,b) => (mode === 'valor' ? b.vpct - a.vpct : b.upct - a.upct));
 
   sortedDb.forEach(r => {
@@ -142,8 +142,8 @@ function renderTable() {
     totP += p; totC += c; totProy += proy; totGap += gap;
     
     const gapClass = gap > 0 ? 'gap-pos' : 'gap-neg';
-    // Indicador verde si supera el 96.77% (Valla)
-    const barColor = pct >= 96.77 ? 'var(--up)' : 'var(--accent)';
+    // Verde si superó el 100%
+    const barColor = pct >= 100 ? 'var(--up)' : 'var(--accent)';
 
     html += `
       <tr>
@@ -176,7 +176,7 @@ function renderTable() {
 
   tFoot.innerHTML = `
     <tr>
-      <td>TOTAL GENERAL</td>
+      <td>CIERRE GENERAL</td>
       <td>${tPrefix}${fmt(totP)}</td>
       <td>${tPrefix}${fmt(totC)}</td>
       <td>${totPct.toFixed(2).replace('.',',')}%</td>
