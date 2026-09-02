@@ -188,7 +188,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ CIERRE DE MES LUZ · AGOSTO DE 2026</span>
+    <span>◆ SEGUIMIENTO LUZ · 1 DE SEPTIEMBRE DE 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
   </div>
 
@@ -199,7 +199,7 @@
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
       <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio</p>
-      <div class="corte-pill">◆ Cierre Final <b>Agosto 2026</b></div>
+      <div class="corte-pill">◆ Corte al <b>1 de septiembre, 2026</b></div>
     </section>
 
     <!-- CONTROLES -->
@@ -249,7 +249,7 @@
       </div>
     </div>
 
-    <footer>LUZ · CIERRE_AGOSTO_2026</footer>
+    <footer>LUZ · SEGUIMIENTO_SEPTIEMBRE_2026</footer>
   </div>
 </div>
 <script>
@@ -277,19 +277,19 @@ function unlockDashboard() {
 }
 
 // LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 100.00; // Cierre de mes
+const EXPECTED_PCT = 3.33; // 1 día de 30 para Septiembre
 
 const data = [
-  {n:"Carlota", zone:"este", vp:1131254, vc:1086752, vpct:96.07, vproy:1086752, vdiff:-44502, up:505599, uc:487889, upct:96.50, uproy:487889, udiff:-17710},
-  {n:"Chacao", zone:"oeste", vp:524853, vc:555333, vpct:105.81, vproy:555333, vdiff:30480, up:278248, uc:294887, upct:105.98, uproy:294887, udiff:16639},
-  {n:"Dos Caminos", zone:"oeste", vp:297284, vc:296174, vpct:99.63, vproy:296174, vdiff:-1110, up:157062, uc:154704, upct:98.50, uproy:154704, udiff:-2358},
-  {n:"Florida", zone:"oeste", vp:702396, vc:722869, vpct:102.91, vproy:722869, vdiff:20473, up:342792, uc:349830, upct:102.05, uproy:349830, udiff:7038},
-  {n:"Luz Quick Rest", zone:"oeste", vp:169594, vc:177934, vpct:104.92, vproy:177934, vdiff:8340, up:90081, uc:91687, upct:101.78, uproy:91687, udiff:1606},
-  {n:"Llanito", zone:"este", vp:461358, vc:467249, vpct:101.28, vproy:467249, vdiff:5891, up:230778, uc:236371, upct:102.42, uproy:236371, udiff:5593},
-  {n:"Marques", zone:"este", vp:150397, vc:143724, vpct:95.56, vproy:143724, vdiff:-6673, up:79860, uc:75991, upct:95.16, uproy:75991, udiff:-3869},
-  {n:"Pedregal", zone:"oeste", vp:326410, vc:323934, vpct:99.24, vproy:323934, vdiff:-2476, up:173384, uc:169952, upct:98.02, uproy:169952, udiff:-3432},
-  {n:"San Antonio", zone:"este", vp:493102, vc:514370, vpct:104.31, vproy:514370, vdiff:21268, up:240570, uc:249020, upct:103.51, uproy:249020, udiff:8450},
-  {n:"Urbina", zone:"este", vp:623353, vc:598774, vpct:96.06, vproy:598774, vdiff:-24579, up:301625, uc:291628, upct:96.69, uproy:291628, udiff:-9997}
+  {n:"Carlota", zone:"este", vp:1056262, vc:33560, vpct:3.18, vproy:1006800, vdiff:-49462, up:471851, uc:14400, upct:3.05, uproy:432000, udiff:-39851},
+  {n:"Chacao", zone:"oeste", vp:539752, vc:18296, vpct:3.39, vproy:548880, vdiff:9128, up:285194, uc:9643, upct:3.38, uproy:289290, udiff:4096},
+  {n:"Dos Caminos", zone:"oeste", vp:287864, vc:10262, vpct:3.56, vproy:307860, vdiff:19996, up:149619, uc:5383, upct:3.60, uproy:161490, udiff:11871},
+  {n:"Florida", zone:"oeste", vp:702588, vc:21659, vpct:3.08, vproy:649770, vdiff:-52818, up:338330, uc:10321, upct:3.05, uproy:309630, udiff:-28700},
+  {n:"Luz Quick Rest", zone:"oeste", vp:172942, vc:5952, vpct:3.44, vproy:178560, vdiff:5618, up:88673, uc:3122, upct:3.52, uproy:93660, udiff:4987},
+  {n:"Llanito", zone:"este", vp:454140, vc:16219, vpct:3.57, vproy:486570, vdiff:32430, up:228601, uc:8360, upct:3.66, uproy:250800, udiff:22199},
+  {n:"Marques", zone:"este", vp:139691, vc:4550, vpct:3.26, vproy:136500, vdiff:-3191, up:73493, uc:2385, upct:3.25, uproy:71550, udiff:-1943},
+  {n:"Pedregal", zone:"oeste", vp:314845, vc:12086, vpct:3.84, vproy:362580, vdiff:47735, up:164365, uc:6276, upct:3.82, uproy:188280, udiff:23915},
+  {n:"San Antonio", zone:"este", vp:499939, vc:18864, vpct:3.77, vproy:565920, vdiff:65981, up:240834, uc:9577, upct:3.98, uproy:287310, udiff:46476},
+  {n:"Urbina", zone:"este", vp:581975, vc:19728, vpct:3.39, vproy:591840, vdiff:9865, up:282041, uc:10493, upct:3.72, uproy:314790, udiff:32749}
 ];
 
 let mode = 'valor';
@@ -348,16 +348,16 @@ function renderKPIs(){
       <div class="kpi-card">
         <div class="kpi-title">Ventas Cumplidas</div>
         <div class="kpi-value">$${fmt(t.vc)}</div>
-        <div class="kpi-sub">Cierre Final</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Unidades Cumplidas</div>
         <div class="kpi-value">${fmt(t.uc)} u</div>
-        <div class="kpi-sub">Cierre Final</div>
+        <div class="kpi-sub">Acumulado a la fecha</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Valla Cierre</div>
-        <div class="kpi-value">100,00%</div>
+        <div class="kpi-title">Valla Día 1</div>
+        <div class="kpi-value">3,33%</div>
         <div class="kpi-sub">Meta teórica hoy</div>
       </div>
     `;
@@ -374,7 +374,7 @@ function renderKPIs(){
       <div class="kpi-sub">Meta del mes</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Cierre Final</div>
+      <div class="kpi-title">Cumplido</div>
       <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
       <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
     </div>
@@ -384,9 +384,9 @@ function renderKPIs(){
       <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
     </div>
     <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
-      <div class="kpi-title">Diferencia Final</div>
+      <div class="kpi-title">Diferencia</div>
       <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
-      <div class="kpi-sub">${t.diff < 0 ? 'Brecha final' : 'Superávit'}</div>
+      <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
     </div>
     <div class="kpi-card accent">
       <div class="kpi-title">Costo Promedio</div>
@@ -394,8 +394,8 @@ function renderKPIs(){
       <div class="kpi-sub">Ppto: $${fmt(t.costoPromedioPpto, 2)}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Valla Cierre</div>
-      <div class="kpi-value">100,00%</div>
+      <div class="kpi-title">Valla Día 1</div>
+      <div class="kpi-value">3,33%</div>
       <div class="kpi-sub">Meta teórica hoy</div>
     </div>
   `;
@@ -448,7 +448,7 @@ function renderRanking(){
 function renderTable(){
   const filtered = getFilteredData();
   
-  // TABLA PLANA Y LIMPIA (Muestra las tres aristas sin alterar el CSS original)
+  // TABLA PLANA Y LIMPIA (Muestra las tres aristas)
   document.getElementById('tableHead').innerHTML = `
     <tr>
       <th>Sucursal</th>
