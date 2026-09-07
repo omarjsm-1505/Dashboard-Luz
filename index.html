@@ -110,8 +110,8 @@
   .corte-pill b{ color:var(--gold-dim); }
 
   .control-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    display:flex;
+    flex-wrap: wrap;
     gap:14px;
     margin-bottom:28px;
   }
@@ -120,10 +120,9 @@
     border:1px solid var(--line);
     border-radius:14px;
     padding:12px 18px;
-    display:flex;
+    display:inline-flex;
     align-items:center;
-    justify-content:space-between;
-    gap:10px;
+    gap:16px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
   .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
@@ -146,14 +145,6 @@
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
-
-  .rank-row{ display:grid; grid-template-columns: 24px 140px 1fr 75px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
-  .rank-num{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold-dim); font-weight:700; }
-  .rank-name{ font-weight:600; font-size:13px; color:var(--text); }
-  .bar-bg{ position:relative; height:20px; background:var(--card-hi); border-radius:6px; overflow:hidden; border:1px solid rgba(140,29,64,0.1); }
-  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--wine), var(--wine-light)); border-radius:5px; transition:width 0.3s ease; }
-  .bar-fill.top{ background:linear-gradient(90deg, #2E7D32, #4CAF50); }
-  .rank-pct{ font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right; color:var(--text); font-weight:700; }
 
   /* ESTILOS DE LA TABLA LIMPIA CON BLOQUES SUTILES */
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
@@ -210,19 +201,11 @@
     <!-- CONTROLES -->
     <div class="control-grid">
       <div class="ctrl-box">
-        <span class="ctrl-title">Zona Comercial</span>
+        <span class="ctrl-title">Filtrar Zona Comercial</span>
         <div class="toggle-group" id="groupZone">
           <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
           <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
           <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
-        </div>
-      </div>
-      <div class="ctrl-box">
-        <span class="ctrl-title">Resumen / Ranking</span>
-        <div class="toggle-group" id="groupMode">
-          <button class="toggle-btn active" onclick="setMode('valor', this)">Valor $</button>
-          <button class="toggle-btn" onclick="setMode('unidades', this)">Unidades</button>
-          <button class="toggle-btn" onclick="setMode('costoPromedio', this)">Costo Promedio</button>
         </div>
       </div>
     </div>
@@ -232,13 +215,6 @@
       <h2 class="sec-title">Resumen del mes</h2>
       <span class="sec-sub">Totales consolidados a la fecha de corte</span>
       <div class="kpis-grid" id="kpiGrid"></div>
-    </div>
-
-    <!-- RANKING -->
-    <div class="section-box">
-      <h2 class="sec-title">Ranking por sucursal</h2>
-      <span class="sec-sub">Indicador comparativo de rendimiento</span>
-      <div id="rankingList"></div>
     </div>
 
     <!-- TABLA LIMPIA UNIFICADA CON BLOQUES (Líneas punticortadas) -->
@@ -297,7 +273,6 @@ const data = [
   {n:"Urbina", zone:"este", vp:581975, vc:109525, vpct:18.82, vproy:657150, vdiff:75175, up:282041, uc:52713, upct:18.69, uproy:316278, udiff:34237}
 ];
 
-let mode = 'valor';
 let zone = 'todas';
 
 function fmt(n, decimals = 0){ 
@@ -310,93 +285,50 @@ function getFilteredData(){
 }
 
 function getTotals(list){
-  let p = 0, c = 0, proy = 0, diff = 0;
-  let total_vp = 0, total_vc = 0, total_up = 0, total_uc = 0;
+  let vp = 0, vc = 0, vproy = 0, vdiff = 0;
+  let up = 0, uc = 0, uproy = 0, udiff = 0;
   
   list.forEach(d => {
-    if(mode === 'valor' || mode === 'costoPromedio') {
-      p += d.vp; c += d.vc; proy += d.vproy; diff += d.vdiff;
-    } else {
-      p += d.up; c += d.uc; proy += d.uproy; diff += d.udiff;
-    }
-    total_vp += d.vp; total_vc += d.vc; total_up += d.up; total_uc += d.uc;
+    vp += d.vp; vc += d.vc; vproy += d.vproy; vdiff += d.vdiff;
+    up += d.up; uc += d.uc; uproy += d.uproy; udiff += d.udiff;
   });
   
-  const pct = p ? (c / p * 100) : 0;
-  const costoPromedio = total_uc > 0 ? (total_vc / total_uc) : 0;
-  const costoPromedioPpto = total_up > 0 ? (total_vp / total_up) : 0;
+  const costoPromedio = uc > 0 ? (vc / uc) : 0;
+  const costoPromedioPpto = up > 0 ? (vp / up) : 0;
   
-  return { p, c, pct, proy, diff, vp: total_vp, vc: total_vc, up: total_up, uc: total_uc, costoPromedio, costoPromedioPpto };
+  return { vp, vc, vproy, vdiff, up, uc, uproy, udiff, costoPromedio, costoPromedioPpto };
 }
 
 function renderKPIs(){
   const t = getTotals(getFilteredData());
-  
-  if(mode === 'costoPromedio'){
-    const varCosto = t.costoPromedio - t.costoPromedioPpto;
-    document.getElementById('kpiGrid').innerHTML = `
-      <div class="kpi-card accent">
-        <div class="kpi-title">Costo Promedio Real</div>
-        <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-        <div class="kpi-sub">Venta $ / Unidades vendidas</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Costo Promedio Ppto</div>
-        <div class="kpi-value">$${fmt(t.costoPromedioPpto, 2)}</div>
-        <div class="kpi-sub">Meta teórica por artículo</div>
-      </div>
-      <div class="kpi-card ${varCosto < 0 ? 'neg' : ''}">
-        <div class="kpi-title">Variación Costo</div>
-        <div class="kpi-value">$${fmtSigned(varCosto, 2)}</div>
-        <div class="kpi-sub">${varCosto >= 0 ? 'Por encima de ppto' : 'Por debajo de ppto'}</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Ventas Cumplidas</div>
-        <div class="kpi-value">$${fmt(t.vc)}</div>
-        <div class="kpi-sub">Acumulado a la fecha</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Unidades Cumplidas</div>
-        <div class="kpi-value">${fmt(t.uc)} u</div>
-        <div class="kpi-sub">Acumulado a la fecha</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Valla Día 5</div>
-        <div class="kpi-value">16,67%</div>
-        <div class="kpi-sub">Meta teórica hoy</div>
-      </div>
-    `;
-    return;
-  }
-
-  const unit = mode === 'valor' ? '$' : '';
-  const sfx = mode === 'unidades' ? ' u' : '';
+  const vpct = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
+  const upct = t.up > 0 ? (t.uc / t.up * 100) : 0;
   
   document.getElementById('kpiGrid').innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-title">Presupuesto</div>
-      <div class="kpi-value">${unit}${fmt(t.p)}${sfx}</div>
-      <div class="kpi-sub">Meta del mes</div>
+      <div class="kpi-title">Ventas Cumplidas</div>
+      <div class="kpi-value">$${fmt(t.vc)}</div>
+      <div class="kpi-sub">${vpct.toFixed(2).replace('.', ',')}% de la meta</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Cumplido</div>
-      <div class="kpi-value">${unit}${fmt(t.c)}${sfx}</div>
-      <div class="kpi-sub">${t.pct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Proyección Cierre</div>
-      <div class="kpi-value">${unit}${fmt(t.proy)}${sfx}</div>
-      <div class="kpi-sub">${t.proy >= t.p ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
-    </div>
-    <div class="kpi-card ${t.diff < 0 ? 'neg' : ''}">
-      <div class="kpi-title">Diferencia</div>
-      <div class="kpi-value">${unit}${fmtSigned(t.diff)}${sfx}</div>
-      <div class="kpi-sub">${t.diff < 0 ? 'Brecha proyectada' : 'Superávit'}</div>
+      <div class="kpi-title">Unidades Cumplidas</div>
+      <div class="kpi-value">${fmt(t.uc)} u</div>
+      <div class="kpi-sub">${upct.toFixed(2).replace('.', ',')}% de la meta</div>
     </div>
     <div class="kpi-card accent">
       <div class="kpi-title">Costo Promedio</div>
       <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-      <div class="kpi-sub">Ppto: $${fmt(t.costoPromedioPpto, 2)}</div>
+      <div class="kpi-sub">Ppto base: $${fmt(t.costoPromedioPpto, 2)}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Proyección Cierre ($)</div>
+      <div class="kpi-value">$${fmt(t.vproy)}</div>
+      <div class="kpi-sub">${t.vproy >= t.vp ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
+    </div>
+    <div class="kpi-card ${t.vdiff < 0 ? 'neg' : ''}">
+      <div class="kpi-title">Diferencia Proyectada</div>
+      <div class="kpi-value">$${fmtSigned(t.vdiff)}</div>
+      <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha a final de mes' : 'Superávit estimado'}</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Valla Día 5</div>
@@ -404,50 +336,6 @@ function renderKPIs(){
       <div class="kpi-sub">Meta teórica hoy</div>
     </div>
   `;
-}
-
-function renderRanking(){
-  const filtered = getFilteredData();
-  
-  if(mode === 'costoPromedio'){
-    const sorted = [...filtered].sort((a,b) => {
-      const cpA = a.uc > 0 ? (a.vc / a.uc) : 0;
-      const cpB = b.uc > 0 ? (b.vc / b.uc) : 0;
-      return cpB - cpA;
-    });
-    const maxCp = Math.max(...sorted.map(d => d.uc > 0 ? (d.vc / d.uc) : 0)) || 1;
-    
-    document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
-      const cp = d.uc > 0 ? (d.vc / d.uc) : 0;
-      const barWidth = Math.min((cp / maxCp) * 100, 100);
-      return `
-      <div class="rank-row">
-        <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-        <span class="rank-name">${d.n}</span>
-        <div class="bar-bg">
-          <div class="bar-fill" style="width:${barWidth}%;"></div>
-        </div>
-        <span class="rank-pct">$${fmt(cp, 2)}</span>
-      </div>`;
-    }).join('');
-    return;
-  }
-
-  const pctKey = mode === 'valor' ? 'vpct' : 'upct';
-  const sorted = [...filtered].sort((a,b) => b[pctKey] - a[pctKey]);
-  
-  document.getElementById('rankingList').innerHTML = sorted.map((d, i) => {
-    const pct = d[pctKey];
-    return `
-    <div class="rank-row">
-      <span class="rank-num">${String(i+1).padStart(2,'0')}</span>
-      <span class="rank-name">${d.n}</span>
-      <div class="bar-bg">
-        <div class="bar-fill ${pct >= EXPECTED_PCT ? 'top' : ''}" style="width:${Math.min(pct, 100)}%;"></div>
-      </div>
-      <span class="rank-pct">${pct.toFixed(2).replace('.', ',')}%</span>
-    </div>`;
-  }).join('');
 }
 
 function renderTable(){
@@ -519,20 +407,12 @@ function renderTable(){
 
 function renderAll(){
   renderKPIs();
-  renderRanking();
   renderTable();
 }
 
 function setZone(z, btn){
   zone = z;
   document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-function setMode(m, btn){
-  mode = m;
-  document.querySelectorAll('#groupMode .toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderAll();
 }
