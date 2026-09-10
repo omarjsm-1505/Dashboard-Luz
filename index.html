@@ -163,22 +163,25 @@
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 
   /* ========================================================
-     OPTIMIZACIÓN PARA IMPRESIÓN / EXPORTACIÓN (TAMAÑO OFICIO)
+     OPTIMIZACIÓN EXTREMA PARA 1 SOLA PÁGINA (OFICIO)
      ======================================================== */
   @media print {
     @page { 
       size: legal landscape; 
-      margin: 10mm; 
+      margin: 5mm; 
     }
-    body { 
+    html, body { 
       background: #FFFFFF !important; 
-      zoom: 0.95; 
+      zoom: 0.80; /* Reducción global para encajar todo */
+      margin: 0; padding: 0;
+      height: 100vh;
+      overflow: hidden;
     }
     * { 
       -webkit-print-color-adjust: exact !important; 
       color-adjust: exact !important; 
     }
-    body::before { opacity: 0.05; }
+    body::before { display: none; }
     
     .auth-overlay, .corte-bar, .control-grid, footer { 
       display: none !important; 
@@ -186,41 +189,43 @@
     
     .wrap { 
       padding: 0 !important; 
-      margin: 0 !important; 
+      margin: 0 auto !important; 
       max-width: 100%; 
     }
     
     .hero { 
-      padding: 10px 0; 
-      margin-bottom: 12px; 
+      padding: 0; 
+      margin-bottom: 5px;
+      border-bottom: none;
     }
-    .logo-header { height: 40px; margin-bottom: 8px; }
-    h1 { font-size: 24px; margin-bottom: 4px; }
-    .hero-sub { font-size: 12px; margin-bottom: 10px; }
+    .logo-header { height: 30px; margin-bottom: 2px; }
+    h1 { font-size: 20px; margin-bottom: 0px; }
+    .hero-sub { font-size: 11px; margin-bottom: 4px; }
+    .corte-pill { margin-bottom: 5px; padding: 4px 10px; font-size: 10px; }
     
-    .section-box { margin-bottom: 12px; page-break-inside: avoid; }
-    .sec-title { font-size: 16px; margin-bottom: 2px; }
-    .sec-sub { font-size: 11px; margin-bottom: 10px; }
+    .section-box { margin-bottom: 8px; page-break-inside: avoid; }
+    .sec-title { font-size: 14px; margin-bottom: 0px; }
+    .sec-sub { font-size: 10px; margin-bottom: 4px; }
     
     .kpis-grid { 
       grid-template-columns: repeat(6, 1fr); 
-      gap: 8px; 
-      margin-bottom: 15px; 
+      gap: 6px; 
+      margin-bottom: 8px; 
     }
-    .kpi-card { padding: 10px; }
+    .kpi-card { padding: 6px 8px; border-radius: 8px; }
     .kpi-title { font-size: 8px; }
-    .kpi-value { font-size: 14px; }
-    .kpi-sub { font-size: 9px; }
+    .kpi-value { font-size: 14px; margin: 2px 0 0; }
+    .kpi-sub { font-size: 8px; }
     
     .tbl-wrap { 
       border: 1px solid #EAEAEA; 
       box-shadow: none; 
-      border-radius: 8px; 
-      overflow: visible; 
+      border-radius: 6px; 
+      overflow: hidden;
     }
     table { min-width: 100%; }
-    th { padding: 8px 6px; font-size: 9px; }
-    td { padding: 8px 6px; font-size: 10px; }
+    th { padding: 6px 4px; font-size: 9px; }
+    td { padding: 6px 4px; font-size: 10px; border-bottom: 1px solid #f0f0f0; }
   }
 </style>
 </head>
@@ -255,7 +260,7 @@
       <div class="corte-pill">◆ Corte al <b>9 de septiembre, 2026</b></div>
     </section>
 
-    <!-- CONTROLES (Se ocultan en impresión) -->
+    <!-- CONTROLES -->
     <div class="control-grid">
       <div class="ctrl-box">
         <span class="ctrl-title">Filtrar Zona Comercial</span>
@@ -274,7 +279,7 @@
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
 
-    <!-- TABLA LIMPIA UNIFICADA CON BLOQUES (Líneas punticortadas) -->
+    <!-- TABLA LIMPIA UNIFICADA CON BLOQUES -->
     <div class="section-box">
       <h2 class="sec-title">Detalle completo (360°)</h2>
       <span class="sec-sub">Consolidado general segmentado por aristas numéricas</span>
@@ -385,7 +390,7 @@ function renderKPIs(){
     <div class="kpi-card ${t.vdiff < 0 ? 'neg' : ''}">
       <div class="kpi-title">Diferencia Proyectada</div>
       <div class="kpi-value">$${fmtSigned(t.vdiff)}</div>
-      <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha a final de mes' : 'Superávit estimado'}</div>
+      <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha a final de mes' : 'Superávit'}</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Valla Día 9</div>
