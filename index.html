@@ -3,425 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Dashboard Ejecutivo de Presupuesto</title>
+<title>Luz · Tablero Gerencial (Esquema Consolidado)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#F8F6F2;
-    --card:#FFFFFF;
-    --card-hi:#F3EFEA;
-    --line: rgba(140,29,64,0.12);
-    --wine:#8C1D40;
-    --wine-light:#B4213F;
-    --wine-bg: rgba(140,29,64,0.06);
-    --gold:#C59B27;
-    --gold-dim:#8A6D1B;
-    --text:#2B2627;
-    --muted:#6E6366;
-    --good:#2E7D32;
-    --good-bg: rgba(46,125,50,0.1);
-    --warn:#D97A46;
-    --warn-bg: rgba(217,122,70,0.12);
-    --danger:#C14646;
+  :root {
+    --bg: #F4F7F9; --surface: #FFFFFF; --border: #E2E8F0;
+    --primary: #0F172A; --primary-light: #334155; --accent: #0284C7;
+    --text: #1E293B; --text-light: #64748B;
+    --up: #16A34A; --up-bg: #DCFCE7; 
+    --down: #DC2626; --down-bg: #FEE2E2;
   }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background-color: var(--bg);
-    color:var(--text);
-    font-family:'Inter', sans-serif;
-    min-height: 100vh;
-    -webkit-font-smoothing:antialiased;
+  * { box-sizing: border-box; }
+  body { margin: 0; background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+  
+  .topbar { background: var(--primary); color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
+  .btn-print { background: var(--accent); color: #FFF; border: none; padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; }
+  
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
+  
+  .header { margin-bottom: 24px; }
+  .header h1 { margin: 0 0 4px; font-size: 22px; color: var(--primary); letter-spacing: -0.5px; }
+  .header p { margin: 0; font-size: 13px; color: var(--text-light); }
+  
+  /* PESTAÑAS (TABS) */
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--border); }
+  .tab-btn { background: transparent; border: none; padding: 10px 20px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; position: relative; transition: color 0.2s; }
+  .tab-btn.active { color: var(--accent); }
+  .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--accent); border-radius: 2px 2px 0 0; }
+  
+  /* TABLA GERENCIAL */
+  .table-wrapper { background: var(--surface); border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; min-width: 750px; text-align: right; }
+  th { background: #F8FAFC; color: var(--text-light); font-size: 11px; text-transform: uppercase; font-weight: 600; padding: 14px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; position: sticky; left: 0; background: inherit; z-index: 2; }
+  th:first-child { background: #F8FAFC; }
+  
+  td { padding: 12px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--primary-light); }
+  tbody tr { background: var(--surface); transition: background 0.15s; }
+  tbody tr:hover { background: #F1F5F9; }
+  
+  .cell-branch { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .badge-zone { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: #E2E8F0; color: var(--text-light); text-transform: uppercase; font-family: 'Inter'; }
+  
+  /* MICRO BARRAS INLINE */
+  .pct-cell { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+  .bar-bg { width: 50px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  
+  .gap-pos { color: var(--up); background: var(--up-bg); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; display: inline-block; }
+  .gap-neg { color: var(--down); background: var(--down-bg); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; display: inline-block; }
+  
+  tfoot tr { background: var(--primary) !important; color: #FFF; }
+  tfoot td { color: #FFF; font-weight: 700; border-bottom: none; }
+  tfoot th:first-child { background: var(--primary); }
+  
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
   }
-
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: 
-      linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)),
-      url('1275044.jpg');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 550px auto;
-    opacity: 0.6;
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  /* PANTALLA DE ACCESO RESTRINGIDO */
-  .auth-overlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .auth-card {
-    background: var(--card); border: 1px solid var(--line);
-    padding: 36px 28px; border-radius: 20px; text-align: center;
-    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
-  }
-  .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
-  .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
-  .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
-  .auth-input {
-    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
-    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
-    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
-  }
-  .auth-input:focus { border-color: var(--wine); }
-  .auth-btn {
-    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
-    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
-    cursor: pointer; transition: background 0.2s;
-  }
-  .auth-btn:hover { background: var(--wine-light); }
-  .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
-
-  /* CONTENIDO PRINCIPAL */
-  .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
-
-  .corte-bar{
-    position:sticky; top:0; z-index:50;
-    background:linear-gradient(90deg, #641024, var(--wine), #641024);
-    border-bottom:2px solid var(--gold);
-    color:#FFFFFF;
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    padding:9px 18px;
-    display:flex; justify-content:space-between; align-items:center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-  }
-  .corte-bar b{ color:var(--gold);}
-  .btn-print{ 
-    background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; 
-    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; 
-    border-radius:100px; cursor:pointer; transition:background 0.2s;
-  }
-
-  .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
-  .logo-header { height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
-  .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
-  h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
-  h1 em{ font-style:italic; color:var(--wine); }
-  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0.5px; }
-  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
-  .corte-pill b{ color:var(--gold-dim); }
-
-  .control-grid{
-    display:flex;
-    flex-wrap: wrap;
-    gap:14px;
-    margin-bottom:28px;
-  }
-  .ctrl-box{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:12px 18px;
-    display:inline-flex;
-    align-items:center;
-    gap:16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  }
-  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
-  .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
-  }
-  .toggle-btn.active{
-    background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
-  }
-
-  .section-box{ margin-bottom:34px; }
-  .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
-  .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
-
-  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:24px; }
-  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
-  .kpi-card.neg{ border-left-color:var(--warn); }
-  .kpi-card.accent{ border-left-color:var(--wine); background:var(--card-hi); }
-  .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
-  .kpi-sub{ font-size:10.5px; color:var(--muted); }
-
-  /* ESTILOS DE LA TABLA LIMPIA CON BLOQUES SUTILES */
-  .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:1050px; }
-  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
-  th:first-child{ text-align:left; }
-  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
-  td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
-  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
-
-  /* LÍNEA PUNTICORTADA PARA SEGMENTAR BLOQUES */
-  th.block-start, td.block-start {
-    border-left: 1px dashed rgba(140, 29, 64, 0.3) !important;
-  }
-
-  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
-  .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
-  .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
-
-  footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
 
-<!-- OVERLAY DE BLOQUEO POR CLAVE -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-card">
-    <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
-    <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
-    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
-  </div>
+<div class="topbar">
+  <span>📊 DASHBOARD LUZ: ESQUEMA CONSOLIDADO</span>
+  <button class="btn-print" onclick="window.print()">Exportar PDF</button>
 </div>
 
-<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
-<div id="mainContent" style="display:none;">
-  <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 8 DE SEPTIEMBRE DE 2026</span>
-    <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
+<div class="container">
+  <div class="header">
+    <h1>Seguimiento de Presupuesto - Septiembre</h1>
+    <p>Corte al: <b>9 de Septiembre de 2026</b> | Valla Teórica: <b style="color:var(--accent)">30.00%</b></p>
   </div>
 
-  <div class="wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="setMode('valor', this)">💵 VALOR ($)</button>
+    <button class="tab-btn" onclick="setMode('unidades', this)">📦 UNIDADES</button>
+  </div>
 
-    <section class="hero">
-      <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Automercado Luz</p>
-      <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio</p>
-      <div class="corte-pill">◆ Corte al <b>8 de septiembre, 2026</b></div>
-    </section>
-
-    <!-- CONTROLES -->
-    <div class="control-grid">
-      <div class="ctrl-box">
-        <span class="ctrl-title">Filtrar Zona Comercial</span>
-        <div class="toggle-group" id="groupZone">
-          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
-          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
-          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
-        </div>
-      </div>
+  <div class="table-container">
+    <div class="table-wrapper">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th>Sucursal</th>
+            <th>Presupuesto Ref.</th>
+            <th>Cumplimiento</th>
+            <th>% Cump.</th>
+            <th>% Part.</th>
+            <th>Proyección</th>
+            <th>Brecha (Ppto)</th>
+          </tr>
+        </thead>
+        <tbody id="tBody"></tbody>
+        <tfoot id="tFoot"></tfoot>
+      </table>
     </div>
-
-    <!-- KPIS -->
-    <div class="section-box">
-      <h2 class="sec-title">Resumen del mes</h2>
-      <span class="sec-sub">Totales consolidados a la fecha de corte</span>
-      <div class="kpis-grid" id="kpiGrid"></div>
-    </div>
-
-    <!-- TABLA LIMPIA UNIFICADA CON BLOQUES (Líneas punticortadas) -->
-    <div class="section-box">
-      <h2 class="sec-title">Detalle completo (360°)</h2>
-      <span class="sec-sub">Consolidado general segmentado por aristas</span>
-
-      <div class="tbl-wrap">
-        <table>
-          <thead id="tableHead"></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <footer>LUZ · SEGUIMIENTO_SEPTIEMBRE_2026</footer>
   </div>
 </div>
 <script>
-// CLAVE DE ACCESO
-const SECRET_KEY = "Luz2026";
-
-function checkAuth() {
-  const pass = document.getElementById('passInput').value;
-  if (pass === SECRET_KEY) {
-    sessionStorage.setItem('luz_authenticated', 'true');
-    unlockDashboard();
-  } else {
-    document.getElementById('authError').style.display = 'block';
-  }
-}
-
-function handleKeyPress(e) {
-  if (e.key === 'Enter') checkAuth();
-}
-
-function unlockDashboard() {
-  document.getElementById('authOverlay').style.display = 'none';
-  document.getElementById('mainContent').style.display = 'block';
-  renderAll();
-}
-
-// LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 26.67; // 8 días de 30 para Septiembre
-
-const data = [
-  {n:"Carlota", zone:"este", vp:1056262, vc:262872, vpct:24.89, vproy:985770, vdiff:-70492, up:471851, uc:120462, upct:25.53, uproy:451732, udiff:-20119},
-  {n:"Chacao", zone:"oeste", vp:539752, vc:140371, vpct:26.01, vproy:526391, vdiff:-13361, up:285194, uc:73837, upct:25.89, uproy:276889, udiff:-8305},
-  {n:"Dos Caminos", zone:"oeste", vp:287864, vc:76603, vpct:26.61, vproy:287261, vdiff:-603, up:149619, uc:39736, upct:26.56, uproy:149010, udiff:-609},
-  {n:"Florida", zone:"oeste", vp:702588, vc:173510, vpct:24.70, vproy:650662, vdiff:-51926, up:338330, uc:85482, upct:25.27, uproy:320558, udiff:-17772},
-  {n:"Luz Quick Rest", zone:"oeste", vp:172942, vc:46539, vpct:26.91, vproy:174521, vdiff:1579, up:88673, uc:23713, upct:26.74, uproy:88924, udiff:251},
-  {n:"Llanito", zone:"este", vp:454140, vc:117110, vpct:25.79, vproy:439162, vdiff:-14978, up:228601, uc:59606, upct:26.07, uproy:223522, udiff:-5079},
-  {n:"Marques", zone:"este", vp:139691, vc:36968, vpct:26.46, vproy:138630, vdiff:-1061, up:73493, uc:19801, upct:26.94, uproy:74254, udiff:761},
-  {n:"Pedregal", zone:"oeste", vp:314845, vc:83362, vpct:26.48, vproy:312608, vdiff:-2237, up:164365, uc:43534, upct:26.49, uproy:163252, udiff:-1113},
-  {n:"San Antonio", zone:"este", vp:499939, vc:135069, vpct:27.02, vproy:506509, vdiff:6570, up:240834, uc:66262, upct:27.51, uproy:248482, udiff:7648},
-  {n:"Urbina", zone:"este", vp:581977, vc:166612, vpct:28.63, vproy:624795, vdiff:42818, up:282040, uc:79395, upct:28.15, uproy:297731, udiff:15691}
+// Base de datos (Corte 09/09/2026)
+const db = [
+  { n: 'Carlota', zone: 'ESTE', vp: 1131254, vc: 292092, vpct: 25.82, vpart: 21.34, vproy: 973640, vgap: -157614, up: 505599, uc: 133477, upct: 26.40, upart: 19.79, uproy: 444923, ugap: -60676 },
+  { n: 'Chacao', zone: 'OESTE', vp: 524853, vc: 156144, vpct: 29.75, vpart: 11.41, vproy: 520480, vgap: -4373, up: 278248, uc: 82042, upct: 29.49, upart: 12.16, uproy: 273473, ugap: -4775 },
+  { n: 'Dos Caminos', zone: 'OESTE', vp: 297284, vc: 85560, vpct: 28.78, vpart: 6.25, vproy: 285200, vgap: -12084, up: 157062, uc: 44315, upct: 28.21, upart: 6.57, uproy: 147717, ugap: -9345 },
+  { n: 'Florida', zone: 'OESTE', vp: 702396, vc: 191453, vpct: 27.26, vpart: 13.99, vproy: 638177, vgap: -64219, up: 342792, uc: 93779, upct: 27.36, upart: 13.90, uproy: 312597, ugap: -30195 },
+  { n: 'Luz Quick Rest', zone: 'OESTE', vp: 169594, vc: 51537, vpct: 30.39, vpart: 3.77, vproy: 171790, vgap: 2196, up: 90081, uc: 26241, upct: 29.13, upart: 3.89, uproy: 87470, ugap: -2611 },
+  { n: 'Llanito', zone: 'ESTE', vp: 461358, vc: 128388, vpct: 27.83, vpart: 9.38, vproy: 427960, vgap: -33398, up: 230778, uc: 65353, upct: 28.32, upart: 9.69, uproy: 217843, ugap: -12935 },
+  { n: 'Marques', zone: 'ESTE', vp: 150397, vc: 40937, vpct: 27.22, vpart: 2.99, vproy: 136457, vgap: -13940, up: 79860, uc: 21869, upct: 27.38, upart: 3.24, uproy: 72897, ugap: -6963 },
+  { n: 'Pedregal', zone: 'OESTE', vp: 326410, vc: 93588, vpct: 28.67, vpart: 6.84, vproy: 311960, vgap: -14450, up: 173384, uc: 48651, upct: 28.06, upart: 7.21, uproy: 162170, ugap: -11214 },
+  { n: 'San Antonio', zone: 'ESTE', vp: 493102, vc: 148798, vpct: 30.18, vpart: 10.87, vproy: 495993, vgap: 2891, up: 240570, uc: 73045, upct: 30.36, upart: 10.83, uproy: 243483, ugap: 2913 },
+  { n: 'Urbina', zone: 'ESTE', vp: 623353, vc: 180323, vpct: 28.93, vpart: 13.17, vproy: 601077, vgap: -22276, up: 301625, uc: 85841, upct: 28.46, upart: 12.72, uproy: 286137, ugap: -15488 }
 ];
 
-let zone = 'todas';
+let mode = 'valor'; // valor o unidades
 
-function fmt(n, decimals = 0){ 
-  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
-}
-function fmtSigned(n, decimals = 0){ return ((n || 0) >= 0 ? '+' : '') + fmt(n, decimals); }
+function fmt(n) { return n.toLocaleString('es-VE'); }
+function fmtS(n) { return (n > 0 ? '+' : '') + n.toLocaleString('es-VE'); }
 
-function getFilteredData(){
-  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
-}
-
-function getTotals(list){
-  let vp = 0, vc = 0, vproy = 0, vdiff = 0;
-  let up = 0, uc = 0, uproy = 0, udiff = 0;
+function renderTable() {
+  const tBody = document.getElementById('tBody');
+  const tFoot = document.getElementById('tFoot');
   
-  list.forEach(d => {
-    vp += d.vp; vc += d.vc; vproy += d.vproy; vdiff += d.vdiff;
-    up += d.up; uc += d.uc; uproy += d.uproy; udiff += d.udiff;
+  let html = '';
+  let totP = 0, totC = 0, totProy = 0, totGap = 0;
+
+  // Ordenar de mayor a menor cumplimiento
+  const sortedDb = [...db].sort((a,b) => (mode === 'valor' ? b.vpct - a.vpct : b.upct - a.upct));
+
+  sortedDb.forEach(r => {
+    let p, c, pct, part, proy, gap, prefix;
+    if(mode === 'valor') {
+      p = r.vp; c = r.vc; pct = r.vpct; part = r.vpart; proy = r.vproy; gap = r.vgap; prefix = '$';
+    } else {
+      p = r.up; c = r.uc; pct = r.upct; part = r.upart; proy = r.uproy; gap = r.ugap; prefix = '';
+    }
+    
+    totP += p; totC += c; totProy += proy; totGap += gap;
+    
+    const gapClass = gap > 0 ? 'gap-pos' : 'gap-neg';
+    // Se pinta verde si superó la valla del día (30%)
+    const barColor = pct >= 30.00 ? 'var(--up)' : 'var(--accent)';
+
+    html += `
+      <tr>
+        <td>
+          <div class="cell-branch">
+            ${r.n} <span class="badge-zone">${r.zone}</span>
+          </div>
+        </td>
+        <td>${prefix}${fmt(p)}</td>
+        <td style="color:var(--text); font-weight:700;">${prefix}${fmt(c)}</td>
+        <td>
+          <div class="pct-cell">
+            <span>${pct.toFixed(2).replace('.',',')}%</span>
+            <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(pct, 100)}%; background:${barColor};"></div></div>
+          </div>
+        </td>
+        <td style="color:var(--text-light);">${part.toFixed(2).replace('.',',')}%</td>
+        <td>${prefix}${fmt(proy)}</td>
+        <td><span class="${gapClass}">${prefix}${fmtS(gap)}</span></td>
+      </tr>
+    `;
   });
-  
-  const costoPromedio = uc > 0 ? (vc / uc) : 0;
-  const costoPromedioPpto = up > 0 ? (vp / up) : 0;
-  
-  return { vp, vc, vproy, vdiff, up, uc, uproy, udiff, costoPromedio, costoPromedioPpto };
-}
 
-function renderKPIs(){
-  const t = getTotals(getFilteredData());
-  const vpct = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
-  const upct = t.up > 0 ? (t.uc / t.up * 100) : 0;
-  
-  document.getElementById('kpiGrid').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-title">Ventas Cumplidas</div>
-      <div class="kpi-value">$${fmt(t.vc)}</div>
-      <div class="kpi-sub">${vpct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Unidades Cumplidas</div>
-      <div class="kpi-value">${fmt(t.uc)} u</div>
-      <div class="kpi-sub">${upct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card accent">
-      <div class="kpi-title">Costo Promedio</div>
-      <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-      <div class="kpi-sub">Ppto base: $${fmt(t.costoPromedioPpto, 2)}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Proyección Cierre ($)</div>
-      <div class="kpi-value">$${fmt(t.vproy)}</div>
-      <div class="kpi-sub">${t.vproy >= t.vp ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
-    </div>
-    <div class="kpi-card ${t.vdiff < 0 ? 'neg' : ''}">
-      <div class="kpi-title">Diferencia Proyectada</div>
-      <div class="kpi-value">$${fmtSigned(t.vdiff)}</div>
-      <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha a final de mes' : 'Superávit estimado'}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Valla Día 8</div>
-      <div class="kpi-value">26,67%</div>
-      <div class="kpi-sub">Meta teórica hoy</div>
-    </div>
-  `;
-}
+  tBody.innerHTML = html;
 
-function renderTable(){
-  const filtered = getFilteredData();
-  
-  // TABLA PLANA Y LIMPIA (Con líneas divisorias para segmentar los bloques)
-  document.getElementById('tableHead').innerHTML = `
+  // Totales
+  const totPct = (totC / totP) * 100;
+  const totGapClass = totGap > 0 ? 'gap-pos' : 'gap-neg';
+  const tPrefix = mode === 'valor' ? '$' : '';
+
+  tFoot.innerHTML = `
     <tr>
-      <th>Sucursal</th>
-      <th style="text-align:center;">Estatus</th>
-      <th class="block-start">Ppto. $</th>
-      <th>Cump. $</th>
-      <th>% Val.</th>
-      <th class="block-start">Ppto. U.</th>
-      <th>Cump. U.</th>
-      <th>% Unid.</th>
-      <th class="block-start">C. Prom. Real</th>
-      <th>C. Prom. Ppto</th>
-      <th>Var. Costo</th>
+      <td>TOTAL SUCURSALES</td>
+      <td>${tPrefix}${fmt(totP)}</td>
+      <td>${tPrefix}${fmt(totC)}</td>
+      <td>${totPct.toFixed(2).replace('.',',')}%</td>
+      <td>100,00%</td>
+      <td>${tPrefix}${fmt(totProy)}</td>
+      <td><span class="${totGapClass}" style="background:transparent; color:#FFF; border:1px solid rgba(255,255,255,0.4);">${tPrefix}${fmtS(totGap)}</span></td>
     </tr>
   `;
-
-  const rows = filtered.map(d => {
-    const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
-    const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
-    const varCosto = cpReal - cpPpto;
-    
-    // Estatus basado en cumplimiento $ vs la valla del día
-    const badge = d.vpct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
-    
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td style="text-align:center;">${badge}</td>
-      <td class="block-start" style="color:var(--muted);">$${fmt(d.vp)}</td>
-      <td>$${fmt(d.vc)}</td>
-      <td style="font-weight:700;">${d.vpct.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start" style="color:var(--muted);">${fmt(d.up)}</td>
-      <td>${fmt(d.uc)}</td>
-      <td style="font-weight:700;">${d.upct.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">$${fmt(cpReal, 2)}</td>
-      <td style="color:var(--muted);">$${fmt(cpPpto, 2)}</td>
-      <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
-    </tr>`;
-  }).join('');
-
-  const t = getTotals(filtered);
-  const varCostoT = t.costoPromedio - t.costoPromedioPpto;
-  const pctValorT = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
-  const pctUnidT = t.up > 0 ? (t.uc / t.up * 100) : 0;
-
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge obs">Global</span></td>
-      <td class="block-start">$${fmt(t.vp)}</td>
-      <td>$${fmt(t.vc)}</td>
-      <td>${pctValorT.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">${fmt(t.up)}</td>
-      <td>${fmt(t.uc)}</td>
-      <td>${pctUnidT.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">$${fmt(t.costoPromedio, 2)}</td>
-      <td>$${fmt(t.costoPromedioPpto, 2)}</td>
-      <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
-    </tr>`;
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
 }
 
-function renderAll(){
-  renderKPIs();
+function setMode(newMode, btn) {
+  mode = newMode;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
   renderTable();
 }
 
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-// VERIFICAR AUTENTICACIÓN INICIAL
-if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
+renderTable();
 </script>
-
 </body>
 </html>
