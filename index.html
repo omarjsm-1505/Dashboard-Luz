@@ -79,7 +79,7 @@
   .auth-btn:hover { background: var(--wine-light); }
   .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
 
-  /* CONTENIDO PRINCIPAL */
+  /* CONTENIDO PRINCIPAL WEB */
   .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
 
   .corte-bar{
@@ -146,7 +146,6 @@
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
-  /* ESTILOS DE LA TABLA LIMPIA CON BLOQUES SUTILES */
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
   table{ width:100%; border-collapse:collapse; min-width:1050px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
@@ -154,17 +153,75 @@
   td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
   td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
   tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
-
-  /* LÍNEA PUNTICORTADA PARA SEGMENTAR BLOQUES */
-  th.block-start, td.block-start {
-    border-left: 1px dashed rgba(140, 29, 64, 0.3) !important;
-  }
+  
+  th.block-start, td.block-start { border-left: 1px dashed rgba(140, 29, 64, 0.3) !important; }
 
   .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
   .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
   .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
+
+  /* ========================================================
+     OPTIMIZACIÓN PARA IMPRESIÓN / EXPORTACIÓN (TAMAÑO OFICIO)
+     ======================================================== */
+  @media print {
+    @page { 
+      size: legal landscape; 
+      margin: 10mm; 
+    }
+    body { 
+      background: #FFFFFF !important; 
+      zoom: 0.95; 
+    }
+    * { 
+      -webkit-print-color-adjust: exact !important; 
+      color-adjust: exact !important; 
+    }
+    body::before { opacity: 0.05; }
+    
+    .auth-overlay, .corte-bar, .control-grid, footer { 
+      display: none !important; 
+    }
+    
+    .wrap { 
+      padding: 0 !important; 
+      margin: 0 !important; 
+      max-width: 100%; 
+    }
+    
+    .hero { 
+      padding: 10px 0; 
+      margin-bottom: 12px; 
+    }
+    .logo-header { height: 40px; margin-bottom: 8px; }
+    h1 { font-size: 24px; margin-bottom: 4px; }
+    .hero-sub { font-size: 12px; margin-bottom: 10px; }
+    
+    .section-box { margin-bottom: 12px; page-break-inside: avoid; }
+    .sec-title { font-size: 16px; margin-bottom: 2px; }
+    .sec-sub { font-size: 11px; margin-bottom: 10px; }
+    
+    .kpis-grid { 
+      grid-template-columns: repeat(6, 1fr); 
+      gap: 8px; 
+      margin-bottom: 15px; 
+    }
+    .kpi-card { padding: 10px; }
+    .kpi-title { font-size: 8px; }
+    .kpi-value { font-size: 14px; }
+    .kpi-sub { font-size: 9px; }
+    
+    .tbl-wrap { 
+      border: 1px solid #EAEAEA; 
+      box-shadow: none; 
+      border-radius: 8px; 
+      overflow: visible; 
+    }
+    table { min-width: 100%; }
+    th { padding: 8px 6px; font-size: 9px; }
+    td { padding: 8px 6px; font-size: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -198,7 +255,7 @@
       <div class="corte-pill">◆ Corte al <b>9 de septiembre, 2026</b></div>
     </section>
 
-    <!-- CONTROLES -->
+    <!-- CONTROLES (Se ocultan en impresión) -->
     <div class="control-grid">
       <div class="ctrl-box">
         <span class="ctrl-title">Filtrar Zona Comercial</span>
@@ -220,7 +277,7 @@
     <!-- TABLA LIMPIA UNIFICADA CON BLOQUES (Líneas punticortadas) -->
     <div class="section-box">
       <h2 class="sec-title">Detalle completo (360°)</h2>
-      <span class="sec-sub">Consolidado general segmentado por aristas</span>
+      <span class="sec-sub">Consolidado general segmentado por aristas numéricas</span>
 
       <div class="tbl-wrap">
         <table>
@@ -341,7 +398,6 @@ function renderKPIs(){
 function renderTable(){
   const filtered = getFilteredData();
   
-  // TABLA PLANA Y LIMPIA (Con líneas divisorias para segmentar los bloques)
   document.getElementById('tableHead').innerHTML = `
     <tr>
       <th>Sucursal</th>
@@ -390,7 +446,7 @@ function renderTable(){
   const totalRow = `
     <tr class="total-row">
       <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge obs">Global</span></td>
+      <td style="text-align:center;"><span class="badge ${pctValorT >= EXPECTED_PCT ? 'meta' : 'obs'}">Global</span></td>
       <td class="block-start">$${fmt(t.vp)}</td>
       <td>$${fmt(t.vc)}</td>
       <td>${pctValorT.toFixed(2).replace('.', ',')}%</td>
