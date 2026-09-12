@@ -146,6 +146,7 @@
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
 
+  /* ESTILOS DE LA TABLA WEB */
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
   table{ width:100%; border-collapse:collapse; min-width:1050px; }
   th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
@@ -163,19 +164,19 @@
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 
   /* ========================================================
-     OPTIMIZACIÓN EXTREMA PARA 1 SOLA PÁGINA (OFICIO)
+     OPTIMIZACIÓN DEFINITIVA PARA 1 SOLA PÁGINA (OFICIO)
      ======================================================== */
   @media print {
     @page { 
       size: legal landscape; 
-      margin: 5mm; 
+      margin: 10mm; 
     }
     html, body { 
       background: #FFFFFF !important; 
-      zoom: 0.80; /* Reducción global para encajar todo */
+      zoom: 0.90; /* Escala ajustada para máxima legibilidad sin desbordar */
       margin: 0; padding: 0;
-      height: 100vh;
-      overflow: hidden;
+      height: auto;
+      overflow: visible;
     }
     * { 
       -webkit-print-color-adjust: exact !important; 
@@ -190,42 +191,62 @@
     .wrap { 
       padding: 0 !important; 
       margin: 0 auto !important; 
-      max-width: 100%; 
+      max-width: 100% !important; 
+      width: 100% !important;
     }
     
     .hero { 
       padding: 0; 
-      margin-bottom: 5px;
+      margin-bottom: 12px;
       border-bottom: none;
     }
-    .logo-header { height: 30px; margin-bottom: 2px; }
-    h1 { font-size: 20px; margin-bottom: 0px; }
-    .hero-sub { font-size: 11px; margin-bottom: 4px; }
-    .corte-pill { margin-bottom: 5px; padding: 4px 10px; font-size: 10px; }
+    .logo-header { height: 35px; margin-bottom: 6px; }
+    h1 { font-size: 22px; margin-bottom: 2px; }
+    .hero-sub { font-size: 13px; margin-bottom: 8px; }
+    .corte-pill { margin-bottom: 8px; padding: 4px 10px; font-size: 11px; }
     
-    .section-box { margin-bottom: 8px; page-break-inside: avoid; }
-    .sec-title { font-size: 14px; margin-bottom: 0px; }
-    .sec-sub { font-size: 10px; margin-bottom: 4px; }
+    .section-box { margin-bottom: 12px; page-break-inside: avoid; }
+    .sec-title { font-size: 16px; margin-bottom: 2px; }
+    .sec-sub { font-size: 11px; margin-bottom: 8px; }
     
     .kpis-grid { 
-      grid-template-columns: repeat(6, 1fr); 
-      gap: 6px; 
-      margin-bottom: 8px; 
+      display: flex !important; 
+      gap: 10px; 
+      margin-bottom: 15px; 
     }
-    .kpi-card { padding: 6px 8px; border-radius: 8px; }
-    .kpi-title { font-size: 8px; }
-    .kpi-value { font-size: 14px; margin: 2px 0 0; }
-    .kpi-sub { font-size: 8px; }
+    .kpi-card { 
+      flex: 1; 
+      padding: 10px; 
+      border-radius: 8px; 
+    }
+    .kpi-title { font-size: 9px; }
+    .kpi-value { font-size: 16px; margin: 4px 0 2px; }
+    .kpi-sub { font-size: 9px; }
     
+    /* REESTRUCTURACIÓN DE LA TABLA PARA IMPRESIÓN */
     .tbl-wrap { 
       border: 1px solid #EAEAEA; 
       box-shadow: none; 
-      border-radius: 6px; 
-      overflow: hidden;
+      border-radius: 8px; 
+      overflow: visible !important; /* Libera el scroll, clave para PDF */
     }
-    table { min-width: 100%; }
-    th { padding: 6px 4px; font-size: 9px; }
-    td { padding: 6px 4px; font-size: 10px; border-bottom: 1px solid #f0f0f0; }
+    table { 
+      width: 100% !important; 
+      min-width: 100% !important; 
+      max-width: 100% !important;
+      table-layout: auto; 
+    }
+    th, td { 
+      padding: 8px 6px !important; 
+      font-size: 11px !important; 
+      white-space: nowrap !important; /* Evita que los números se partan */
+    }
+    th { font-size: 10px !important; }
+    td:first-child { 
+      white-space: normal !important; /* Permite que el nombre de la sucursal ocupe 2 líneas si falta espacio */
+      min-width: 100px;
+    }
+    tr { page-break-inside: avoid; }
   }
 </style>
 </head>
@@ -247,7 +268,7 @@
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
     <span>◆ SEGUIMIENTO LUZ · 11 DE SEPTIEMBRE DE 2026</span>
-    <button class="btn-print" onclick="window.print()">🖨️ Exportar</button>
+    <button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button>
   </div>
 
   <div class="wrap">
@@ -292,7 +313,6 @@
       </div>
     </div>
 
-    <footer>LUZ · SEGUIMIENTO_SEPTIEMBRE_2026</footer>
   </div>
 </div>
 <script>
