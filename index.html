@@ -265,7 +265,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 17 DE SEPTIEMBRE DE 2026</span>
+    <span>◆ SEGUIMIENTO LUZ · 20 DE SEPTIEMBRE DE 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button>
   </div>
 
@@ -276,7 +276,7 @@
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
       <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio</p>
-      <div class="corte-pill">◆ Corte al <b>17 de septiembre, 2026</b></div>
+      <div class="corte-pill">◆ Corte al <b>20 de septiembre, 2026</b></div>
     </section>
 
     <!-- CONTROLES -->
@@ -338,19 +338,19 @@ function unlockDashboard() {
 }
 
 // LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 56.67; // 17 días de 30 para Septiembre
+const EXPECTED_PCT = 66.67; // 20 días de 30 para Septiembre
 
 const data = [
-  {n:"Carlota", zone:"este", vp:1056262, vc:553961, vpct:52.45, vproy:977578, vdiff:-78684, up:407015, uc:251765, upct:61.86, uproy:444291, udiff:37276},
-  {n:"Chacao", zone:"oeste", vp:539752, vc:297515, vpct:55.12, vproy:525026, vdiff:-14726, up:246615, uc:156213, upct:63.34, uproy:275670, udiff:29055},
-  {n:"Dos Caminos", zone:"oeste", vp:287864, vc:165114, vpct:57.36, vproy:291378, vdiff:3514, up:128320, uc:85413, upct:66.56, uproy:150729, udiff:22409},
-  {n:"Florida", zone:"oeste", vp:702588, vc:363379, vpct:51.72, vproy:641257, vdiff:-61331, up:292730, uc:175672, upct:60.01, uproy:310009, udiff:17279},
-  {n:"Luz Quick Rest", zone:"oeste", vp:172942, vc:97767, vpct:56.53, vproy:172530, vdiff:-412, up:76190, uc:49767, upct:65.32, uproy:87824, udiff:11634},
-  {n:"Llanito", zone:"este", vp:454140, vc:243813, vpct:53.69, vproy:430258, vdiff:-23882, up:196490, uc:122365, upct:62.28, uproy:215938, udiff:19448},
-  {n:"Marques", zone:"este", vp:139691, vc:78301, vpct:56.05, vproy:138178, vdiff:-1513, up:64160, uc:41420, upct:64.56, uproy:73094, udiff:8934},
-  {n:"Pedregal", zone:"oeste", vp:314845, vc:177366, vpct:56.33, vproy:312999, vdiff:-1846, up:142355, uc:91783, upct:64.47, uproy:161970, udiff:19615},
-  {n:"San Antonio", zone:"este", vp:499939, vc:281131, vpct:56.23, vproy:496114, vdiff:-3825, up:208520, uc:136838, upct:65.62, uproy:241479, udiff:32959},
-  {n:"Urbina", zone:"este", vp:581977, vc:331942, vpct:57.04, vproy:585780, vdiff:3803, up:242605, uc:156068, upct:64.33, uproy:275414, udiff:32809}
+  {n:"Carlota", zone:"este", vp:1056262, vc:665856, vpct:63.04, vproy:998784, vdiff:-57478, up:407015, uc:303059, upct:74.46, uproy:454588, udiff:47573},
+  {n:"Chacao", zone:"oeste", vp:539752, vc:353499, vpct:65.49, vproy:530248, vdiff:-9504, up:246615, uc:185615, upct:75.27, uproy:278422, udiff:31807},
+  {n:"Dos Caminos", zone:"oeste", vp:287864, vc:197472, vpct:68.60, vproy:296208, vdiff:8344, up:128320, uc:102581, upct:79.94, uproy:153872, udiff:25552},
+  {n:"Florida", zone:"oeste", vp:702588, vc:443277, vpct:63.09, vproy:664916, vdiff:-37672, up:292730, uc:214697, upct:73.34, uproy:322046, udiff:29316},
+  {n:"Luz Quick Rest", zone:"oeste", vp:172942, vc:114815, vpct:66.39, vproy:172222, vdiff:-720, up:76190, uc:58660, upct:76.99, uproy:87990, udiff:11800},
+  {n:"Llanito", zone:"este", vp:454140, vc:296935, vpct:65.38, vproy:445402, vdiff:-8738, up:196490, uc:148788, upct:75.72, uproy:223182, udiff:26692},
+  {n:"Marques", zone:"este", vp:139691, vc:93789, vpct:67.14, vproy:140684, vdiff:993, up:64160, uc:49720, upct:77.49, uproy:74580, udiff:10420},
+  {n:"Pedregal", zone:"oeste", vp:314845, vc:211332, vpct:67.12, vproy:316998, vdiff:2153, up:142355, uc:109549, upct:76.95, uproy:164324, udiff:21969},
+  {n:"San Antonio", zone:"este", vp:499939, vc:341281, vpct:68.26, vproy:511922, vdiff:11983, up:208520, uc:165990, upct:79.60, uproy:248985, udiff:40465},
+  {n:"Urbina", zone:"este", vp:581977, vc:402628, vpct:69.18, vproy:603942, vdiff:21965, up:242605, uc:189278, upct:78.02, uproy:283917, udiff:41312}
 ];
 
 let zone = 'todas';
@@ -411,8 +411,8 @@ function renderKPIs(){
       <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha a final de mes' : 'Superávit estimado'}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Valla Día 17</div>
-      <div class="kpi-value">56,67%</div>
+      <div class="kpi-title">Valla Día 20</div>
+      <div class="kpi-value">66,67%</div>
       <div class="kpi-sub">Meta teórica hoy</div>
     </div>
   `;
