@@ -265,7 +265,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 28 DE SEPTIEMBRE DE 2026</span>
+    <span>◆ SEGUIMIENTO LUZ · 28 DE SEPTIEMBRE DE 2026 (CORREGIDO)</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button>
   </div>
 
@@ -341,16 +341,16 @@ function unlockDashboard() {
 const EXPECTED_PCT = 93.33; // 28 días de 30 para Septiembre
 
 const data = [
-  {n:"Carlota", zone:"este", vp:1056262, vc:940687, vpct:89.06, vproy:1007879, vdiff:-48383, up:407015, uc:422230, upct:103.74, uproy:452389, udiff:45374},
-  {n:"Chacao", zone:"oeste", vp:539752, vc:496245, vpct:91.94, vproy:531691, vdiff:-8061, up:246615, uc:260706, upct:105.71, uproy:279328, udiff:32713},
-  {n:"Dos Caminos", zone:"oeste", vp:287864, vc:279142, vpct:96.97, vproy:299081, vdiff:11217, up:128320, uc:144612, upct:112.70, uproy:154941, udiff:26621},
-  {n:"Florida", zone:"oeste", vp:702588, vc:612817, vpct:87.22, vproy:656590, vdiff:-45998, up:292730, uc:297278, upct:101.55, uproy:318512, udiff:25782},
-  {n:"Luz Quick Rest", zone:"oeste", vp:172942, vc:160762, vpct:92.96, vproy:172245, vdiff:-697, up:76190, uc:82553, upct:108.35, uproy:88450, udiff:12260},
-  {n:"Llanito", zone:"este", vp:454140, vc:410401, vpct:90.37, vproy:439715, vdiff:-14425, up:196490, uc:206172, upct:104.93, uproy:220899, udiff:24409},
-  {n:"Marques", zone:"este", vp:139691, vc:132122, vpct:94.58, vproy:141559, vdiff:1868, up:64160, uc:70011, upct:109.12, uproy:75012, udiff:10852},
-  {n:"Pedregal", zone:"oeste", vp:314845, vc:294519, vpct:93.54, vproy:315556, vdiff:711, up:142355, uc:152226, upct:106.93, uproy:163099, udiff:20744},
-  {n:"San Antonio", zone:"este", vp:499939, vc:478196, vpct:95.65, vproy:512353, vdiff:12414, up:208520, uc:232037, upct:111.28, uproy:248611, udiff:40091},
-  {n:"Urbina", zone:"este", vp:581977, vc:556079, vpct:95.55, vproy:595799, vdiff:13822, up:242605, uc:262566, upct:108.23, uproy:281321, udiff:38716}
+  {n:"Carlota", zone:"este", vp:1056262, vc:938135, vpct:88.82, vproy:1005145, vdiff:-51117, up:407015, uc:361735, upct:88.88, uproy:387573, udiff:-19442},
+  {n:"Chacao", zone:"oeste", vp:539752, vc:494509, vpct:91.62, vproy:529831, vdiff:-9921, up:246615, uc:221054, upct:89.64, uproy:236844, udiff:-9771},
+  {n:"Dos Caminos", zone:"oeste", vp:287864, vc:278175, vpct:96.63, vproy:298045, vdiff:10181, up:128320, uc:122612, upct:95.55, uproy:131370, udiff:3050},
+  {n:"Florida", zone:"oeste", vp:702588, vc:611016, vpct:86.97, vproy:654660, vdiff:-47928, up:292730, uc:256984, upct:87.79, uproy:275340, udiff:-17390},
+  {n:"Luz Quick Rest", zone:"oeste", vp:172942, vc:160332, vpct:92.71, vproy:171784, vdiff:-1158, up:76190, uc:73322, upct:96.24, uproy:78559, udiff:2369},
+  {n:"Llanito", zone:"este", vp:454140, vc:409073, vpct:90.08, vproy:438292, vdiff:-15848, up:196490, uc:175975, upct:89.56, uproy:188545, udiff:-7945},
+  {n:"Marques", zone:"este", vp:139691, vc:131642, vpct:94.24, vproy:141045, vdiff:1354, up:64160, uc:59727, upct:93.09, uproy:63993, udiff:-167},
+  {n:"Pedregal", zone:"oeste", vp:314845, vc:293612, vpct:93.26, vproy:314584, vdiff:-261, up:142355, uc:131671, upct:92.49, uproy:141076, udiff:-1279},
+  {n:"San Antonio", zone:"este", vp:499939, vc:476655, vpct:95.34, vproy:510702, vdiff:10763, up:208520, uc:192912, upct:92.51, uproy:206691, udiff:-1829},
+  {n:"Urbina", zone:"este", vp:581977, vc:554720, vpct:95.32, vproy:594343, vdiff:12366, up:242605, uc:231978, upct:95.62, uproy:248548, udiff:5943}
 ];
 
 let zone = 'todas';
