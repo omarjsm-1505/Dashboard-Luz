@@ -1,506 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Dashboard Ejecutivo de Presupuesto</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#F8F6F2;
-    --card:#FFFFFF;
-    --card-hi:#F3EFEA;
-    --line: rgba(140,29,64,0.12);
-    --wine:#8C1D40;
-    --wine-light:#B4213F;
-    --wine-bg: rgba(140,29,64,0.06);
-    --gold:#C59B27;
-    --gold-dim:#8A6D1B;
-    --text:#2B2627;
-    --muted:#6E6366;
-    --good:#2E7D32;
-    --good-bg: rgba(46,125,50,0.1);
-    --warn:#D97A46;
-    --warn-bg: rgba(217,122,70,0.12);
-    --danger:#C14646;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background-color: var(--bg);
-    color:var(--text);
-    font-family:'Inter', sans-serif;
-    min-height: 100vh;
-    -webkit-font-smoothing:antialiased;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: 
-      linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)),
-      url('1275044.jpg');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 550px auto;
-    opacity: 0.6;
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  /* PANTALLA DE ACCESO RESTRINGIDO */
-  .auth-overlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .auth-card {
-    background: var(--card); border: 1px solid var(--line);
-    padding: 36px 28px; border-radius: 20px; text-align: center;
-    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
-  }
-  .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
-  .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
-  .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
-  .auth-input {
-    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
-    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
-    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
-  }
-  .auth-input:focus { border-color: var(--wine); }
-  .auth-btn {
-    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
-    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
-    cursor: pointer; transition: background 0.2s;
-  }
-  .auth-btn:hover { background: var(--wine-light); }
-  .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
-
-  /* CONTENIDO PRINCIPAL WEB */
-  .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
-
-  .corte-bar{
-    position:sticky; top:0; z-index:50;
-    background:linear-gradient(90deg, #641024, var(--wine), #641024);
-    border-bottom:2px solid var(--gold);
-    color:#FFFFFF;
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    padding:9px 18px;
-    display:flex; justify-content:space-between; align-items:center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-  }
-  .corte-bar b{ color:var(--gold);}
-  .btn-print{ 
-    background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; 
-    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; 
-    border-radius:100px; cursor:pointer; transition:background 0.2s;
-  }
-
-  .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
-  .logo-header { height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
-  .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
-  h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
-  h1 em{ font-style:italic; color:var(--wine); }
-  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0.5px; }
-  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
-  .corte-pill b{ color:var(--gold-dim); }
-
-  .control-grid{
-    display:flex;
-    flex-wrap: wrap;
-    gap:14px;
-    margin-bottom:28px;
-  }
-  .ctrl-box{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:12px 18px;
-    display:inline-flex;
-    align-items:center;
-    gap:16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  }
-  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
-  .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
-  }
-  .toggle-btn.active{
-    background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
-  }
-
-  .section-box{ margin-bottom:34px; }
-  .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
-  .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
-
-  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:24px; }
-  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
-  .kpi-card.neg{ border-left-color:var(--warn); }
-  .kpi-card.accent{ border-left-color:var(--wine); background:var(--card-hi); }
-  .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
-  .kpi-sub{ font-size:10.5px; color:var(--muted); }
-
-  .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:1050px; }
-  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
-  th:first-child{ text-align:left; }
-  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
-  td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
-  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
-  
-  th.block-start, td.block-start { border-left: 1px dashed rgba(140, 29, 64, 0.3) !important; }
-
-  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
-  .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
-  .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
-
-  footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
-
-  /* ========================================================
-     OPTIMIZACIÓN DEFINITIVA PARA 1 SOLA PÁGINA (OFICIO)
-     ======================================================== */
-  @media print {
-    @page { 
-      size: legal landscape; 
-      margin: 10mm; 
-    }
-    html, body { 
-      background: #FFFFFF !important; 
-      zoom: 0.90; 
-      margin: 0; padding: 0;
-      height: auto;
-      overflow: visible;
-    }
-    * { 
-      -webkit-print-color-adjust: exact !important; 
-      color-adjust: exact !important; 
-    }
-    body::before { display: none; }
-    
-    .auth-overlay, .corte-bar, .control-grid, footer { 
-      display: none !important; 
-    }
-    
-    .wrap { 
-      padding: 0 !important; 
-      margin: 0 auto !important; 
-      max-width: 100% !important; 
-      width: 100% !important;
-    }
-    
-    .hero { 
-      padding: 0; 
-      margin-bottom: 12px;
-      border-bottom: none;
-    }
-    .logo-header { height: 35px; margin-bottom: 6px; }
-    h1 { font-size: 22px; margin-bottom: 2px; }
-    .hero-sub { font-size: 13px; margin-bottom: 8px; }
-    .corte-pill { margin-bottom: 8px; padding: 4px 10px; font-size: 11px; }
-    
-    .section-box { margin-bottom: 12px; page-break-inside: avoid; }
-    .sec-title { font-size: 16px; margin-bottom: 2px; }
-    .sec-sub { font-size: 11px; margin-bottom: 8px; }
-    
-    .kpis-grid { 
-      display: flex !important; 
-      gap: 10px; 
-      margin-bottom: 15px; 
-    }
-    .kpi-card { 
-      flex: 1; 
-      padding: 10px; 
-      border-radius: 8px; 
-    }
-    .kpi-title { font-size: 9px; }
-    .kpi-value { font-size: 16px; margin: 4px 0 2px; }
-    .kpi-sub { font-size: 9px; }
-    
-    .tbl-wrap { 
-      border: 1px solid #EAEAEA; 
-      box-shadow: none; 
-      border-radius: 8px; 
-      overflow: visible !important; 
-    }
-    table { 
-      width: 100% !important; 
-      min-width: 100% !important; 
-      max-width: 100% !important;
-      table-layout: auto; 
-    }
-    th, td { 
-      padding: 8px 6px !important; 
-      font-size: 11px !important; 
-      white-space: nowrap !important; 
-    }
-    th { font-size: 10px !important; }
-    td:first-child { 
-      white-space: normal !important; 
-      min-width: 100px;
-    }
-    tr { page-break-inside: avoid; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Aperturas - Automercado Luz</title>
 </head>
-<body>
+<body style="font-family: Arial, sans-serif; display: flex; justify-content: center; background-color: #f0f0f0; padding: 20px;">
 
-<!-- OVERLAY DE BLOQUEO POR CLAVE -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-card">
-    <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
-    <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
-    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
-  </div>
-</div>
-
-<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
-<div id="mainContent" style="display:none;">
-  <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · CIERRE DE SEPTIEMBRE DE 2026</span>
-    <button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button>
-  </div>
-
-  <div class="wrap">
-
-    <section class="hero">
-      <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Automercado Luz</p>
-      <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio</p>
-      <div class="corte-pill">◆ Cierre final al <b>30 de septiembre, 2026</b></div>
-    </section>
-
-    <!-- CONTROLES -->
-    <div class="control-grid">
-      <div class="ctrl-box">
-        <span class="ctrl-title">Filtrar Zona Comercial</span>
-        <div class="toggle-group" id="groupZone">
-          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
-          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
-          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
+<div style="background-color: white; width: 850px; border-radius: 5px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    
+    <!-- Encabezado con Logo y Título -->
+    <div style="display: flex; align-items: center; padding: 15px 20px; background-color: #f4f4f4; border-bottom: 2px solid #ddd;">
+        <!-- Logo CSS de Automercado Luz -->
+        <div style="background: radial-gradient(ellipse at center, #cc1c1c 0%, #850606 100%);
+                    border-radius: 50%;
+                    width: 90px;
+                    height: 45px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-family: 'Brush Script MT', 'Comic Sans MS', cursive;
+                    font-size: 26px;
+                    font-style: italic;
+                    box-shadow: inset 0px 0px 5px rgba(0,0,0,0.5), 2px 2px 4px rgba(0,0,0,0.4);
+                    border: 2px solid #fff;
+                    transform: skewX(-5deg);">
+            Luz
         </div>
-      </div>
+        <h1 style="flex-grow: 1; text-align: center; margin: 0; font-size: 24px; font-weight: bold; color: #000; letter-spacing: 0.5px;">
+            REPORTE DE APERTURAS - 04/10/2026
+        </h1>
     </div>
 
-    <!-- KPIS -->
-    <div class="section-box">
-      <h2 class="sec-title">Resumen del mes</h2>
-      <span class="sec-sub">Totales consolidados a la fecha de corte final</span>
-      <div class="kpis-grid" id="kpiGrid"></div>
+    <!-- Tabla de Datos -->
+    <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 15px;">
+        <thead>
+            <tr>
+                <th style="background-color: #d36a24; color: white; border: 1px solid #000; padding: 8px 5px; font-weight: bold;">Sucursal</th>
+                <th style="background-color: #d36a24; color: white; border: 1px solid #000; padding: 8px 5px; font-weight: bold;">Hora de Reporte</th>
+                <th style="background-color: #d36a24; color: white; border: 1px solid #000; padding: 8px 5px; font-weight: bold;">Cantidad de Clientes</th>
+                <th style="background-color: #d36a24; color: white; border: 1px solid #000; padding: 8px 5px; font-weight: bold;">Responsable</th>
+            </tr>
+        </thead>
+        <tbody style="color: #000;">
+            <tr><td style="border: 1px solid #000; padding: 6px;">San Antonio</td><td style="border: 1px solid #000; padding: 6px;">07:00 a. m.</td><td style="border: 1px solid #000; padding: 6px;">0</td><td style="border: 1px solid #000; padding: 6px;">Jason Andrés</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">La Urbina</td><td style="border: 1px solid #000; padding: 6px;">06:57 a. m.</td><td style="border: 1px solid #000; padding: 6px;">2</td><td style="border: 1px solid #000; padding: 6px;">Jesus Garcia</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">Los Dos Caminos</td><td style="border: 1px solid #000; padding: 6px; color: #d30000; font-weight: bold;">Pendiente</td><td style="border: 1px solid #000; padding: 6px; color: #d30000; font-weight: bold;">Pendiente</td><td style="border: 1px solid #000; padding: 6px; color: #d30000; font-weight: bold;">Pendiente</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">El Llanito</td><td style="border: 1px solid #000; padding: 6px;">07:00 a. m.</td><td style="border: 1px solid #000; padding: 6px;">0</td><td style="border: 1px solid #000; padding: 6px;">Sr. Jose Longa</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">Chacao</td><td style="border: 1px solid #000; padding: 6px;">06:59 a. m.</td><td style="border: 1px solid #000; padding: 6px;">3</td><td style="border: 1px solid #000; padding: 6px;">Sr. Ávila José</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">La Carlota</td><td style="border: 1px solid #000; padding: 6px;">07:00 a. m.</td><td style="border: 1px solid #000; padding: 6px;">4</td><td style="border: 1px solid #000; padding: 6px;">Williams</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">La Florida</td><td style="border: 1px solid #000; padding: 6px;">07:00 a. m.</td><td style="border: 1px solid #000; padding: 6px;">1</td><td style="border: 1px solid #000; padding: 6px;">Sr. Antonio Rosquete</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">LuzQuick</td><td style="border: 1px solid #000; padding: 6px;">07:01 a. m.</td><td style="border: 1px solid #000; padding: 6px;">1</td><td style="border: 1px solid #000; padding: 6px;">Yeidi</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">El Marqués</td><td style="border: 1px solid #000; padding: 6px;">07:00 a. m.</td><td style="border: 1px solid #000; padding: 6px;">1</td><td style="border: 1px solid #000; padding: 6px;">Luis López</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 6px;">El Pedregal</td><td style="border: 1px solid #000; padding: 6px;">07:01 a. m.</td><td style="border: 1px solid #000; padding: 6px;">2</td><td style="border: 1px solid #000; padding: 6px;">Anavic</td></tr>
+        </tbody>
+    </table>
+
+    <!-- Pie de página -->
+    <div style="padding: 5px 10px; background-color: #f4f4f4; font-size: 13px; font-weight: bold; color: #000; border-top: 1px solid #ddd;">
+        Datos consolidados a las 07:03 a. m. - 04/10/2026
     </div>
-
-    <!-- TABLA LIMPIA UNIFICADA CON BLOQUES -->
-    <div class="section-box">
-      <h2 class="sec-title">Detalle completo (360°)</h2>
-      <span class="sec-sub">Consolidado general segmentado por aristas numéricas</span>
-
-      <div class="tbl-wrap">
-        <table>
-          <thead id="tableHead"></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
 </div>
-<script>
-// CLAVE DE ACCESO
-const SECRET_KEY = "Luz2026";
-
-function checkAuth() {
-  const pass = document.getElementById('passInput').value;
-  if (pass === SECRET_KEY) {
-    sessionStorage.setItem('luz_authenticated', 'true');
-    unlockDashboard();
-  } else {
-    document.getElementById('authError').style.display = 'block';
-  }
-}
-
-function handleKeyPress(e) {
-  if (e.key === 'Enter') checkAuth();
-}
-
-function unlockDashboard() {
-  document.getElementById('authOverlay').style.display = 'none';
-  document.getElementById('mainContent').style.display = 'block';
-  renderAll();
-}
-
-// LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 100.00; // 30 días de 30 para Septiembre (Cierre Total)
-
-const data = [
-  {n:"Carlota", zone:"este", vp:1056262, vc:1006138, vpct:95.25, vproy:1006138, vdiff:-50124, up:407015, uc:387572, upct:95.22, uproy:387572, udiff:-19443},
-  {n:"Chacao", zone:"oeste", vp:539752, vc:534284, vpct:98.99, vproy:534284, vdiff:-5468, up:246615, uc:238746, upct:96.81, uproy:238746, udiff:-7869},
-  {n:"Dos Caminos", zone:"oeste", vp:287864, vc:299673, vpct:104.10, vproy:299673, vdiff:11809, up:128320, uc:131923, upct:102.81, uproy:131923, udiff:3603},
-  {n:"Florida", zone:"oeste", vp:702588, vc:654795, vpct:93.20, vproy:654795, vdiff:-47793, up:292730, uc:275077, upct:93.97, uproy:275077, udiff:-17653},
-  {n:"Luz Quick Rest", zone:"oeste", vp:172942, vc:173457, vpct:100.30, vproy:173457, vdiff:515, up:76190, uc:79416, upct:104.23, uproy:79416, udiff:3226},
-  {n:"Llanito", zone:"este", vp:454140, vc:441295, vpct:97.17, vproy:441295, vdiff:-12845, up:196490, uc:190117, upct:96.76, uproy:190117, udiff:-6373},
-  {n:"Marques", zone:"este", vp:139691, vc:142595, vpct:102.08, vproy:142595, vdiff:2904, up:64160, uc:64476, upct:100.49, uproy:64476, udiff:316},
-  {n:"Pedregal", zone:"oeste", vp:314845, vc:317417, vpct:100.82, vproy:317417, vdiff:2572, up:142355, uc:142438, upct:100.06, uproy:142438, udiff:83},
-  {n:"San Antonio", zone:"este", vp:499939, vc:512288, vpct:102.47, vproy:512288, vdiff:12349, up:208520, uc:207168, upct:99.35, uproy:207168, udiff:-1352},
-  {n:"Urbina", zone:"este", vp:581977, vc:596917, vpct:102.57, vproy:596917, vdiff:14940, up:242605, uc:250018, upct:103.06, uproy:250018, udiff:7413}
-];
-
-let zone = 'todas';
-
-function fmt(n, decimals = 0){ 
-  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
-}
-function fmtSigned(n, decimals = 0){ return ((n || 0) >= 0 ? '+' : '') + fmt(n, decimals); }
-
-function getFilteredData(){
-  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
-}
-
-function getTotals(list){
-  let vp = 0, vc = 0, vproy = 0, vdiff = 0;
-  let up = 0, uc = 0, uproy = 0, udiff = 0;
-  
-  list.forEach(d => {
-    vp += d.vp; vc += d.vc; vproy += d.vproy; vdiff += d.vdiff;
-    up += d.up; uc += d.uc; uproy += d.uproy; udiff += d.udiff;
-  });
-  
-  const costoPromedio = uc > 0 ? (vc / uc) : 0;
-  const costoPromedioPpto = up > 0 ? (vp / up) : 0;
-  
-  return { vp, vc, vproy, vdiff, up, uc, uproy, udiff, costoPromedio, costoPromedioPpto };
-}
-
-function renderKPIs(){
-  const t = getTotals(getFilteredData());
-  const vpct = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
-  const upct = t.up > 0 ? (t.uc / t.up * 100) : 0;
-  
-  document.getElementById('kpiGrid').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-title">Ventas Cumplidas</div>
-      <div class="kpi-value">$${fmt(t.vc)}</div>
-      <div class="kpi-sub">${vpct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Unidades Cumplidas</div>
-      <div class="kpi-value">${fmt(t.uc)} u</div>
-      <div class="kpi-sub">${upct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card accent">
-      <div class="kpi-title">Costo Promedio</div>
-      <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-      <div class="kpi-sub">Ppto base: $${fmt(t.costoPromedioPpto, 2)}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Cierre Final Mes ($)</div>
-      <div class="kpi-value">$${fmt(t.vproy)}</div>
-      <div class="kpi-sub">${t.vproy >= t.vp ? 'Cerró sobre ppto' : 'Cerró bajo ppto'}</div>
-    </div>
-    <div class="kpi-card ${t.vdiff < 0 ? 'neg' : ''}">
-      <div class="kpi-title">Diferencia Cierre</div>
-      <div class="kpi-value">$${fmtSigned(t.vdiff)}</div>
-      <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha final de mes' : 'Superávit consolidado'}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Valla Cierre</div>
-      <div class="kpi-value">100,00%</div>
-      <div class="kpi-sub">Meta oficial del mes</div>
-    </div>
-  `;
-}
-
-function renderTable(){
-  const filtered = getFilteredData();
-  
-  document.getElementById('tableHead').innerHTML = `
-    <tr>
-      <th>Sucursal</th>
-      <th style="text-align:center;">Estatus</th>
-      <th class="block-start">Ppto. $</th>
-      <th>Cump. $</th>
-      <th>% Val.</th>
-      <th class="block-start">Ppto. U.</th>
-      <th>Cump. U.</th>
-      <th>% Unid.</th>
-      <th class="block-start">C. Prom. Real</th>
-      <th>C. Prom. Ppto</th>
-      <th>Var. Costo</th>
-    </tr>
-  `;
-
-  const rows = filtered.map(d => {
-    const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
-    const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
-    const varCosto = cpReal - cpPpto;
-    
-    // Estatus basado en cumplimiento $ vs la valla del día
-    const badge = d.vpct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
-    
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td style="text-align:center;">${badge}</td>
-      <td class="block-start" style="color:var(--muted);">$${fmt(d.vp)}</td>
-      <td>$${fmt(d.vc)}</td>
-      <td style="font-weight:700;">${d.vpct.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start" style="color:var(--muted);">${fmt(d.up)}</td>
-      <td>${fmt(d.uc)}</td>
-      <td style="font-weight:700;">${d.upct.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">$${fmt(cpReal, 2)}</td>
-      <td style="color:var(--muted);">$${fmt(cpPpto, 2)}</td>
-      <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
-    </tr>`;
-  }).join('');
-
-  const t = getTotals(filtered);
-  const varCostoT = t.costoPromedio - t.costoPromedioPpto;
-  const pctValorT = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
-  const pctUnidT = t.up > 0 ? (t.uc / t.up * 100) : 0;
-
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge ${pctValorT >= EXPECTED_PCT ? 'meta' : 'obs'}">Global</span></td>
-      <td class="block-start">$${fmt(t.vp)}</td>
-      <td>$${fmt(t.vc)}</td>
-      <td>${pctValorT.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">${fmt(t.up)}</td>
-      <td>${fmt(t.uc)}</td>
-      <td>${pctUnidT.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">$${fmt(t.costoPromedio, 2)}</td>
-      <td>$${fmt(t.costoPromedioPpto, 2)}</td>
-      <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
-    </tr>`;
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
-}
-
-function renderAll(){
-  renderKPIs();
-  renderTable();
-}
-
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-// VERIFICAR AUTENTICACIÓN INICIAL
-if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
-</script>
 
 </body>
 </html>
