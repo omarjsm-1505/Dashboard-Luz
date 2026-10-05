@@ -145,6 +145,9 @@
   .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
   .kpi-sub{ font-size:10.5px; color:var(--muted); }
+  
+  /* Destacado para porcentajes positivos */
+  .kpi-card.pos .kpi-value { color: var(--good); }
 
   .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
   table{ width:100%; border-collapse:collapse; min-width:1050px; }
@@ -162,88 +165,31 @@
 
   footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
 
-  /* ========================================================
-     OPTIMIZACIÓN DEFINITIVA PARA 1 SOLA PÁGINA (OFICIO)
-     ======================================================== */
   @media print {
-    @page { 
-      size: legal landscape; 
-      margin: 10mm; 
-    }
-    html, body { 
-      background: #FFFFFF !important; 
-      zoom: 0.90; 
-      margin: 0; padding: 0;
-      height: auto;
-      overflow: visible;
-    }
-    * { 
-      -webkit-print-color-adjust: exact !important; 
-      color-adjust: exact !important; 
-    }
+    @page { size: legal landscape; margin: 10mm; }
+    html, body { background: #FFFFFF !important; zoom: 0.85; margin: 0; padding: 0; height: auto; overflow: visible; }
+    * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
     body::before { display: none; }
-    
-    .auth-overlay, .corte-bar, .control-grid, footer { 
-      display: none !important; 
-    }
-    
-    .wrap { 
-      padding: 0 !important; 
-      margin: 0 auto !important; 
-      max-width: 100% !important; 
-      width: 100% !important;
-    }
-    
-    .hero { 
-      padding: 0; 
-      margin-bottom: 12px;
-      border-bottom: none;
-    }
+    .auth-overlay, .corte-bar, .control-grid, footer { display: none !important; }
+    .wrap { padding: 0 !important; margin: 0 auto !important; max-width: 100% !important; width: 100% !important; }
+    .hero { padding: 0; margin-bottom: 12px; border-bottom: none; }
     .logo-header { height: 35px; margin-bottom: 6px; }
     h1 { font-size: 22px; margin-bottom: 2px; }
     .hero-sub { font-size: 13px; margin-bottom: 8px; }
     .corte-pill { margin-bottom: 8px; padding: 4px 10px; font-size: 11px; }
-    
     .section-box { margin-bottom: 12px; page-break-inside: avoid; }
     .sec-title { font-size: 16px; margin-bottom: 2px; }
     .sec-sub { font-size: 11px; margin-bottom: 8px; }
-    
-    .kpis-grid { 
-      display: flex !important; 
-      gap: 10px; 
-      margin-bottom: 15px; 
-    }
-    .kpi-card { 
-      flex: 1; 
-      padding: 10px; 
-      border-radius: 8px; 
-    }
+    .kpis-grid { display: flex !important; gap: 10px; margin-bottom: 15px; }
+    .kpi-card { flex: 1; padding: 10px; border-radius: 8px; }
     .kpi-title { font-size: 9px; }
     .kpi-value { font-size: 16px; margin: 4px 0 2px; }
     .kpi-sub { font-size: 9px; }
-    
-    .tbl-wrap { 
-      border: 1px solid #EAEAEA; 
-      box-shadow: none; 
-      border-radius: 8px; 
-      overflow: visible !important; 
-    }
-    table { 
-      width: 100% !important; 
-      min-width: 100% !important; 
-      max-width: 100% !important;
-      table-layout: auto; 
-    }
-    th, td { 
-      padding: 8px 6px !important; 
-      font-size: 11px !important; 
-      white-space: nowrap !important; 
-    }
+    .tbl-wrap { border: 1px solid #EAEAEA; box-shadow: none; border-radius: 8px; overflow: visible !important; }
+    table { width: 100% !important; min-width: 100% !important; max-width: 100% !important; table-layout: auto; }
+    th, td { padding: 8px 6px !important; font-size: 11px !important; white-space: nowrap !important; }
     th { font-size: 10px !important; }
-    td:first-child { 
-      white-space: normal !important; 
-      min-width: 100px;
-    }
+    td:first-child { white-space: normal !important; min-width: 100px; }
     tr { page-break-inside: avoid; }
   }
 </style>
@@ -275,7 +221,7 @@
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio (Base PPTO Ajustada 95/5)</p>
+      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio</p>
       <div class="corte-pill">◆ Corte al <b>04 de octubre, 2026</b></div>
     </section>
 
@@ -291,17 +237,24 @@
       </div>
     </div>
 
-    <!-- KPIS -->
+    <!-- KPIS: Resumen del Mes -->
     <div class="section-box">
       <h2 class="sec-title">Resumen del mes</h2>
       <span class="sec-sub">Totales consolidados a la fecha de corte</span>
       <div class="kpis-grid" id="kpiGrid"></div>
     </div>
+    
+    <!-- NUEVA SECCIÓN: VS MES ANTERIOR -->
+    <div class="section-box">
+      <h2 class="sec-title">Vs. Mes Anterior</h2>
+      <span class="sec-sub">Comparativa de ritmo de ventas (promedio diario efectivo)</span>
+      <div class="kpis-grid" id="vsGrid"></div>
+    </div>
 
     <!-- TABLA LIMPIA UNIFICADA CON BLOQUES -->
     <div class="section-box">
       <h2 class="sec-title">Detalle completo (360°)</h2>
-      <span class="sec-sub">Consolidado general segmentado por aristas numéricas</span>
+      <span class="sec-sub">Presupuestos redistribuidos con reglas y topes manuales</span>
 
       <div class="tbl-wrap">
         <table>
@@ -339,19 +292,21 @@ function unlockDashboard() {
 
 // LÓGICA DEL DASHBOARD
 const EXPECTED_PCT = 12.90; // 4 días de 31 para Octubre
+const DAYS_OCT_ELAPSED = 4;
+const DAYS_SEP_TOTAL = 30;
 
-// Datos de Octubre - Cuotas aprobadas y Corte al Día 4
+// Datos de Octubre + Registros Cierre Septiembre para Comparativa
 const data = [
-  {n:"Carlota", zone:"este", vp:1041480, vc:158665, vpct:15.23, vproy:1229654, vdiff:188174, up:384886, uc:61006, upct:15.85, uproy:472796, udiff:87910},
-  {n:"Chacao", zone:"oeste", vp:556875, vc:83920, vpct:15.07, vproy:650377, vdiff:93502, up:250180, uc:37285, upct:14.90, uproy:288957, udiff:38777},
-  {n:"Dos Caminos", zone:"oeste", vp:321750, vc:44117, vpct:13.71, vproy:341910, vdiff:20160, up:148657, uc:19797, upct:13.32, uproy:153427, udiff:4770},
-  {n:"Florida", zone:"oeste", vp:680625, vc:109666, vpct:16.11, vproy:849910, vdiff:169285, up:269255, uc:47151, upct:17.51, uproy:365418, udiff:96163},
-  {n:"Luz Quick Rest", zone:"oeste", vp:190575, vc:25965, vpct:13.62, vproy:201231, vdiff:10656, up:88348, uc:11937, upct:13.51, uproy:92512, udiff:4164},
-  {n:"Llanito", zone:"este", vp:447975, vc:72909, vpct:16.28, vproy:565046, vdiff:117071, up:190436, uc:31304, upct:16.44, uproy:242607, udiff:52171},
-  {n:"Marques", zone:"este", vp:153945, vc:21987, vpct:14.28, vproy:170397, vdiff:16452, up:71718, uc:9781, upct:13.64, uproy:75806, udiff:4088},
-  {n:"Pedregal", zone:"oeste", vp:351450, vc:48660, vpct:13.85, vproy:377112, vdiff:25662, up:160401, uc:21740, upct:13.55, uproy:168485, udiff:8084},
-  {n:"San Antonio", zone:"este", vp:554400, vc:86993, vpct:15.69, vproy:674195, vdiff:119795, up:233011, uc:34796, upct:14.93, uproy:269671, udiff:36660},
-  {n:"Urbina", zone:"este", vp:650925, vc:106787, vpct:16.41, vproy:827600, vdiff:176675, up:283108, uc:44108, upct:15.58, uproy:341838, udiff:58730}
+  {n:"Carlota", zone:"este", vp:1041480, vc:158665, vpct:15.23, vproy:1229654, vdiff:188174, up:384886, uc:61006, upct:15.85, uproy:472796, udiff:87910, sep_vc:1006138, sep_uc:387572},
+  {n:"Chacao", zone:"oeste", vp:556875, vc:83920, vpct:15.07, vproy:650377, vdiff:93502, up:250180, uc:37285, upct:14.90, uproy:288957, udiff:38777, sep_vc:534284, sep_uc:238746},
+  {n:"Dos Caminos", zone:"oeste", vp:321750, vc:44117, vpct:13.71, vproy:341910, vdiff:20160, up:148657, uc:19797, upct:13.32, uproy:153427, udiff:4770, sep_vc:299673, sep_uc:131923},
+  {n:"Florida", zone:"oeste", vp:680625, vc:109666, vpct:16.11, vproy:849910, vdiff:169285, up:269255, uc:47151, upct:17.51, uproy:365418, udiff:96163, sep_vc:654795, sep_uc:275077},
+  {n:"Luz Quick Rest", zone:"oeste", vp:190575, vc:25965, vpct:13.62, vproy:201231, vdiff:10656, up:88348, uc:11937, upct:13.51, uproy:92512, udiff:4164, sep_vc:173457, sep_uc:79416},
+  {n:"Llanito", zone:"este", vp:447975, vc:72909, vpct:16.28, vproy:565046, vdiff:117071, up:190436, uc:31304, upct:16.44, uproy:242607, udiff:52171, sep_vc:441295, sep_uc:190117},
+  {n:"Marques", zone:"este", vp:153945, vc:21987, vpct:14.28, vproy:170397, vdiff:16452, up:71718, uc:9781, upct:13.64, uproy:75806, udiff:4088, sep_vc:142595, sep_uc:64476},
+  {n:"Pedregal", zone:"oeste", vp:351450, vc:48660, vpct:13.85, vproy:377112, vdiff:25662, up:160401, uc:21740, upct:13.55, uproy:168485, udiff:8084, sep_vc:317417, sep_uc:142438},
+  {n:"San Antonio", zone:"este", vp:554400, vc:86993, vpct:15.69, vproy:674195, vdiff:119795, up:233011, uc:34796, upct:14.93, uproy:269671, udiff:36660, sep_vc:512288, sep_uc:207168},
+  {n:"Urbina", zone:"este", vp:650925, vc:106787, vpct:16.41, vproy:827600, vdiff:176675, up:283108, uc:44108, upct:15.58, uproy:341838, udiff:58730, sep_vc:596917, sep_uc:250018}
 ];
 
 let zone = 'todas';
@@ -368,16 +323,18 @@ function getFilteredData(){
 function getTotals(list){
   let vp = 0, vc = 0, vproy = 0, vdiff = 0;
   let up = 0, uc = 0, uproy = 0, udiff = 0;
+  let sep_vc = 0, sep_uc = 0;
   
   list.forEach(d => {
     vp += d.vp; vc += d.vc; vproy += d.vproy; vdiff += d.vdiff;
     up += d.up; uc += d.uc; uproy += d.uproy; udiff += d.udiff;
+    sep_vc += d.sep_vc; sep_uc += d.sep_uc;
   });
   
   const costoPromedio = uc > 0 ? (vc / uc) : 0;
   const costoPromedioPpto = up > 0 ? (vp / up) : 0;
   
-  return { vp, vc, vproy, vdiff, up, uc, uproy, udiff, costoPromedio, costoPromedioPpto };
+  return { vp, vc, vproy, vdiff, up, uc, uproy, udiff, costoPromedio, costoPromedioPpto, sep_vc, sep_uc };
 }
 
 function renderKPIs(){
@@ -415,6 +372,42 @@ function renderKPIs(){
       <div class="kpi-title">Valla Día 4</div>
       <div class="kpi-value">12,90%</div>
       <div class="kpi-sub">Meta teórica hoy</div>
+    </div>
+  `;
+}
+
+function renderVsMesAnterior(){
+  const t = getTotals(getFilteredData());
+  
+  const avgValSep = t.sep_vc / DAYS_SEP_TOTAL;
+  const avgUniSep = t.sep_uc / DAYS_SEP_TOTAL;
+  
+  const avgValOct = t.vc / DAYS_OCT_ELAPSED;
+  const avgUniOct = t.uc / DAYS_OCT_ELAPSED;
+  
+  const valGrowth = avgValSep > 0 ? ((avgValOct / avgValSep) - 1) * 100 : 0;
+  const uniGrowth = avgUniSep > 0 ? ((avgUniOct / avgUniSep) - 1) * 100 : 0;
+
+  document.getElementById('vsGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-title">Promedio Diario ($)</div>
+      <div class="kpi-value">$${fmt(avgValOct)}</div>
+      <div class="kpi-sub">Sep: $${fmt(avgValSep)} / día</div>
+    </div>
+    <div class="kpi-card ${valGrowth >= 0 ? 'pos' : 'neg'}">
+      <div class="kpi-title">Crecimiento Valor</div>
+      <div class="kpi-value">${fmtSigned(valGrowth, 2)}%</div>
+      <div class="kpi-sub">Ritmo facturación vs Sep</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Promedio Diario (Unid.)</div>
+      <div class="kpi-value">${fmt(avgUniOct)} u</div>
+      <div class="kpi-sub">Sep: ${fmt(avgUniSep)} u / día</div>
+    </div>
+    <div class="kpi-card ${uniGrowth >= 0 ? 'pos' : 'neg'}">
+      <div class="kpi-title">Crecimiento Volumen</div>
+      <div class="kpi-value">${fmtSigned(uniGrowth, 2)}%</div>
+      <div class="kpi-sub">Ritmo unidades vs Sep</div>
     </div>
   `;
 }
@@ -487,6 +480,7 @@ function renderTable(){
 
 function renderAll(){
   renderKPIs();
+  renderVsMesAnterior();
   renderTable();
 }
 
