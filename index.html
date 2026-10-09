@@ -211,7 +211,7 @@
 <!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
 <div id="mainContent" style="display:none;">
   <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 07 DE OCTUBRE DE 2026</span>
+    <span>◆ SEGUIMIENTO LUZ · 08 DE OCTUBRE DE 2026</span>
     <button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button>
   </div>
 
@@ -221,8 +221,8 @@
       <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
       <p class="eyebrow">Automercado Luz</p>
       <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio (Base PPTO Ajustada 95/5)</p>
-      <div class="corte-pill">◆ Corte al <b>07 de octubre, 2026</b></div>
+      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio (Base PPTO Aprobada)</p>
+      <div class="corte-pill">◆ Corte al <b>08 de octubre, 2026</b></div>
     </section>
 
     <!-- CONTROLES -->
@@ -291,22 +291,22 @@ function unlockDashboard() {
 }
 
 // LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 22.58; // 7 días de 31 para Octubre
-const DAYS_OCT_ELAPSED = 7;
+const EXPECTED_PCT = 25.81; // 8 días de 31 para Octubre
+const DAYS_OCT_ELAPSED = 8;
 const DAYS_SEP_TOTAL = 30;
 
-// Datos de Octubre (Corte Día 7) + Registros Cierre Septiembre para Comparativa
+// Datos de Octubre (Corte Día 8) + Registros Cierre Septiembre para Comparativa
 const data = [
-  {n:"Carlota", zone:"este", vp:1041480, vc:248306, vpct:23.84, vproy:1099641, vdiff:58161, up:384886, uc:94170, upct:24.47, uproy:417039, udiff:32153, sep_vc:1006138, sep_uc:387572},
-  {n:"Chacao", zone:"oeste", vp:556875, vc:135900, vpct:24.40, vproy:601843, vdiff:44968, up:250180, uc:59718, upct:23.87, uproy:264465, udiff:14285, sep_vc:534284, sep_uc:238746},
-  {n:"Dos Caminos", zone:"oeste", vp:321750, vc:73949, vpct:22.98, vproy:327488, vdiff:5738, up:148657, uc:32321, upct:21.74, uproy:143136, udiff:-5521, sep_vc:299673, sep_uc:131923},
-  {n:"Florida", zone:"oeste", vp:680625, vc:164499, vpct:24.17, vproy:728496, vdiff:47871, up:269255, uc:68343, upct:25.38, uproy:302662, udiff:33407, sep_vc:654795, sep_uc:275077},
-  {n:"Llanito", zone:"este", vp:447975, vc:107947, vpct:24.10, vproy:478051, vdiff:30076, up:190436, uc:46128, upct:24.22, uproy:204281, udiff:13845, sep_vc:441295, sep_uc:190117},
-  {n:"Luz Quick Rest", zone:"oeste", vp:190575, vc:43201, vpct:22.67, vproy:191319, vdiff:744, up:88348, uc:19809, upct:22.42, uproy:87726, udiff:-622, sep_vc:173457, sep_uc:79416},
-  {n:"Marques", zone:"este", vp:153945, vc:35095, vpct:22.80, vproy:155421, vdiff:1476, up:71718, uc:15384, upct:21.45, uproy:68129, udiff:-3589, sep_vc:142595, sep_uc:64476},
-  {n:"Pedregal", zone:"oeste", vp:351450, vc:77125, vpct:21.94, vproy:341554, vdiff:-9896, up:160401, uc:34339, upct:21.41, uproy:152073, udiff:-8328, sep_vc:317417, sep_uc:142438},
-  {n:"San Antonio", zone:"este", vp:554400, vc:130534, vpct:23.55, vproy:578079, vdiff:23679, up:233011, uc:51838, upct:22.25, uproy:229568, udiff:-3443, sep_vc:512288, sep_uc:207168},
-  {n:"Urbina", zone:"este", vp:650925, vc:156638, vpct:24.06, vproy:693683, vdiff:42758, up:283108, uc:63589, upct:22.46, uproy:281608, udiff:-1500, sep_vc:596917, sep_uc:250018}
+  {n:"Carlota", zone:"este", vp:1041480, vc:278137, vpct:26.71, vproy:1077781, vdiff:36301, up:384886, uc:105220, upct:27.34, uproy:407728, udiff:22842, sep_vc:1006138, sep_uc:387572},
+  {n:"Chacao", zone:"oeste", vp:556875, vc:153052, vpct:27.48, vproy:593076, vdiff:36201, up:250180, uc:67386, upct:26.94, uproy:261121, udiff:10941, sep_vc:534284, sep_uc:238746},
+  {n:"Dos Caminos", zone:"oeste", vp:321750, vc:83299, vpct:25.89, vproy:322784, vdiff:1034, up:148657, uc:36465, upct:24.53, uproy:141302, udiff:-7355, sep_vc:299673, sep_uc:131923},
+  {n:"Florida", zone:"oeste", vp:680625, vc:185069, vpct:27.19, vproy:717142, vdiff:36517, up:269255, uc:76357, upct:28.36, uproy:295883, udiff:26628, sep_vc:654795, sep_uc:275077},
+  {n:"Llanito", zone:"este", vp:447975, vc:119127, vpct:26.59, vproy:461617, vdiff:13642, up:190436, uc:50593, upct:26.57, uproy:196048, udiff:5612, sep_vc:441295, sep_uc:190117},
+  {n:"Luz Quick Rest", zone:"oeste", vp:190575, vc:49071, vpct:25.75, vproy:190150, vdiff:-425, up:88348, uc:22633, upct:25.62, uproy:87703, udiff:-645, sep_vc:173457, sep_uc:79416},
+  {n:"Marques", zone:"este", vp:153945, vc:39808, vpct:25.86, vproy:154256, vdiff:311, up:71718, uc:17372, upct:24.22, uproy:67316, udiff:-4402, sep_vc:142595, sep_uc:64476},
+  {n:"Pedregal", zone:"oeste", vp:351450, vc:87800, vpct:24.98, vproy:340225, vdiff:-11225, up:160401, uc:39155, upct:24.41, uproy:151726, udiff:-8675, sep_vc:317417, sep_uc:142438},
+  {n:"San Antonio", zone:"este", vp:554400, vc:145129, vpct:26.18, vproy:562375, vdiff:7975, up:233011, uc:57585, upct:24.71, uproy:223142, udiff:-9869, sep_vc:512288, sep_uc:207168},
+  {n:"Urbina", zone:"este", vp:650925, vc:174299, vpct:26.78, vproy:675409, vdiff:24484, up:283108, uc:70924, upct:25.05, uproy:274830, udiff:-8278, sep_vc:596917, sep_uc:250018}
 ];
 
 let zone = 'todas';
@@ -369,8 +369,8 @@ function renderKPIs(){
       <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha a final de mes' : 'Superávit consolidado'}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title">Valla Día 7</div>
-      <div class="kpi-value">22,58%</div>
+      <div class="kpi-title">Valla Día 8</div>
+      <div class="kpi-value">25,81%</div>
       <div class="kpi-sub">Meta teórica hoy</div>
     </div>
   `;
