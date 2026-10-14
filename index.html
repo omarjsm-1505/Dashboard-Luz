@@ -1,501 +1,424 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luz · Dashboard Ejecutivo de Presupuesto</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#F8F6F2;
-    --card:#FFFFFF;
-    --card-hi:#F3EFEA;
-    --line: rgba(140,29,64,0.12);
-    --wine:#8C1D40;
-    --wine-light:#B4213F;
-    --wine-bg: rgba(140,29,64,0.06);
-    --gold:#C59B27;
-    --gold-dim:#8A6D1B;
-    --text:#2B2627;
-    --muted:#6E6366;
-    --good:#2E7D32;
-    --good-bg: rgba(46,125,50,0.1);
-    --warn:#D97A46;
-    --warn-bg: rgba(217,122,70,0.12);
-    --danger:#C14646;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background-color: var(--bg);
-    color:var(--text);
-    font-family:'Inter', sans-serif;
-    min-height: 100vh;
-    -webkit-font-smoothing:antialiased;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reporte Ejecutivo Consolidado - Unidades Vendidas por Sucursal</title>
+  <style>
+    /* 1. Configuración de Página: Oficio (Legal) Horizontal */
+    @page {
+      size: legal landscape;
+      margin: 8mm 10mm;
+    }
 
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: 
-      linear-gradient(to bottom, rgba(248, 246, 242, 0.92), rgba(248, 246, 242, 0.97)),
-      url('1275044.jpg');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 550px auto;
-    opacity: 0.6;
-    z-index: -1;
-    pointer-events: none;
-  }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
 
-  /* PANTALLA DE ACCESO RESTRINGIDO */
-  .auth-overlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .auth-card {
-    background: var(--card); border: 1px solid var(--line);
-    padding: 36px 28px; border-radius: 20px; text-align: center;
-    box-shadow: 0 10px 30px rgba(140,29,64,0.08); max-width: 380px; width: 100%;
-  }
-  .auth-logo { height: 48px; margin-bottom: 16px; object-fit: contain; }
-  .auth-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
-  .auth-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
-  .auth-input {
-    width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1.5px solid var(--line);
-    border-radius: 10px; font-size: 15px; text-align: center; font-family: 'JetBrains Mono', monospace;
-    background: var(--card-hi); color: var(--text); outline: none; transition: border-color 0.2s;
-  }
-  .auth-input:focus { border-color: var(--wine); }
-  .auth-btn {
-    width: 100%; padding: 12px; background: var(--wine); color: #FFFFFF;
-    border: none; border-radius: 10px; font-family: 'Inter'; font-weight: 700; font-size: 14px;
-    cursor: pointer; transition: background 0.2s;
-  }
-  .auth-btn:hover { background: var(--wine-light); }
-  .auth-error { color: var(--danger); font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
+    body {
+      margin: 0;
+      padding: 16px 20px;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #F4F6F9;
+      color: #0F172A;
+    }
 
-  /* CONTENIDO PRINCIPAL WEB */
-  .wrap{max-width:1180px; margin:0 auto; padding:20px 20px 80px;}
+    /* Barra de herramientas superior (oculta al exportar a PDF) */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1340px;
+      margin: 0 auto 12px auto;
+      padding: 10px 16px;
+      background: #0F172A;
+      color: #FFFFFF;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+    }
 
-  .corte-bar{
-    position:sticky; top:0; z-index:50;
-    background:linear-gradient(90deg, #641024, var(--wine), #641024);
-    border-bottom:2px solid var(--gold);
-    color:#FFFFFF;
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    padding:9px 18px;
-    display:flex; justify-content:space-between; align-items:center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-  }
-  .corte-bar b{ color:var(--gold);}
-  .btn-print{ 
-    background:var(--gold); color:#FFFFFF; border:none; padding:5px 12px; 
-    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; 
-    border-radius:100px; cursor:pointer; transition:background 0.2s;
-  }
+    .toolbar-info {
+      font-size: 13px;
+      color: #CBD5E1;
+    }
 
-  .hero{ padding:24px 0; border-bottom:1px solid var(--line); margin-bottom:24px; }
-  .logo-header { height: 52px; max-width: 200px; object-fit: contain; margin-bottom: 14px; display: block; filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.08)); }
-  .eyebrow{ font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:2px; font-size:10.5px; color:var(--wine); font-weight:700; margin:0 0 6px; }
-  h1{ font-family:'Fraunces', serif; font-weight:700; font-size:32px; line-height:1.2; margin:0 0 8px; color:var(--text); }
-  h1 em{ font-style:italic; color:var(--wine); }
-  .hero-sub{ color:var(--muted); font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0.5px; }
-  .corte-pill{ display:inline-block; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--wine); background:var(--card); border:1px solid var(--line); padding:6px 14px; border-radius:100px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
-  .corte-pill b{ color:var(--gold-dim); }
+    .btn-pdf {
+      background: #0056B3;
+      color: #FFFFFF;
+      border: 1px solid #38BDF8;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
 
-  .control-grid{
-    display:flex;
-    flex-wrap: wrap;
-    gap:14px;
-    margin-bottom:28px;
-  }
-  .ctrl-box{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:12px 18px;
-    display:inline-flex;
-    align-items:center;
-    gap:16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  }
-  .ctrl-title{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--wine); font-weight:700; margin:0; }
-  .toggle-group{ display:inline-flex; background:var(--card-hi); border:1px solid var(--line); border-radius:100px; padding:3px; flex-wrap: wrap; }
-  .toggle-btn{
-    border:none; background:transparent; color:var(--muted); font-family:'Inter'; font-weight:600; font-size:12px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:all 0.2s ease;
-  }
-  .toggle-btn.active{
-    background:var(--wine); color:#FFFFFF; box-shadow:0 2px 8px rgba(140,29,64,0.3);
-  }
+    .btn-pdf:hover {
+      background: #003D82;
+    }
 
-  .section-box{ margin-bottom:34px; }
-  .sec-title{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:0 0 2px 0; color:var(--text); }
-  .sec-sub{ color:var(--muted); font-size:12.5px; margin:0 0 16px 0; display:block; }
+    /* Contenedor Hoja Oficio Horizontal */
+    .sheet {
+      max-width: 1340px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      padding: 16px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+      border: 1px solid #E2E8F0;
+    }
 
-  .kpis-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:24px; }
-  .kpi-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; border-left:4px solid var(--gold); box-shadow:0 2px 10px rgba(0,0,0,0.03); }
-  .kpi-card.neg{ border-left-color:var(--warn); }
-  .kpi-card.accent{ border-left-color:var(--wine); background:var(--card-hi); }
-  .kpi-title{ font-family:'JetBrains Mono', monospace; font-size:9.5px; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .kpi-value{ font-family:'Fraunces', serif; font-size:20px; font-weight:700; color:var(--text); margin:5px 0 2px; }
-  .kpi-sub{ font-size:10.5px; color:var(--muted); }
-  
-  /* Destacado para porcentajes positivos */
-  .kpi-card.pos .kpi-value { color: var(--good); }
+    /* Encabezado Ejecutivo */
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2.5px solid #0F172A;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
 
-  .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); box-shadow:0 4px 15px rgba(0,0,0,0.03); }
-  table{ width:100%; border-collapse:collapse; min-width:1050px; }
-  th{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--wine); padding:12px 14px; text-align:right; border-bottom:2px solid var(--line); background:var(--card-hi); font-weight:700; }
-  th:first-child{ text-align:left; }
-  td{ padding:12px 14px; font-size:12px; text-align:right; border-bottom:1px solid var(--line); font-family:'JetBrains Mono', monospace; color:var(--text); }
-  td:first-child{ text-align:left; font-family:'Inter'; font-weight:600; }
-  tr.total-row td{ background:var(--wine-bg); font-weight:700; color:var(--wine); border-top:2px solid var(--wine); }
-  
-  th.block-start, td.block-start { border-left: 1px dashed rgba(140, 29, 64, 0.3) !important; }
+    .report-title h1 {
+      margin: 0;
+      font-size: 16pt;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #0F172A;
+      text-transform: uppercase;
+    }
 
-  .badge{ font-size:9px; font-weight:700; font-family:'JetBrains Mono', monospace; padding:3px 7px; border-radius:100px; text-transform:uppercase; display:inline-block; }
-  .badge.meta{ background:var(--good-bg); color:var(--good); border:1px solid var(--good); }
-  .badge.obs{ background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
+    .report-title p {
+      margin: 2px 0 0 0;
+      font-size: 8.5pt;
+      color: #475569;
+      font-weight: 500;
+    }
 
-  footer{ text-align:center; color:var(--muted); font-size:11px; padding-top:24px; font-family:'JetBrains Mono', monospace; }
+    /* Leyenda de Jerarquía Visual */
+    .legend {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 7.5pt;
+      font-weight: 700;
+    }
 
-  @media print {
-    @page { size: legal landscape; margin: 10mm; }
-    html, body { background: #FFFFFF !important; zoom: 0.85; margin: 0; padding: 0; height: auto; overflow: visible; }
-    * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
-    body::before { display: none; }
-    .auth-overlay, .corte-bar, .control-grid, footer { display: none !important; }
-    .wrap { padding: 0 !important; margin: 0 auto !important; max-width: 100% !important; width: 100% !important; }
-    .hero { padding: 0; margin-bottom: 12px; border-bottom: none; }
-    .logo-header { height: 35px; margin-bottom: 6px; }
-    h1 { font-size: 22px; margin-bottom: 2px; }
-    .hero-sub { font-size: 13px; margin-bottom: 8px; }
-    .corte-pill { margin-bottom: 8px; padding: 4px 10px; font-size: 11px; }
-    .section-box { margin-bottom: 12px; page-break-inside: avoid; }
-    .sec-title { font-size: 16px; margin-bottom: 2px; }
-    .sec-sub { font-size: 11px; margin-bottom: 8px; }
-    .kpis-grid { display: flex !important; gap: 10px; margin-bottom: 15px; }
-    .kpi-card { flex: 1; padding: 10px; border-radius: 8px; }
-    .kpi-title { font-size: 9px; }
-    .kpi-value { font-size: 16px; margin: 4px 0 2px; }
-    .kpi-sub { font-size: 9px; }
-    .tbl-wrap { border: 1px solid #EAEAEA; box-shadow: none; border-radius: 8px; overflow: visible !important; }
-    table { width: 100% !important; min-width: 100% !important; max-width: 100% !important; table-layout: auto; }
-    th, td { padding: 8px 6px !important; font-size: 11px !important; white-space: nowrap !important; }
-    th { font-size: 10px !important; }
-    td:first-child { white-space: normal !important; min-width: 100px; }
-    tr { page-break-inside: avoid; }
-  }
-</style>
+    .legend-item {
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    /* Tabla Matriz Optimizada */
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .matrix-table th,
+    .matrix-table td {
+      border: 1px solid #CBD5E1;
+      padding: 3px 5px;
+      vertical-align: middle;
+    }
+
+    /* Encabezados de Columna */
+    .matrix-table thead th {
+      background: #0F172A;
+      color: #FFFFFF;
+      font-size: 7.8pt;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      padding: 6px 4px;
+    }
+
+    .matrix-table thead th.col-cat {
+      text-align: left;
+      padding-left: 8px;
+      background: #1E293B;
+    }
+
+    .matrix-table thead th.col-total {
+      background: #003D82;
+      width: 76pt;
+    }
+
+    /* 2. Prevención de Desbordes (Auto-Wrap) en 1ra Columna: Mínimo 138pt */
+    .col-cat {
+      width: 138pt;
+      min-width: 138pt;
+      max-width: 138pt;
+      white-space: normal !important;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      text-align: left;
+      font-size: 8pt;
+      font-weight: 800;
+      color: #0F172A;
+      line-height: 1.15;
+      padding-left: 8px !important;
+      background-color: #F8FAFC;
+    }
+
+    /* Filas alternas suaves */
+    .matrix-table tbody tr:nth-child(even) td:not(.col-cat):not(.col-total-cell) {
+      background-color: #FAFBFD;
+    }
+
+    /* Estructura interna de cada celda (Valor + Fila Inferior de Ranking) */
+    .cell-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .val-num {
+      font-size: 8.8pt;
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .val-empty {
+      color: #94A3B8;
+      font-weight: 600;
+    }
+
+    /* Sub-fila inferior de Ranking Dinámico */
+    .rank-badge {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 6.8pt;
+      font-weight: 800;
+      line-height: 1.25;
+      padding: 1px 3px;
+      border-radius: 3px;
+      letter-spacing: 0.1px;
+      white-space: nowrap;
+    }
+
+    /* Colores Altamente Saturados por Rango */
+    /* 🥇 Rango 1 (Oro) */
+    .rk-1 {
+      background-color: #FEF08A;
+      color: #92400E;
+      border: 1px solid #F59E0B;
+    }
+
+    /* 🥈 Rango 2 (Plata) */
+    .rk-2 {
+      background-color: #E2E8F0;
+      color: #1E293B;
+      border: 1px solid #64748B;
+    }
+
+    /* 🥉 Rango 3 (Bronce) */
+    .rk-3 {
+      background-color: #FFEDD5;
+      color: #9A3412;
+      border: 1px solid #EA580C;
+    }
+
+    /* 🔹 Rango 4 y 5 (Azul Eléctrico #0056B3) */
+    .rk-45 {
+      background-color: #DBEAFE;
+      color: #0056B3;
+      border: 1px solid #0056B3;
+    }
+
+    /* ⚪ Rango 6 al 10 (Gris) */
+    .rk-610 {
+      background-color: #F1F5F9;
+      color: #64748B;
+      border: 1px solid #CBD5E1;
+      font-weight: 600;
+    }
+
+    /* Columna derecha Total General */
+    .col-total-cell {
+      background-color: #F1F5F9;
+      text-align: right;
+      font-size: 9pt;
+      font-weight: 800;
+      color: #0F172A;
+      padding-right: 8px !important;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 3. Fila de Cierre: Total general con fondo gris estructurado y borde superior reforzado */
+    .matrix-table tfoot tr.total-row td {
+      background-color: #E2E8F0 !important;
+      border-top: 2.5px solid #0F172A !important;
+      border-bottom: 2px solid #0F172A !important;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .matrix-table tfoot tr.total-row td.col-cat {
+      font-size: 8.8pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #0F172A;
+    }
+
+    .matrix-table tfoot tr.total-row .val-num {
+      font-size: 9.2pt;
+      font-weight: 900;
+    }
+
+    .matrix-table tfoot tr.total-row td.col-total-cell {
+      background-color: #CBD5E1 !important;
+      font-size: 9.6pt;
+      font-weight: 900;
+      color: #003D82;
+    }
+
+    @media print {
+      body {
+        background: #FFFFFF;
+        padding: 0;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .sheet {
+        max-width: 100%;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- OVERLAY DE BLOQUEO POR CLAVE -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-card">
-    <img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';">
-    <h2 class="auth-title">Automercado Luz</h2>
-    <p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p>
-    <input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)">
-    <button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button>
-    <div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div>
-  </div>
-</div>
-
-<!-- CONTENIDO OCULTO HASTA AUTENTICAR -->
-<div id="mainContent" style="display:none;">
-  <div class="corte-bar">
-    <span>◆ SEGUIMIENTO LUZ · 12 DE OCTUBRE DE 2026</span>
-    <button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button>
+  <div class="toolbar">
+    <div class="toolbar-info">
+      📋 <strong>Vista Previa Ejecutiva:</strong> Hoja Oficio Horizontal (Legal Landscape) · Auto-Wrap 138pt · Ranking Dinámico 1-10
+    </div>
+    <button class="btn-pdf" onclick="window.print()">
+      📥 Descargar / Guardar en PDF (Oficio Horizontal)
+    </button>
   </div>
 
-  <div class="wrap">
-
-    <section class="hero">
-      <img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';">
-      <p class="eyebrow">Automercado Luz</p>
-      <h1>Seguimiento <em>presupuesto</em></h1>
-      <p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio (Base PPTO Aprobada)</p>
-      <div class="corte-pill">◆ Corte al <b>12 de octubre, 2026</b></div>
-    </section>
-
-    <!-- CONTROLES -->
-    <div class="control-grid">
-      <div class="ctrl-box">
-        <span class="ctrl-title">Filtrar Zona Comercial</span>
-        <div class="toggle-group" id="groupZone">
-          <button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button>
-          <button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button>
-          <button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button>
-        </div>
+  <div class="sheet">
+    <header class="report-header">
+      <div class="report-title">
+        <h1>Reporte Consolidado de Ventas por Categoría y Sucursal</h1>
+        <p>Matriz de Unidades Vendidas y Posicionamiento Competitivo Horizontal (Rango 1 al 10 por Categoría)</p>
       </div>
-    </div>
-
-    <!-- KPIS: Resumen del Mes -->
-    <div class="section-box">
-      <h2 class="sec-title">Resumen del mes</h2>
-      <span class="sec-sub">Totales consolidados a la fecha de corte</span>
-      <div class="kpis-grid" id="kpiGrid"></div>
-    </div>
-    
-    <!-- NUEVA SECCIÓN: VS MES ANTERIOR -->
-    <div class="section-box">
-      <h2 class="sec-title">Vs. Mes Anterior</h2>
-      <span class="sec-sub">Comparativa de ritmo de ventas (promedio diario efectivo)</span>
-      <div class="kpis-grid" id="vsGrid"></div>
-    </div>
-
-    <!-- TABLA LIMPIA UNIFICADA CON BLOQUES -->
-    <div class="section-box">
-      <h2 class="sec-title">Detalle completo (360°)</h2>
-      <span class="sec-sub">Presupuestos redistribuidos con reglas y topes manuales</span>
-
-      <div class="tbl-wrap">
-        <table>
-          <thead id="tableHead"></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
+      <div class="legend">
+        <span class="legend-item rk-1">🥇 Rango 1: Líder (Oro)</span>
+        <span class="legend-item rk-2">🥈 Rango 2: Plata</span>
+        <span class="legend-item rk-3">🥉 Rango 3: Bronce</span>
+        <span class="legend-item rk-45">🔹 Rango 4-5: Top 5 (#0056B3)</span>
+        <span class="legend-item rk-610">⚪ Rango 6-10: Bajo Media</span>
       </div>
-    </div>
+    </header>
 
+    <table class="matrix-table" id="salesMatrix">
+      <thead>
+        <tr>
+          <th class="col-cat">CATEGORÍA</th>
+          <th>CARLOTA</th>
+          <th>CHACAO</th>
+          <th>DOS CAMINOS</th>
+          <th>FLORIDA</th>
+          <th>LLANITO</th>
+          <th>QUICK</th>
+          <th>MARQUES</th>
+          <th>PEDREGAL</th>
+          <th>SAN ANTONIO</th>
+          <th>URBINA</th>
+          <th class="col-total">Total general</th>
+        </tr>
+      </thead>
+      <tbody id="matrixBody"></tbody>
+      <tfoot id="matrixFoot"></tfoot>
+    </table>
   </div>
-</div>
-<script>
-// CLAVE DE ACCESO
-const SECRET_KEY = "Luz2026";
 
-function checkAuth() {
-  const pass = document.getElementById('passInput').value;
-  if (pass === SECRET_KEY) {
-    sessionStorage.setItem('luz_authenticated', 'true');
-    unlockDashboard();
-  } else {
-    document.getElementById('authError').style.display = 'block';
-  }
-}
+  <script>
+    // Datos auditados fieles al reporte consolidado de origen
+    const rowsData = [
+      { cat: "ALIMENTO PREPARADO", vals: [2830, 1586, 572, 1415, 272, 10973, 252, 1137, 554, 2007], total: 21598 },
+      { cat: "BEBIDA ALCOHOLICA",  vals: [6965, 3660, 5045, 3845, 1805, null, 1223, 2301, 2556, 2783], total: 30183 },
+      { cat: "CARNICERIA",         vals: [12752, 3997, 2498, 12528, 5735, 423, 1187, 1986, 7228, 8043], total: 56377 },
+      { cat: "CHARCUTERIA",        vals: [6821, 3227, 1708, 4359, 2335, 587, 826, 1486, 3042, 3503], total: 27893 },
+      { cat: "CHUCHERIA",          vals: [9664, 6532, 4216, 7460, 4968, 1739, 2472, 4626, 5638, 7321], total: 54636 },
+      { cat: "CONGELADOS",         vals: [1420, 652, 793, 1079, 500, 65, 523, 620, 1064, 753], total: 7469 },
+      { cat: "CUIDADO PERSONAL",   vals: [3857, 2731, 1413, 2688, 2114, 653, 690, 1583, 3429, 3146], total: 22304 },
+      { cat: "FRULEVER",           vals: [24153, 13449, 7011, 9361, 8149, 1125, 3485, 7295, 7782, 8873], total: 90683 },
+      { cat: "LIMPIEZA",           vals: [7446, 4945, 3056, 5312, 3540, 1065, 1299, 3488, 4359, 5274], total: 39784 },
+      { cat: "UTENSILIO",          vals: [525, 415, 224, 367, 315, 81, 33, 314, 351, 339], total: 2964 },
+      { cat: "VIVERES",            vals: [77827, 55005, 27346, 63738, 46751, 16070, 14030, 32180, 50889, 62820], total: 446656 }
+    ];
 
-function handleKeyPress(e) {
-  if (e.key === 'Enter') checkAuth();
-}
+    const footerData = {
+      cat: "Total general",
+      vals: [154259, 96200, 53882, 112152, 76483, 32781, 26020, 57017, 86892, 104862],
+      total: 800548
+    };
 
-function unlockDashboard() {
-  document.getElementById('authOverlay').style.display = 'none';
-  document.getElementById('mainContent').style.display = 'block';
-  renderAll();
-}
+    const fmt = (n) => n === null ? "—" : n.toLocaleString("es-VE");
 
-// LÓGICA DEL DASHBOARD
-const EXPECTED_PCT = 38.71; // 12 días de 31 para Octubre
-const DAYS_OCT_ELAPSED = 12;
-const DAYS_SEP_TOTAL = 30;
+    // Calcula el ranking del 1 al 10 dentro de la fila (mayor volumen = posición 1)
+    function computeRanks(vals) {
+      const indexed = vals.map((v, idx) => ({ val: v === null ? -1 : v, idx }));
+      indexed.sort((a, b) => b.val - a.val);
+      const ranks = new Array(vals.length);
+      indexed.forEach((item, pos) => { ranks[item.idx] = pos + 1; });
+      return ranks;
+    }
 
-// Datos de Octubre (Corte Día 12) + Registros Cierre Septiembre para Comparativa
-const data = [
-  {n:"Carlota", zone:"este", vp:1041480, vc:405553, vpct:38.94, vproy:1047679, vdiff:6199, up:384886, uc:154259, upct:40.08, uproy:398502, udiff:13616, sep_vc:1006138, sep_uc:387572},
-  {n:"Chacao", zone:"oeste", vp:556875, vc:218064, vpct:39.16, vproy:563332, vdiff:6457, up:250180, uc:96200, upct:38.45, uproy:248517, udiff:-1663, sep_vc:534284, sep_uc:238746},
-  {n:"Dos Caminos", zone:"oeste", vp:321750, vc:122132, vpct:37.96, vproy:315508, vdiff:-6242, up:148657, uc:53882, upct:36.25, uproy:139195, udiff:-9462, sep_vc:299673, sep_uc:131923},
-  {n:"Florida", zone:"oeste", vp:680625, vc:272511, vpct:40.04, vproy:703987, vdiff:23362, up:269255, uc:112152, upct:41.65, uproy:289726, udiff:20471, sep_vc:654795, sep_uc:275077},
-  {n:"Llanito", zone:"este", vp:447975, vc:179645, vpct:40.10, vproy:464083, vdiff:16108, up:190436, uc:76483, upct:40.16, uproy:197581, udiff:7145, sep_vc:441295, sep_uc:190117},
-  {n:"Luz Quick Rest", zone:"oeste", vp:190575, vc:70720, vpct:37.11, vproy:182693, vdiff:-7882, up:88348, uc:32781, upct:37.10, uproy:84684, udiff:-3664, sep_vc:173457, sep_uc:79416},
-  {n:"Marques", zone:"este", vp:153945, vc:59047, vpct:38.36, vproy:152538, vdiff:-1407, up:71718, uc:26020, upct:36.28, uproy:67218, udiff:-4500, sep_vc:142595, sep_uc:64476},
-  {n:"Pedregal", zone:"oeste", vp:351450, vc:127679, vpct:36.33, vproy:329837, vdiff:-21613, up:160401, uc:57017, upct:35.55, uproy:147294, udiff:-13107, sep_vc:317417, sep_uc:142438},
-  {n:"San Antonio", zone:"este", vp:554400, vc:219313, vpct:39.56, vproy:566559, vdiff:12159, up:233011, uc:86892, upct:37.29, uproy:224471, udiff:-8540, sep_vc:512288, sep_uc:207168},
-  {n:"Urbina", zone:"este", vp:650925, vc:257195, vpct:39.51, vproy:664420, vdiff:13495, up:283108, uc:104862, upct:37.04, uproy:270894, udiff:-12214, sep_vc:596917, sep_uc:250018}
-];
+    // Genera el badge visual según la jerarquía estricta solicitada
+    function getBadge(rank) {
+      if (rank === 1) return { cls: "rk-1",   txt: `🥇 Rango 1` };
+      if (rank === 2) return { cls: "rk-2",   txt: `🥈 Rango 2` };
+      if (rank === 3) return { cls: "rk-3",   txt: `🥉 Rango 3` };
+      if (rank === 4 || rank === 5) return { cls: "rk-45",  txt: `🔹 Rango ${rank}` };
+      return { cls: "rk-610", txt: `⚪ Rango ${rank}` };
+    }
 
-let zone = 'todas';
+    function renderRow(rowObj, isFooter = false) {
+      const ranks = computeRanks(rowObj.vals);
+      const tr = document.createElement("tr");
+      if (isFooter) tr.className = "total-row";
 
-function fmt(n, decimals = 0){ 
-  return (n || 0).toLocaleString('es-VE', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); 
-}
-function fmtSigned(n, decimals = 0){ return ((n || 0) >= 0 ? '+' : '') + fmt(n, decimals); }
+      let html = `<td class="col-cat">${rowObj.cat}</td>`;
+      rowObj.vals.forEach((v, i) => {
+        const b = getBadge(ranks[i]);
+        const valClass = v === null ? "val-num val-empty" : "val-num";
+        html += `
+          <td>
+            <div class="cell-wrap">
+              <span class="${valClass}">${fmt(v)}</span>
+              <span class="rank-badge ${b.cls}">${b.txt}</span>
+            </div>
+          </td>`;
+      });
+      html += `<td class="col-total-cell">${fmt(rowObj.total)}</td>`;
+      tr.innerHTML = html;
+      return tr;
+    }
 
-function getFilteredData(){
-  return zone === 'todas' ? data : data.filter(d => d.zone === zone);
-}
+    const tbody = document.getElementById("matrixBody");
+    rowsData.forEach(r => tbody.appendChild(renderRow(r, false)));
 
-function getTotals(list){
-  let vp = 0, vc = 0, vproy = 0, vdiff = 0;
-  let up = 0, uc = 0, uproy = 0, udiff = 0;
-  let sep_vc = 0, sep_uc = 0;
-  
-  list.forEach(d => {
-    vp += d.vp; vc += d.vc; vproy += d.vproy; vdiff += d.vdiff;
-    up += d.up; uc += d.uc; uproy += d.uproy; udiff += d.udiff;
-    sep_vc += d.sep_vc; sep_uc += d.sep_uc;
-  });
-  
-  const costoPromedio = uc > 0 ? (vc / uc) : 0;
-  const costoPromedioPpto = up > 0 ? (vp / up) : 0;
-  
-  return { vp, vc, vproy, vdiff, up, uc, uproy, udiff, costoPromedio, costoPromedioPpto, sep_vc, sep_uc };
-}
-
-function renderKPIs(){
-  const t = getTotals(getFilteredData());
-  const vpct = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
-  const upct = t.up > 0 ? (t.uc / t.up * 100) : 0;
-  
-  document.getElementById('kpiGrid').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-title">Ventas Cumplidas</div>
-      <div class="kpi-value">$${fmt(t.vc)}</div>
-      <div class="kpi-sub">${vpct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Unidades Cumplidas</div>
-      <div class="kpi-value">${fmt(t.uc)} u</div>
-      <div class="kpi-sub">${upct.toFixed(2).replace('.', ',')}% de la meta</div>
-    </div>
-    <div class="kpi-card accent">
-      <div class="kpi-title">Costo Promedio</div>
-      <div class="kpi-value">$${fmt(t.costoPromedio, 2)}</div>
-      <div class="kpi-sub">Ppto base: $${fmt(t.costoPromedioPpto, 2)}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Proyección Cierre ($)</div>
-      <div class="kpi-value">$${fmt(t.vproy)}</div>
-      <div class="kpi-sub">${t.vproy >= t.vp ? 'Cierra sobre ppto' : 'Cierra bajo ppto'}</div>
-    </div>
-    <div class="kpi-card ${t.vdiff < 0 ? 'neg' : ''}">
-      <div class="kpi-title">Diferencia Proyectada</div>
-      <div class="kpi-value">$${fmtSigned(t.vdiff)}</div>
-      <div class="kpi-sub">${t.vdiff < 0 ? 'Brecha a final de mes' : 'Superávit consolidado'}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Valla Día 12</div>
-      <div class="kpi-value">38,71%</div>
-      <div class="kpi-sub">Meta teórica hoy</div>
-    </div>
-  `;
-}
-
-function renderVsMesAnterior(){
-  const t = getTotals(getFilteredData());
-  
-  const avgValSep = t.sep_vc / DAYS_SEP_TOTAL;
-  const avgUniSep = t.sep_uc / DAYS_SEP_TOTAL;
-  
-  const avgValOct = t.vc / DAYS_OCT_ELAPSED;
-  const avgUniOct = t.uc / DAYS_OCT_ELAPSED;
-  
-  const valGrowth = avgValSep > 0 ? ((avgValOct / avgValSep) - 1) * 100 : 0;
-  const uniGrowth = avgUniSep > 0 ? ((avgUniOct / avgUniSep) - 1) * 100 : 0;
-
-  document.getElementById('vsGrid').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-title">Promedio Diario ($)</div>
-      <div class="kpi-value">$${fmt(avgValOct)}</div>
-      <div class="kpi-sub">Sep: $${fmt(avgValSep)} / día</div>
-    </div>
-    <div class="kpi-card ${valGrowth >= 0 ? 'pos' : 'neg'}">
-      <div class="kpi-title">Crecimiento Valor</div>
-      <div class="kpi-value">${fmtSigned(valGrowth, 2)}%</div>
-      <div class="kpi-sub">Ritmo facturación vs Sep</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Promedio Diario (Unid.)</div>
-      <div class="kpi-value">${fmt(avgUniOct)} u</div>
-      <div class="kpi-sub">Sep: ${fmt(avgUniSep)} u / día</div>
-    </div>
-    <div class="kpi-card ${uniGrowth >= 0 ? 'pos' : 'neg'}">
-      <div class="kpi-title">Crecimiento Volumen</div>
-      <div class="kpi-value">${fmtSigned(uniGrowth, 2)}%</div>
-      <div class="kpi-sub">Ritmo unidades vs Sep</div>
-    </div>
-  `;
-}
-
-function renderTable(){
-  const filtered = getFilteredData();
-  
-  document.getElementById('tableHead').innerHTML = `
-    <tr>
-      <th>Sucursal</th>
-      <th style="text-align:center;">Estatus</th>
-      <th class="block-start">Ppto. $</th>
-      <th>Cump. $</th>
-      <th>% Val.</th>
-      <th class="block-start">Ppto. U.</th>
-      <th>Cump. U.</th>
-      <th>% Unid.</th>
-      <th class="block-start">C. Prom. Real</th>
-      <th>C. Prom. Ppto</th>
-      <th>Var. Costo</th>
-    </tr>
-  `;
-
-  const rows = filtered.map(d => {
-    const cpReal = d.uc > 0 ? (d.vc / d.uc) : 0;
-    const cpPpto = d.up > 0 ? (d.vp / d.up) : 0;
-    const varCosto = cpReal - cpPpto;
-    
-    // Estatus basado en cumplimiento $ vs la valla del día
-    const badge = d.vpct >= EXPECTED_PCT ? '<span class="badge meta">Meta</span>' : '<span class="badge obs">Obs.</span>';
-    
-    return `
-    <tr>
-      <td>${d.n}</td>
-      <td style="text-align:center;">${badge}</td>
-      <td class="block-start" style="color:var(--muted);">$${fmt(d.vp)}</td>
-      <td>$${fmt(d.vc)}</td>
-      <td style="font-weight:700;">${d.vpct.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start" style="color:var(--muted);">${fmt(d.up)}</td>
-      <td>${fmt(d.uc)}</td>
-      <td style="font-weight:700;">${d.upct.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">$${fmt(cpReal, 2)}</td>
-      <td style="color:var(--muted);">$${fmt(cpPpto, 2)}</td>
-      <td style="color:${varCosto >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCosto, 2)}</td>
-    </tr>`;
-  }).join('');
-
-  const t = getTotals(filtered);
-  const varCostoT = t.costoPromedio - t.costoPromedioPpto;
-  const pctValorT = t.vp > 0 ? (t.vc / t.vp * 100) : 0;
-  const pctUnidT = t.up > 0 ? (t.uc / t.up * 100) : 0;
-
-  const totalRow = `
-    <tr class="total-row">
-      <td>TOTAL CONSOLIDADO</td>
-      <td style="text-align:center;"><span class="badge ${pctValorT >= EXPECTED_PCT ? 'meta' : 'obs'}">Global</span></td>
-      <td class="block-start">$${fmt(t.vp)}</td>
-      <td>$${fmt(t.vc)}</td>
-      <td>${pctValorT.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">${fmt(t.up)}</td>
-      <td>${fmt(t.uc)}</td>
-      <td>${pctUnidT.toFixed(2).replace('.', ',')}%</td>
-      <td class="block-start">$${fmt(t.costoPromedio, 2)}</td>
-      <td>$${fmt(t.costoPromedioPpto, 2)}</td>
-      <td style="color:${varCostoT >= 0 ? 'var(--good)' : 'var(--warn)'};">$${fmtSigned(varCostoT, 2)}</td>
-    </tr>`;
-
-  document.getElementById('tableBody').innerHTML = rows + totalRow;
-}
-
-function renderAll(){
-  renderKPIs();
-  renderVsMesAnterior();
-  renderTable();
-}
-
-function setZone(z, btn){
-  zone = z;
-  document.querySelectorAll('#groupZone .toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
-}
-
-// VERIFICAR AUTENTICACIÓN INICIAL
-if (sessionStorage.getItem('luz_authenticated') === 'true') {
-  unlockDashboard();
-}
-</script>
-
+    const tfoot = document.getElementById("matrixFoot");
+    tfoot.appendChild(renderRow(footerData, true));
+  </script>
 </body>
 </html>
