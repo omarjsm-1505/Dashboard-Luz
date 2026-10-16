@@ -3,141 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Árbol Genealógico Interactivo</title>
+<title>Árbol Genealógico - Familia Sánchez Gómez</title>
 <style>
   :root {
-    --bg: #0b0f19;
-    --panel: #151c2c;
-    --panel-hover: #1e293b;
-    --border: #2a364f;
-    --text: #f1f5f9;
+    --bg: #090d16;
+    --card: #131b2e;
+    --card-hover: #1b2640;
+    --border: #263554;
+    --text: #f8fafc;
     --muted: #94a3b8;
-    --gen1: #f59e0b; /* Dorado */
-    --gen2: #38bdf8; /* Azul */
-    --gen3: #10b981; /* Esmeralda */
-    --gen4: #a855f7; /* Violeta */
+    --gen1: #f59e0b; /* Dorado - Abuelos */
+    --gen2: #38bdf8; /* Azul - Padres */
+    --gen3: #10b981; /* Esmeralda - Hermanos */
+    --yo: #a855f7;   /* Violeta Neón - Lester (Yo) */
+    --leones: #eab308;
+    --magallanes: #3b82f6;
+    --cardenales: #ef4444;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-  
+
   body {
-    background: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg) 75%);
+    background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg) 70%);
     color: var(--text);
     min-height: 100vh;
-    padding: 16px;
-    font-size: 13.5px;
+    padding: 14px;
+    font-size: 13px;
   }
 
-  .contenedor { max-width: 780px; margin: 0 auto; }
+  .app { max-width: 820px; margin: 0 auto; }
 
-  /* Cabecera y Controles Intuitivos */
-  .cabecera {
-    background: rgba(21, 28, 44, 0.85);
+  /* Cabecera Estilo HUD de Videojuego */
+  .hud-header {
+    background: rgba(19, 27, 46, 0.9);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 14px 16px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+  }
+
+  .hud-top {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
-  .titulo-box h1 {
+  .titulo h1 {
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--gen1);
+    color: #fbbf24;
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  .titulo-box p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .titulo p { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-  .controles { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .controles { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
   .buscador {
     background: var(--bg);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 6px 12px;
+    padding: 6px 10px;
     border-radius: 8px;
-    font-size: 12.5px;
+    font-size: 12px;
     outline: none;
-    width: 190px;
-    transition: 0.2s;
+    width: 175px;
   }
-  .buscador:focus { border-color: var(--gen2); box-shadow: 0 0 8px rgba(56,189,248,0.25); }
+  .buscador:focus { border-color: var(--gen2); }
 
   .btn {
-    background: var(--panel-hover);
+    background: var(--card-hover);
     border: 1px solid var(--border);
     color: var(--text);
     padding: 6px 10px;
     border-radius: 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: 0.2s;
+    font-size: 11.5px;
     font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
   }
-  .btn:hover { border-color: var(--gen1); color: var(--gen1); }
+  .btn:hover, .btn.activo-filtro { border-color: #fbbf24; color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
 
-  /* Líneas conectoras del árbol */
+  /* Barra de Filtros Rápidos (Equipos LVBP) */
+  .hud-filtros {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    font-size: 11.5px;
+  }
+  .hud-filtros span { color: var(--muted); margin-right: 4px; }
+
+  /* Contenedor de Ramas */
+  .seccion-rama {
+    background: rgba(19, 27, 46, 0.45);
+    border: 1px solid rgba(38, 53, 84, 0.7);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .titulo-rama {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Estructura de Árbol Compacto en Línea */
   .rama {
-    margin-left: 20px;
+    margin-left: 18px;
     padding-left: 14px;
-    border-left: 2px solid #26334d;
+    border-left: 2px solid #293859;
     position: relative;
   }
 
   .nodo { position: relative; margin: 6px 0; }
-  
-  /* Conector horizontal tipo codo */
+
   .rama > .nodo::before {
     content: "";
     position: absolute;
-    top: 18px;
+    top: 17px;
     left: -14px;
     width: 14px;
     height: 2px;
-    background: #26334d;
+    background: #293859;
   }
 
-  /* Barra compacta de cada persona */
+  /* Barra Compacta de Persona */
   .barra {
     display: inline-flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
-    background: var(--panel);
+    gap: 8px;
+    background: var(--card);
     border: 1px solid var(--border);
-    border-left: 4px solid var(--color-gen, var(--gen1));
+    border-left: 4px solid var(--color-nodo, var(--gen1));
     padding: 6px 12px 6px 8px;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     user-select: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
   }
 
   .barra:hover {
-    background: var(--panel-hover);
+    background: var(--card-hover);
     transform: translateX(3px);
-    border-color: var(--color-gen);
+    border-color: var(--color-nodo);
   }
 
   .barra.activo {
-    background: #1a2438;
-    border-color: var(--color-gen);
-    box-shadow: 0 0 14px rgba(0,0,0,0.4), inset 0 0 8px rgba(255,255,255,0.03);
+    background: #1e293b;
+    border-color: var(--color-nodo);
+    box-shadow: 0 0 14px rgba(0,0,0,0.5);
   }
 
-  .avatar {
-    width: 26px;
-    height: 26px;
+  .barra.protagonista {
+    background: linear-gradient(90deg, rgba(168,85,247,0.18), var(--card));
+    border-color: var(--yo);
+  }
+
+  .icono {
+    width: 25px;
+    height: 25px;
     border-radius: 6px;
     background: rgba(255,255,255,0.06);
     display: flex;
@@ -146,80 +190,80 @@
     font-size: 14px;
   }
 
-  .nom { font-weight: 700; color: var(--text); font-size: 13.5px; }
+  .nom { font-weight: 700; font-size: 13.5px; color: #fff; }
 
-  .badge-rol {
-    font-size: 10.5px;
+  .rol-chip {
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     padding: 2px 7px;
     border-radius: 99px;
     background: rgba(255,255,255,0.06);
-    color: var(--color-gen);
-    letter-spacing: 0.4px;
+    color: var(--color-nodo);
   }
 
-  .badge-hijos {
+  .edad-chip {
     font-size: 11px;
-    color: var(--muted);
-    background: var(--bg);
+    color: #cbd5e1;
+    background: rgba(0,0,0,0.3);
     padding: 1px 6px;
-    border-radius: 6px;
+    border-radius: 5px;
   }
+
+  .equipo-mini {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+  }
+  .eq-leones { color: #fde047; background: rgba(234,179,8,0.12); border-color: rgba(234,179,8,0.3); }
+  .eq-magallanes { color: #93c5fd; background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.3); }
+  .eq-cardenales { color: #fca5a5; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); }
 
   .flecha {
     font-size: 10px;
     color: var(--muted);
-    margin-left: 4px;
-    transition: transform 0.25s ease;
+    margin-left: 2px;
+    transition: transform 0.2s ease;
   }
-  .barra.activo .flecha { transform: rotate(180deg); color: var(--color-gen); }
+  .barra.activo .flecha { transform: rotate(180deg); color: var(--color-nodo); }
 
-  /* Ficha desplegable en línea (Estilo RPG) */
+  /* Ficha Desplegable en Línea (Estilo Estadísticas de Juego) */
   .ficha {
     display: none;
-    background: linear-gradient(145deg, #111726, #0d1320);
+    background: linear-gradient(145deg, #0f172a, #090d16);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--color-gen);
+    border-left: 3px solid var(--color-nodo);
     border-radius: 0 10px 10px 10px;
-    margin: 5px 0 10px 12px;
+    margin: 5px 0 8px 12px;
     padding: 10px 12px;
     max-width: 560px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
-    animation: desplegar 0.2s ease-out;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    animation: abrir 0.18s ease-out;
   }
 
   .ficha.abierto { display: block; }
 
-  .grid-datos {
+  .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
     gap: 6px;
-    margin-bottom: 8px;
   }
 
-  .dato-item {
+  .stat {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
-    padding: 4px 8px;
+    padding: 5px 8px;
     border-radius: 6px;
   }
 
-  .dato-label { font-size: 10px; color: var(--muted); text-transform: uppercase; display: block; }
-  .dato-valor { font-size: 12px; font-weight: 600; color: #e2e8f0; }
+  .stat-k { font-size: 9.5px; text-transform: uppercase; color: var(--muted); display: block; }
+  .stat-v { font-size: 12px; font-weight: 600; color: #f1f5f9; margin-top: 1px; display: block; }
 
-  .historia {
-    font-size: 12.5px;
-    line-height: 1.45;
-    color: #cbd5e1;
-    background: rgba(0,0,0,0.25);
-    padding: 8px 10px;
-    border-radius: 6px;
-  }
+  .oculto { display: none !important; }
 
-  .oculto-filtro { display: none !important; }
-
-  @keyframes desplegar {
+  @keyframes abrir {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
   }
@@ -227,95 +271,180 @@
 </head>
 <body>
 
-<div class="contenedor">
-  <div class="cabecera">
-    <div class="titulo-box">
-      <h1>🛡️ Árbol de Linaje</h1>
-      <p>Toca cualquier integrante para desplegar su ficha completa</p>
+<div class="app">
+  <div class="hud-header">
+    <div class="hud-top">
+      <div class="titulo">
+        <h1>🎮 Árbol Genealógico • Lester Sánchez</h1>
+        <p>Toca cualquier nombre para desplegar su ficha completa en línea</p>
+      </div>
+      <div class="controles">
+        <input type="text" class="buscador" placeholder="🔍 Buscar nombre, signo, hobby..." oninput="filtrarTexto(this.value)">
+        <button class="btn" onclick="alternarTodo(true)">➕ Abrir Todo</button>
+        <button class="btn" onclick="alternarTodo(false)">➖ Cerrar Todo</button>
+      </div>
     </div>
-    <div class="controles">
-      <input type="text" id="buscador" class="buscador" placeholder="🔍 Buscar nombre o dato..." oninput="filtrarArbol(this.value)">
-      <button class="btn" onclick="alternarTodos(true)">➕ Abrir todo</button>
-      <button class="btn" onclick="alternarTodos(false)">➖ Cerrar todo</button>
+    <div class="hud-filtros">
+      <span>⚾ Filtrar por equipo:</span>
+      <button class="btn activo-filtro" onclick="filtrarEquipo('todos', this)">Todos (9)</button>
+      <button class="btn" onclick="filtrarEquipo('Leones', this)">🦁 Leones del Caracas (3)</button>
+      <button class="btn" onclick="filtrarEquipo('Magallanes', this)">⚓ Navegantes del Magallanes (3)</button>
+      <button class="btn" onclick="filtrarEquipo('Cardenales', this)">🐦 Cardenales de Lara (2)</button>
     </div>
   </div>
 
-  <div id="arbol"></div>
+  <div id="contenedor-arbol"></div>
 </div>
 
 <script>
-// =====================================================
-// 1. BASE DE DATOS ULTRA COMPACTA (1 línea por persona)
-// =====================================================
-const familia = {
-  n: "Bisabuelo Fundador", r: "1ª Gen • Patriarca", i: "👑", g: 1, d: { "🎂 Nac": "1920", "📍 Lugar": "Caracas", "💼 Oficio": "Comerciante", "❤️ Pareja": "Bisabuela" }, bio: "Inició el legado familiar. Aquí se muestra toda su biografía, anécdotas e hitos importantes.", h: [
-    { n: "Abuelo (Rama A)", r: "2ª Gen", i: "⚡", g: 2, d: { "🎂 Nac": "1948", "📍 Lugar": "Caracas", "💼 Profesión": "Ingeniero" }, bio: "Continuó la tradición familiar y expandió la primera rama.", h: [
-      { n: "Padre / Madre", r: "3ª Gen", i: "🌟", g: 3, d: { "🎂 Nac": "1975", "📍 Lugar": "Caracas", "💼 Área": "Operaciones" }, bio: "Líder de la tercera generación con enfoque en organización y gestión.", h: [
-        { n: "Hijo / Hija", r: "4ª Gen", i: "🚀", g: 4, d: { "🎂 Nac": "2008", "📍 Lugar": "Caracas", "🎯 Interés": "Arte y Diseño" }, bio: "Nueva generación de la familia.", h: [] }
-      ]}
-    ]},
-    { n: "Tío Abuelo (Rama B)", r: "2ª Gen", i: "🛡️", g: 2, d: { "🎂 Nac": "1952", "📍 Lugar": "Valencia", "💼 Profesión": "Médico" }, bio: "Historia completa y detalles de la segunda rama familiar.", h: [] }
-  ]
-};
-
-// Colores automáticos según generación
-const coloresGen = { 1: "var(--gen1)", 2: "var(--gen2)", 3: "var(--gen3)", 4: "var(--gen4)" };
-
-// =====================================================
-// 2. MOTOR DE RENDERIZADO E INTERACTIVIDAD
-// =====================================================
-const render = (p) => {
-  const color = coloresGen[p.g] || "var(--gen2)";
-  const totalHijos = p.h ? p.h.length : 0;
-  const textoBusqueda = `${p.n} ${p.r} ${p.bio} ${Object.values(p.d||{}).join(' ')}`.toLowerCase();
-
-  return `
-  <div class="nodo" data-search="${textoBusqueda}" style="--color-gen: ${color}">
-    <div class="barra" onclick="toggleFicha(this)">
-      <span class="avatar">${p.i || '👤'}</span>
-      <span class="nom">${p.n}</span>
-      <span class="badge-rol">${p.r}</span>
-      ${totalHijos > 0 ? `<span class="badge-hijos" title="Descendientes directos">🌿 ${totalHijos}</span>` : ''}
-      <span class="flecha">▼</span>
-    </div>
-    <div class="ficha">
-      <div class="grid-datos">
-        ${Object.entries(p.d||{}).map(([k,v])=>`
-          <div class="dato-item">
-            <span class="dato-label">${k}</span>
-            <span class="dato-valor">${v}</span>
-          </div>`).join('')}
-      </div>
-      <div class="historia">${p.bio || ''}</div>
-    </div>
-    ${totalHijos > 0 ? `<div class="rama">${p.h.map(render).join('')}</div>` : ''}
-  </div>`;
-};
-
-function toggleFicha(barra) {
-  barra.classList.toggle('activo');
-  barra.nextElementSibling.classList.toggle('abierto');
-}
-
-function alternarTodos(abrir) {
-  document.querySelectorAll('.barra').forEach(b => b.classList.toggle('activo', abrir));
-  document.querySelectorAll('.ficha').forEach(f => f.classList.toggle('abierto', abrir));
-}
-
-function filtrarArbol(texto) {
-  const q = texto.trim().toLowerCase();
-  document.querySelectorAll('.nodo').forEach(nodo => {
-    if (!q) {
-      nodo.classList.remove('oculto-filtro');
-      return;
+// =========================================================================
+// BASE DE DATOS ULTRA COMPACTA (Toda la familia de Lester Sánchez)
+// =========================================================================
+const arbolFamiliar = [
+  {
+    tituloRama: "🌸 Rama Materna",
+    raiz: {
+      n: "Haider Moreno", r: "Abuela Materna", i: "🕊️", c: "var(--gen1)", edad: "34 años (En Memoria)", eq: "Leones",
+      d: { "🎂 Edad": "34 años (Falleció)", "♎ Signo": "Libra", "🔧 Hobbies": "Trabajar Mecánica", "⚾ Equipo": "🦁 Leones del Caracas" },
+      h: [
+        {
+          n: "Yesenia Gómez", r: "Madre", i: "👩", c: "var(--gen2)", edad: "48 años", eq: "Cardenales",
+          d: { "🎂 Edad": "48 años", "♎ Signo": "Libra", "📚 Hobbies": "Leer", "⚾ Equipo": "🐦 Cardenales de Lara" },
+          h: [
+            {
+              n: "José Mariño", r: "Hermano Materno", i: "👦", c: "var(--gen3)", edad: "22 años", eq: "Magallanes",
+              d: { "🎂 Edad": "22 años", "♓ Signo": "Piscis", "😴 Hobbies": "Dormir", "⚾ Equipo": "⚓ Navegantes del Magallanes" }, h: []
+            },
+            {
+              n: "Shannen Mariño", r: "Hermana Materna", i: "👧", c: "var(--gen3)", edad: "20 años", eq: "Magallanes",
+              d: { "🎂 Edad": "20 años", "♏ Signo": "Escorpio", "📚 Hobbies": "Leer", "⚾ Equipo": "⚓ Navegantes del Magallanes" }, h: []
+            }
+          ]
+        }
+      ]
     }
-    const coincide = nodo.dataset.search.includes(q) || 
-                     Array.from(nodo.querySelectorAll('.nodo')).some(hijo => hijo.dataset.search.includes(q));
-    nodo.classList.toggle('oculto-filtro', !coincide);
+  },
+  {
+    tituloRama: "🛡️ Rama Paterna",
+    raiz: {
+      n: "Marlene Marrero", r: "Abuela", i: "👵", c: "var(--gen1)", edad: "67 años", eq: "Magallanes",
+      d: { "🎂 Edad": "67 años", "♐ Signo": "Sagitario", "🎰 Hobbies": "Jugar Apuestas Royal", "⚾ Equipo": "⚓ Navegantes del Magallanes" },
+      h: [
+        {
+          n: "Omar Sánchez", r: "Padre", i: "👨", c: "var(--gen2)", edad: "43 años", eq: "Leones",
+          d: { "🎂 Edad": "43 años", "♑ Signo": "Capricornio", "🤖 Hobbies": "Hablar con Géminis", "⚾ Equipo": "🦁 Leones del Caracas" },
+          h: [
+            {
+              n: "Kamila Sánchez", r: "Hermana Paterna", i: "👧", c: "var(--gen3)", edad: "20 años", eq: "Leones",
+              d: { "🎂 Edad": "20 años", "♒ Signo": "Acuario", "🌍 Hobbies": "Estudiar Idiomas", "⚾ Equipo": "🦁 Leones del Caracas" }, h: []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    tituloRama: "⭐ Protagonista Principal (Unión de Ambas Ramas)",
+    raiz: {
+      n: "Lester Sánchez (Yo)", r: "Protagonista", i: "🎮", c: "var(--yo)", edad: "15 años", eq: "Cardenales", esYo: true,
+      d: { "🎂 Edad": "15 años", "♍ Signo": "Virgo", "📱 Hobbies": "Ver TikTok", "⚾ Equipo": "🐦 Cardenales de Lara", "👨‍👩‍👦 Padres": "Omar Sánchez y Yesenia Gómez", "🐰 Compañero": "Mascota Conejo" },
+      h: [
+        {
+          n: "Conejo", r: "Mascota Familiar", i: "🐰", c: "var(--yo)", edad: "Compañero", eq: "Todos",
+          d: { "🐾 Tipo": "Conejo", "🎮 Dueño": "Lester Sánchez", "⭐ Rol": "Mascota oficial de la familia" }, h: []
+        }
+      ]
+    }
+  }
+];
+
+// =========================================================================
+// MOTOR DE RENDERIZADO ULTRA COMPACTO
+// =========================================================================
+function badgeEquipo(eq) {
+  if (eq === "Leones") return `<span class="equipo-mini eq-leones">🦁 Leones</span>`;
+  if (eq === "Magallanes") return `<span class="equipo-mini eq-magallanes">⚓ Magallanes</span>`;
+  if (eq === "Cardenales") return `<span class="equipo-mini eq-cardenales">🐦 Cardenales</span>`;
+  return "";
+}
+
+function renderNodo(p) {
+  const textoBusqueda = `${p.n} ${p.r} ${Object.values(p.d).join(' ')}`.toLowerCase();
+  return `
+    <div class="nodo" data-search="${textoBusqueda}" data-eq="${p.eq}" style="--color-nodo: ${p.c}">
+      <div class="barra ${p.esYo ? 'protagonista activo' : ''}" onclick="toggleNodo(this)">
+        <span class="icono">${p.i}</span>
+        <span class="nom">${p.n}</span>
+        <span class="rol-chip">${p.r}</span>
+        <span class="edad-chip">${p.edad}</span>
+        ${badgeEquipo(p.eq)}
+        <span class="flecha">▼</span>
+      </div>
+      <div class="ficha ${p.esYo ? 'abierto' : ''}">
+        <div class="stats-grid">
+          ${Object.entries(p.d).map(([k, v]) => `
+            <div class="stat">
+              <span class="stat-k">${k}</span>
+              <span class="stat-v">${v}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ${p.h && p.h.length ? `<div class="rama">${p.h.map(renderNodo).join('')}</div>` : ''}
+    </div>
+  `;
+}
+
+function iniciarArbol() {
+  const contenedor = document.getElementById("contenedor-arbol");
+  contenedor.innerHTML = arbolFamiliar.map(sec => `
+    <div class="seccion-rama">
+      <div class="titulo-rama">${sec.tituloRama}</div>
+      ${renderNodo(sec.raiz)}
+    </div>
+  `).join('');
+}
+
+function toggleNodo(barra) {
+  barra.classList.toggle("activo");
+  barra.nextElementSibling.classList.toggle("abierto");
+}
+
+function alternarTodo(abrir) {
+  document.querySelectorAll(".barra").forEach(b => b.classList.toggle("activo", abrir));
+  document.querySelectorAll(".ficha").forEach(f => f.classList.toggle("abierto", abrir));
+}
+
+function filtrarTexto(q) {
+  const texto = q.trim().toLowerCase();
+  document.querySelectorAll(".nodo").forEach(n => {
+    if (!texto) { n.classList.remove("oculto"); return; }
+    const coincide = n.dataset.search.includes(texto) ||
+                     Array.from(n.querySelectorAll(".nodo")).some(h => h.dataset.search.includes(texto));
+    n.classList.toggle("oculto", !coincide);
   });
 }
 
-document.getElementById("arbol").innerHTML = render(familia);
+function filtrarEquipo(eq, btn) {
+  document.querySelectorAll(".hud-filtros .btn").forEach(b => b.classList.remove("activo-filtro"));
+  btn.classList.add("activo-filtro");
+
+  document.querySelectorAll(".nodo").forEach(n => {
+    if (eq === "todos") {
+      n.classList.remove("oculto");
+      return;
+    }
+    const coincidePropio = n.dataset.eq === eq;
+    const coincideHijo = Array.from(n.querySelectorAll(".nodo")).some(h => h.dataset.eq === eq);
+    n.classList.toggle("oculto", !(coincidePropio || coincideHijo));
+    if (coincidePropio) {
+      n.querySelector(".barra").classList.add("activo");
+      n.querySelector(".ficha").classList.add("abierto");
+    }
+  });
+}
+
+iniciarArbol();
 </script>
 </body>
 </html>
