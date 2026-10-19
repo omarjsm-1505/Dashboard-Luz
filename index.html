@@ -1,170 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Octubre 2026 - Reporte PDF (Corte 18/10)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-</head>
-<body class="bg-gray-100 text-gray-800 font-sans p-4 md:p-8">
-
-    <div class="max-w-7xl mx-auto mb-4 flex justify-end" data-html2canvas-ignore>
-        <button onclick="descargarPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-            Descargar PDF (Oficio Horizontal)
-        </button>
-    </div>
-
-    <div id="reporte-pdf" class="max-w-7xl mx-auto bg-gray-100 p-2">
-        
-        <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-sm mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h1 class="text-xl md:text-2xl font-black tracking-tight uppercase">📊 Identificación de productos en puerta</h1>
-                <p class="text-slate-300 text-sm mt-1">Gestión de Operaciones • Ciclo Octubre 2026 (Corte al 18/10)</p>
-            </div>
-            <div class="flex gap-2">
-                <span class="bg-blue-900 border border-blue-700 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-blue-300">VOLUMEN DE EVENTOS</span>
-                <span class="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-white">MIXTO (PCP + RILUZ)</span>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white p-5 rounded-xl border-l-4 border-blue-600">
-                <span class="text-[10px] font-bold text-gray-400 uppercase">🚨 Total Eventos</span>
-                <span class="text-3xl font-black text-gray-800 block mt-1">58 Ev.</span>
-                <span class="text-[9px] text-gray-500">Del 01 al 18 de Octubre</span>
-            </div>
-            <div class="bg-white p-5 rounded-xl border-l-4 border-red-500">
-                <span class="text-[10px] font-bold text-gray-400 uppercase">📈 Sucursales Críticas</span>
-                <span class="text-3xl font-black text-red-600 block mt-1">14 Ev.</span>
-                <span class="text-[9px] text-gray-500">La Carlota y El Pedregal</span>
-            </div>
-            <div class="bg-white p-5 rounded-xl border-l-4 border-amber-500">
-                <span class="text-[10px] font-bold text-gray-400 uppercase">📍 Fugas Masivas</span>
-                <span class="text-3xl font-black text-amber-600 block mt-1">4 Ev.</span>
-                <span class="text-[9px] text-gray-500">Omisiones de 5+ unidades</span>
-            </div>
-            <div class="bg-white p-5 rounded-xl border-l-4 border-green-600">
-                <span class="text-[10px] font-bold text-gray-400 uppercase">📉 Promedio Diario</span>
-                <span class="text-3xl font-black text-green-600 block mt-1">3.2</span>
-                <span class="text-[9px] text-gray-500">Eventos por día</span>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <div class="bg-white p-5 rounded-2xl">
-                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">🏢 Eventos por Sucursal</h3>
-                <div class="w-full flex items-end justify-between h-[150px] pt-4 px-2 border-b border-l border-gray-300">
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-red-600 mb-1">14</span><div class="w-6 bg-red-600 rounded-t-sm" style="height: 120px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">CAR</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-800 mb-1">14</span><div class="w-6 bg-slate-700 rounded-t-sm" style="height: 120px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">PED</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-800 mb-1">10</span><div class="w-6 bg-slate-700 rounded-t-sm" style="height: 85px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">CHA</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-600 mb-1">5</span><div class="w-6 bg-slate-500 rounded-t-sm" style="height: 42px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">2CA</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-600 mb-1">4</span><div class="w-6 bg-slate-500 rounded-t-sm" style="height: 34px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">LUZ</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">URB</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">FLO</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">SAN</span></div>
-                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">2</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 17px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">MAR</span></div>
-                </div>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl">
-                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">📉 Progresión de Identificación</h3>
-                <div class="relative h-[150px] w-full border-b border-l border-gray-300">
-                    <svg class="w-full h-full" viewBox="0 0 300 150" preserveAspectRatio="none">
-                        <polyline fill="none" stroke="#334155" stroke-width="3" points="40,80 150,20 260,60" />
-                        <circle cx="40" cy="80" r="5" fill="#3b82f6" /><text x="40" y="65" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">13</text>
-                        <circle cx="150" cy="20" r="5" fill="#ef4444" /><text x="150" y="10" text-anchor="middle" font-size="10" font-weight="bold" fill="#ef4444">24</text>
-                        <circle cx="260" cy="60" r="5" fill="#3b82f6" /><text x="260" y="45" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">21</text>
-                    </svg>
-                    <div class="absolute bottom-[-22px] left-0 right-0 flex justify-between text-[8px] font-black text-gray-500 px-6">
-                        <span>01 al 04 Oct</span><span>05 al 11 Oct</span><span>12 al 18 Oct</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl mb-6">
-            <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">📋 Consolidado Departamental</h3>
-            <table class="w-full text-left text-sm border-collapse">
-                <thead>
-                    <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase font-bold border-b border-slate-200">
-                        <th class="p-2">Sucursal</th><th class="p-2 text-center">01-04 Oct</th><th class="p-2 text-center">05-11 Oct</th><th class="p-2 text-center bg-blue-50 text-blue-800">12-18 Oct</th><th class="p-2 text-right font-black">Acumulado</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-xs">
-                    <tr><td class="p-2 font-semibold">La Carlota (CAR)</td><td class="p-2 text-center font-bold text-amber-600">6</td><td class="p-2 text-center font-bold text-amber-600">6</td><td class="p-2 text-center bg-blue-50 font-bold text-amber-600">2</td><td class="p-2 text-right font-black">14</td></tr>
-                    <tr><td class="p-2 font-semibold">El Pedregal (PED)</td><td class="p-2 text-center font-bold">4</td><td class="p-2 text-center font-black text-red-600">7</td><td class="p-2 text-center bg-blue-50 font-bold">3</td><td class="p-2 text-right font-black">14</td></tr>
-                    <tr><td class="p-2 font-semibold">Chacao (CHA)</td><td class="p-2 text-center">0</td><td class="p-2 text-center font-bold">3</td><td class="p-2 text-center bg-blue-50 font-black text-red-600">7</td><td class="p-2 text-right font-black">10</td></tr>
-                    <tr><td class="p-2 font-semibold">Dos Caminos (2CA)</td><td class="p-2 text-center font-bold">3</td><td class="p-2 text-center font-bold">1</td><td class="p-2 text-center bg-blue-50 font-bold text-amber-600">1</td><td class="p-2 text-right font-black">5</td></tr>
-                    <tr><td class="p-2 font-semibold">Luzquick (LUZ)</td><td class="p-2 text-center">0</td><td class="p-2 text-center">1</td><td class="p-2 text-center bg-blue-50 font-bold">3</td><td class="p-2 text-right font-black">4</td></tr>
-                    <tr><td class="p-2 font-semibold">La Florida (FLO)</td><td class="p-2 text-center">0</td><td class="p-2 text-center font-bold">2</td><td class="p-2 text-center bg-blue-50">1</td><td class="p-2 text-right font-black">3</td></tr>
-                    <tr><td class="p-2 font-semibold">La Urbina (URB)</td><td class="p-2 text-center">1</td><td class="p-2 text-center font-bold">2</td><td class="p-2 text-center bg-blue-50">0</td><td class="p-2 text-right font-black">3</td></tr>
-                    <tr><td class="p-2 font-semibold">San Antonio (SAN)</td><td class="p-2 text-center">0</td><td class="p-2 text-center">1</td><td class="p-2 text-center bg-blue-50 font-bold text-amber-600">2</td><td class="p-2 text-right font-black">3</td></tr>
-                    <tr><td class="p-2 font-semibold">El Marqués (MAR)</td><td class="p-2 text-center">0</td><td class="p-2 text-center font-bold">2</td><td class="p-2 text-center bg-blue-50">0</td><td class="p-2 text-right font-black">2</td></tr>
-                </tbody>
-                <tfoot>
-                    <tr class="bg-slate-800 text-white font-black text-xs border-t-2 border-slate-900">
-                        <td class="p-2 uppercase">TOTAL EVENTOS</td><td class="p-2 text-center">13</td><td class="p-2 text-center">24</td><td class="p-2 text-center bg-blue-900">21</td><td class="p-2 text-right">58</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl mb-6 border-l-4 border-indigo-500 html2pdf__page-break">
-            <h3 class="text-xs font-bold text-indigo-700 uppercase mb-4">🔍 Detalle Operativo (01 al 11 Octubre)</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-[9px] border-collapse">
-                    <thead class="bg-slate-100">
-                        <tr class="text-slate-500 uppercase font-bold border-b border-slate-200">
-                            <th class="p-2">Fecha</th><th class="p-2">Sucursal</th><th class="p-2">Cajero(a)</th><th class="p-2">Observación</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 text-slate-700">
-                        <tr><td class="p-2">01/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Karina Waldrop</td><td class="p-2">Toallitas Humedas (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">01/10</td><td class="p-2 font-semibold">La Urbina</td><td class="p-2 text-amber-600 font-bold">Lorgelys Mendez</td><td class="p-2">Cartón de Huevos (Omisión)</td></tr>
-                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Yaneth</td><td class="p-2">Zanahoria KG (Omisión)</td></tr>
-                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2 text-red-600">Liz</td><td class="p-2">Pechuga de pollo / Muslos (Cruce de Código)</td></tr>
-                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Oriana</td><td class="p-2">Bolsas con logo (Omisión de 4 unidades)</td></tr>
-                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2 text-red-600">Liz</td><td class="p-2">Naranjas (Omisión)</td></tr>
-                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600 font-bold">Angela Rosario</td><td class="p-2">Huevos Purolomo (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Deisy Aguilar</td><td class="p-2">Carne Molida (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600 font-bold">Angela Rosario</td><td class="p-2 text-red-600 font-bold">Cerveza Zulia (Fuga masiva 30 und)</td></tr>
-                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Aracelis</td><td class="p-2">Manzana Royal / Tomate Perita (Cruce de Código)</td></tr>
-                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">El Marqués</td><td class="p-2">Gregori Ovalles</td><td class="p-2">2 ½ cartón de huevos (Factura solo 1)</td></tr>
-                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Darelis Herrera</td><td class="p-2">Cebollín / Ajo Porro (Cruce de Código)</td></tr>
-                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Kelvin Ramirez</td><td class="p-2">Bandeja de Muslo (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600 font-bold">Michelle Gomez</td><td class="p-2">Cartón de Huevos (Omisión)</td></tr>
-                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Yuneidy Araque</td><td class="p-2">Plátano (Omisión)</td></tr>
-                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Kelvin Ramirez</td><td class="p-2">½ Cartón de huevos (Omisión)</td></tr>
-                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">La Florida</td><td class="p-2 text-red-600">Clara</td><td class="p-2">Leche Upaca (Lleva 1, facturan 4)</td></tr>
-                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">La Florida</td><td class="p-2 text-red-600">Clara</td><td class="p-2">Tortilla Bimbo (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Liz</td><td class="p-2">Pan (Ticket reutilizado / Cobro Erróneo)</td></tr>
-                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">La Urbina</td><td class="p-2 text-amber-600">Francis Villalba</td><td class="p-2">Durazno / Tomate Perita (Cruce de Código)</td></tr>
-                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Oriana</td><td class="p-2">Tomates / Cebolla (Cruce de Código - Omisión)</td></tr>
-                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Carly</td><td class="p-2">Aceite Vatel (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">Luzquick</td><td class="p-2">Francis</td><td class="p-2">Mayonesa Kraft (Cruce con Flips)</td></tr>
-                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Greicy Diaz</td><td class="p-2">Bolsa de Hielo (Omisión)</td></tr>
-                        <tr><td class="p-2 text-red-600">07/10</td><td class="p-2 font-semibold text-red-600">El Pedregal</td><td class="p-2 text-red-600 font-bold">Yulexy</td><td class="p-2 text-red-600 font-bold">Pollo entero (Fuga de 1 pollo - Jefa en caja)</td></tr>
-                        <tr><td class="p-2">07/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Katherin</td><td class="p-2">Pan Francés / Canilla (Cruce)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Katerine</td><td class="p-2">Cambures / Plátano (Cruce de Código)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Dariana</td><td class="p-2">Jugo Yusty Naranja (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Florida</td><td class="p-2">Hilary</td><td class="p-2">Bolsas (Omisión de 2 unidades)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Marta</td><td class="p-2">Lechosa (Omisión)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600">Fabiana Marcano</td><td class="p-2 text-red-600 font-bold">Cerveza Zulia (Sobrefacturación 12 und)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Andreina Rivas</td><td class="p-2">Aguacate / Cebolla (Cruce de Código)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Karianny Gutierrez</td><td class="p-2">Cartón de Huevos (Omisión)</td></tr>
-                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Yolimar Rodriguez</td><td class="p-2">Sardina Willinger (Fuga de 2 unidades)</td></tr>
-                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Carly</td><td class="p-2">Plátanos / Cambur Guineo (Cruce)</td></tr>
-                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">El Marqués</td><td class="p-2">Gregori Ovalles</td><td class="p-2">Cheese Tris (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">El Marqués</td><td class="p-2">Gregori Ovalles</td><td class="p-2">Tomate de árbol / Tomate Perita (Cruce)</td></tr>
-                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Deisy Aguilar</td><td class="p-2">Refresco Coca-Cola 1L (Sobrefacturación)</td></tr>
-                        <tr><td class="p-2">10/10</td><td class
-<!DOCTYPE html>
-<html lang="es">
-<head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Octubre 2026 - PDF</title>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -216,3 +52,38 @@
                 </div>
             </div>
         </div>
+        <div class="bg-white p-5 rounded-2xl mb-6">
+            <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">📋 Consolidado Departamental</h3>
+            <table class="w-full text-left text-sm border-collapse">
+                <thead class="bg-slate-50 text-slate-500 text-[10px] uppercase font-bold border-b"><th class="p-2">Sucursal</th><th class="p-2 text-center">01-04 Oct</th><th class="p-2 text-center">05-11 Oct</th><th class="p-2 text-center bg-blue-50 text-blue-800">12-18 Oct</th><th class="p-2 text-right">Acumulado</th></thead>
+                <tbody class="divide-y divide-slate-100 text-xs">
+<tr><td class="p-2 font-bold">CAR</td><td class="p-2 text-center text-amber-600">6</td><td class="p-2 text-center text-amber-600">6</td><td class="p-2 text-center bg-blue-50 text-amber-600 font-bold">2</td><td class="p-2 text-right font-black">14</td></tr><tr><td class="p-2 font-bold">PED</td><td class="p-2 text-center">4</td><td class="p-2 text-center text-red-600 font-bold">7</td><td class="p-2 text-center bg-blue-50 font-bold">3</td><td class="p-2 text-right font-black">14</td></tr><tr><td class="p-2 font-bold">CHA</td><td class="p-2 text-center">0</td><td class="p-2 text-center">3</td><td class="p-2 text-center bg-blue-50 text-red-600 font-bold">7</td><td class="p-2 text-right font-black">10</td></tr><tr><td class="p-2 font-bold">2CA</td><td class="p-2 text-center">3</td><td class="p-2 text-center">1</td><td class="p-2 text-center bg-blue-50 text-amber-600 font-bold">1</td><td class="p-2 text-right font-black">5</td></tr><tr><td class="p-2 font-bold">LUZ</td><td class="p-2 text-center">0</td><td class="p-2 text-center">1</td><td class="p-2 text-center bg-blue-50 font-bold">3</td><td class="p-2 text-right font-black">4</td></tr><tr><td class="p-2 font-bold">FLO</td><td class="p-2 text-center">0</td><td class="p-2 text-center">2</td><td class="p-2 text-center bg-blue-50">1</td><td class="p-2 text-right font-black">3</td></tr><tr><td class="p-2 font-bold">URB</td><td class="p-2 text-center">1</td><td class="p-2 text-center">2</td><td class="p-2 text-center bg-blue-50">0</td><td class="p-2 text-right font-black">3</td></tr><tr><td class="p-2 font-bold">SAN</td><td class="p-2 text-center">0</td><td class="p-2 text-center">1</td><td class="p-2 text-center bg-blue-50 text-amber-600 font-bold">2</td><td class="p-2 text-right font-black">3</td></tr><tr><td class="p-2 font-bold">MAR</td><td class="p-2 text-center">0</td><td class="p-2 text-center">2</td><td class="p-2 text-center bg-blue-50">0</td><td class="p-2 text-right font-black">2</td></tr>
+                </tbody>
+                <tfoot class="bg-slate-800 text-white font-black text-xs"><td class="p-2">TOTAL</td><td class="p-2 text-center">13</td><td class="p-2 text-center">24</td><td class="p-2 text-center bg-blue-900">21</td><td class="p-2 text-right">58</td></tfoot>
+            </table>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl mb-6 border-l-4 border-indigo-500 html2pdf__page-break">
+            <h3 class="text-xs font-bold text-indigo-700 uppercase mb-4">🔍 Detalle: 01 al 11 Octubre</h3>
+            <table class="w-full text-left text-[9px] border-collapse"><thead class="bg-slate-100 text-slate-500 uppercase font-bold"><th class="p-2">Fecha</th><th class="p-2">Suc.</th><th class="p-2">Cajero</th><th class="p-2">Obs.</th></thead><tbody class="divide-y text-slate-700">
+<tr><td class="p-1">01/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Karina Waldrop</td><td class="p-1">Toallitas Humedas (Sobrefacturación)</td></tr><tr><td class="p-1">01/10</td><td class="p-1 font-bold">URB</td><td class="p-1 text-amber-600">Lorgelys Mendez</td><td class="p-1">Cartón de Huevos (Omisión)</td></tr><tr><td class="p-1">02/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Yaneth</td><td class="p-1">Zanahoria KG (Omisión)</td></tr><tr><td class="p-1">02/10</td><td class="p-1 font-bold">PED</td><td class="p-1 text-red-600">Liz</td><td class="p-1">Pechuga / Muslos (Cruce)</td></tr><tr><td class="p-1">02/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Oriana</td><td class="p-1">Bolsas con logo (Omisión 4 und)</td></tr><tr><td class="p-1">02/10</td><td class="p-1 font-bold">PED</td><td class="p-1 text-red-600">Liz</td><td class="p-1">Naranjas (Omisión)</td></tr><tr><td class="p-1">02/10</td><td class="p-1 font-bold">2CA</td><td class="p-1 text-amber-600">Angela Rosario</td><td class="p-1">Huevos Purolomo (Sobrefacturación)</td></tr><tr><td class="p-1">02/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Deisy Aguilar</td><td class="p-1">Carne Molida (Sobrefacturación)</td></tr><tr><td class="p-1">02/10</td><td class="p-1 font-bold">2CA</td><td class="p-1 text-amber-600">Angela Rosario</td><td class="p-1 text-red-600 font-bold">Cerveza Zulia (Fuga masiva 30 und)</td></tr><tr><td class="p-1">03/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Aracelis</td><td class="p-1">Manzana Royal / Tomate Perita (Cruce)</td></tr><tr><td class="p-1">03/10</td><td class="p-1 font-bold">MAR</td><td class="p-1">Gregori Ovalles</td><td class="p-1">2 ½ cartón huevos (Factura solo 1)</td></tr><tr><td class="p-1">03/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Darelis Herrera</td><td class="p-1">Cebollín / Ajo Porro (Cruce)</td></tr><tr><td class="p-1">03/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Kelvin Ramirez</td><td class="p-1">Bandeja de Muslo (Sobrefacturación)</td></tr><tr><td class="p-1">03/10</td><td class="p-1 font-bold">2CA</td><td class="p-1 text-amber-600">Michelle Gomez</td><td class="p-1">Cartón de Huevos (Omisión)</td></tr><tr><td class="p-1">03/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Yuneidy Araque</td><td class="p-1">Plátano (Omisión)</td></tr><tr><td class="p-1">03/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Kelvin Ramirez</td><td class="p-1">½ Cartón de huevos (Omisión)</td></tr><tr><td class="p-1">05/10</td><td class="p-1 font-bold">FLO</td><td class="p-1 text-red-600">Clara</td><td class="p-1">Leche Upaca (Lleva 1, facturan 4)</td></tr><tr><td class="p-1">05/10</td><td class="p-1 font-bold">FLO</td><td class="p-1 text-red-600">Clara</td><td class="p-1">Tortilla Bimbo (Sobrefacturación)</td></tr><tr><td class="p-1">05/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Liz</td><td class="p-1">Pan (Ticket reutilizado / Cobro Erróneo)</td></tr><tr><td class="p-1">05/10</td><td class="p-1 font-bold">URB</td><td class="p-1 text-amber-600">Francis Villalba</td><td class="p-1">Durazno / Tomate Perita (Cruce)</td></tr><tr><td class="p-1">06/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Oriana</td><td class="p-1">Tomates / Cebolla (Cruce)</td></tr><tr><td class="p-1">06/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Carly</td><td class="p-1">Aceite Vatel (Sobrefacturación)</td></tr><tr><td class="p-1">06/10</td><td class="p-1 font-bold">LUZ</td><td class="p-1">Francis</td><td class="p-1">Mayonesa Kraft (Cruce con Flips)</td></tr><tr><td class="p-1">06/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Greicy Diaz</td><td class="p-1">Bolsa de Hielo (Omisión)</td></tr><tr><td class="p-1 text-red-600">07/10</td><td class="p-1 font-bold">PED</td><td class="p-1 text-red-600 font-bold">Yulexy</td><td class="p-1 text-red-600 font-bold">Pollo entero (Fuga de 1 pollo - Jefa)</td></tr><tr><td class="p-1">07/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Katherin</td><td class="p-1">Pan Francés / Canilla (Cruce)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Katerine</td><td class="p-1">Cambures / Plátano (Cruce)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Dariana</td><td class="p-1">Jugo Yusty Naranja (Sobrefacturac)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">FLO</td><td class="p-1">Hilary</td><td class="p-1">Bolsas (Omisión de 2 unidades)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Marta</td><td class="p-1">Lechosa (Omisión)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">2CA</td><td class="p-1 text-amber-600">Fabiana Marcano</td><td class="p-1 text-red-600 font-bold">Cerveza Zulia (Sobrefacturación 12 und)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Andreina Rivas</td><td class="p-1">Aguacate / Cebolla (Cruce)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Karianny Gutierrez</td><td class="p-1">Cartón de Huevos (Omisión)</td></tr><tr><td class="p-1">08/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Yolimar Rodriguez</td><td class="p-1">Sardina Willinger (Fuga de 2 und)</td></tr><tr><td class="p-1">09/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Carly</td><td class="p-1">Plátanos / Cambur Guineo (Cruce)</td></tr><tr><td class="p-1">09/10</td><td class="p-1 font-bold">MAR</td><td class="p-1">Gregori Ovalles</td><td class="p-1">Cheese Tris (Sobrefacturación)</td></tr><tr><td class="p-1">09/10</td><td class="p-1 font-bold">MAR</td><td class="p-1">Gregori Ovalles</td><td class="p-1">Tomate de árbol / Tomate Perita (Cruce)</td></tr><tr><td class="p-1">09/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Deisy Aguilar</td><td class="p-1">Refresco Coca-Cola 1L (Sobrefacturac)</td></tr><tr><td class="p-1">10/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Katerine</td><td class="p-1">Detergente Ace 800g (Sobrefacturac)</td></tr><tr><td class="p-1">10/10</td><td class="p-1 font-bold">URB</td><td class="p-1 text-amber-600">Jesus Rivero</td><td class="p-1">Tortilla Bimbo 330gr (Cobro indebido)</td></tr><tr><td class="p-1 text-red-600">10/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Kelvin Ramirez</td><td class="p-1 text-red-600 font-bold">Refresco 7UP 2L (Fuga de 5 unidades)</td></tr><tr><td class="p-1">10/10</td><td class="p-1 font-bold">SAN</td><td class="p-1 text-amber-600">Yenifer Blanco</td><td class="p-1">1 Cartón de Huevo (Omisión)</td></tr>
+            </tbody></table>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl mb-6 border-l-4 border-indigo-500">
+            <h3 class="text-xs font-bold text-indigo-700 uppercase mb-4">🔍 Detalle: 12 al 18 Octubre</h3>
+            <table class="w-full text-left text-[9px] border-collapse"><thead class="bg-slate-100 text-slate-500 uppercase font-bold"><th class="p-2">Fecha</th><th class="p-2">Suc.</th><th class="p-2">Cajero</th><th class="p-2">Obs.</th></thead><tbody class="divide-y text-slate-700">
+<tr><td class="p-1">12/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Gabriela</td><td class="p-1">Bolsa con logo (Omisión)</td></tr><tr><td class="p-1">12/10</td><td class="p-1 font-bold">LUZ</td><td class="p-1">Erison Velasquez</td><td class="p-1">Coca-Cola 2L (Factura 3, lleva 4)</td></tr><tr><td class="p-1">13/10</td><td class="p-1 font-bold">PED</td><td class="p-1">José Miguel</td><td class="p-1">Lechuga / Cilantro (Cruce)</td></tr><tr><td class="p-1">13/10</td><td class="p-1 font-bold">SAN</td><td class="p-1 text-amber-600">Frank Molina</td><td class="p-1">Cartón Huevos (Sobrefacturación)</td></tr><tr><td class="p-1">14/10</td><td class="p-1 font-bold">LUZ</td><td class="p-1">Samantha</td><td class="p-1">Atún Williger 1.70g / 1.42g (Sobrefacturac)</td></tr><tr><td class="p-1 text-red-600">15/10</td><td class="p-1 font-bold">PED</td><td class="p-1 text-red-600 font-bold">Katerine</td><td class="p-1 text-red-600 font-bold">Sal Bahía (Masiva: Lleva 1, facturan 10)</td></tr><tr><td class="p-1">15/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600">Darlis Herrera</td><td class="p-1">Limón (Mal pesaje / Menos gramos)</td></tr><tr><td class="p-1">16/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Maribel</td><td class="p-1">Melocoton Laila (Sobrefacturación)</td></tr><tr><td class="p-1 text-red-600">16/10</td><td class="p-1 font-bold">FLO</td><td class="p-1 text-red-600 font-bold">Nicol Bayuelo</td><td class="p-1 text-red-600 font-bold">Glup Cola Negra (Fuga masiva 12 und)</td></tr><tr><td class="p-1 text-red-600">16/10</td><td class="p-1 font-bold">PED</td><td class="p-1 text-red-600 font-bold">Oriana</td><td class="p-1 text-red-600 font-bold">Cerveza de lata Pilsen (Fuga de 5 und)</td></tr><tr><td class="p-1">16/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">María</td><td class="p-1">Plátanos (Omisión)</td></tr><tr><td class="p-1">17/10</td><td class="p-1 font-bold">LUZ</td><td class="p-1">Samanta</td><td class="p-1">Aguacate (Omisión)</td></tr><tr><td class="p-1">17/10</td><td class="p-1 font-bold">PED</td><td class="p-1">Katerine</td><td class="p-1">Bandeja T Bone de cerdo (Omisión)</td></tr><tr><td class="p-1">17/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Maura</td><td class="p-1">Café San Domingo (Cobro erróneo)</td></tr><tr><td class="p-1">17/10</td><td class="p-1 font-bold">2CA</td><td class="p-1 text-amber-600">Angela Rosario</td><td class="p-1">Cambur Guineo / Plátano (Cruce)</td></tr><tr><td class="p-1">18/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Arverlin</td><td class="p-1">Cartón de Huevo (Omisión)</td></tr><tr><td class="p-1">18/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Maribel</td><td class="p-1">Papaya (Omisión)</td></tr><tr><td class="p-1">18/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">María Parra</td><td class="p-1">Lentejas Panteras (Sobrefacturación)</td></tr><tr><td class="p-1">18/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Osnaily</td><td class="p-1">Mermelada Secretos de la Abuela</td></tr><tr><td class="p-1">18/10</td><td class="p-1 font-bold">CHA</td><td class="p-1">Damelis</td><td class="p-1">Tomate Perita / Cilantro (Cruce)</td></tr><tr><td class="p-1">18/10</td><td class="p-1 font-bold">CAR</td><td class="p-1 text-amber-600 font-bold">Angui Perez</td><td class="p-1 text-red-600 font-bold">Cartón de Huevos (Omisión de cobro)</td></tr>
+            </tbody></table>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border-t-4 border-red-600">
+            <h3 class="text-xs font-bold text-slate-600 uppercase mb-4">⚠️ Score de Cajeros (Semana 12 al 18 Oct)</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">Katerine</span><span class="text-[10px] text-red-600 block mb-1">El Pedregal</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">2 Eventos</span></div><div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">Maribel</span><span class="text-[10px] text-red-600 block mb-1">Chacao</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">2 Eventos</span></div><div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">Samantha</span><span class="text-[10px] text-red-600 block mb-1">Luzquick</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">2 Eventos</span></div><div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">Nicol Bayuelo</span><span class="text-[10px] text-red-600 block mb-1">La Florida</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">1 Ev Masivo</span></div><div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">Oriana</span><span class="text-[10px] text-red-600 block mb-1">El Pedregal</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">1 Ev Fuga</span></div><div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">Angela Rosario</span><span class="text-[10px] text-red-600 block mb-1">Dos Caminos</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">1 Evento</span></div><div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">María Parra</span><span class="text-[10px] text-red-600 block mb-1">Chacao</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">1 Evento</span></div><div class="p-2 bg-red-50 border border-red-100 rounded-lg"><span class="text-xs font-black text-red-800">Frank Molina</span><span class="text-[10px] text-red-600 block mb-1">San Antonio</span><span class="text-[10px] font-bold bg-red-200 text-red-800 px-1 rounded block text-center">1 Evento</span></div>
+            </div>
+        </div>
+    </div>
+    <script>function descargarPDF(){html2pdf().set({margin:10,filename:'Dashboard_Octubre.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'legal',orientation:'landscape'}}).from(document.getElementById('reporte-pdf')).save();}</script>
+</body>
+</html>
