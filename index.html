@@ -1,37 +1,218 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Luz · Dashboard Ejecutivo</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"><style>:root{--bg:#F8F6F2;--card:#FFFFFF;--card-hi:#F3EFEA;--line:rgba(140,29,64,0.12);--wine:#8C1D40;--wine-light:#B4213F;--wine-bg:rgba(140,29,64,0.06);--gold:#C59B27;--gold-dim:#8A6D1B;--text:#2B2627;--muted:#6E6366;--good:#2E7D32;--good-bg:rgba(46,125,50,0.1);--warn:#D97A46;--warn-bg:rgba(217,122,70,0.12);--danger:#C14646}*{box-sizing:border-box}body{margin:0;background-color:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(to bottom,rgba(248,246,242,0.92),rgba(248,246,242,0.97)),url('1275044.jpg');background-repeat:no-repeat;background-position:center center;background-size:550px auto;opacity:0.6;z-index:-1;pointer-events:none}.auth-overlay{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}.auth-card{background:var(--card);border:1px solid var(--line);padding:36px 28px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(140,29,64,0.08);max-width:380px;width:100%}.auth-logo{height:48px;margin-bottom:16px;object-fit:contain}.auth-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--text);margin:0 0 6px}.auth-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px}.auth-input{width:100%;padding:12px 16px;margin-bottom:12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--card-hi);color:var(--text);outline:none;transition:border-color 0.2s}.auth-input:focus{border-color:var(--wine)}.auth-btn{width:100%;padding:12px;background:var(--wine);color:#FFFFFF;border:none;border-radius:10px;font-family:'Inter';font-weight:700;font-size:14px;cursor:pointer;transition:background 0.2s}.auth-btn:hover{background:var(--wine-light)}.auth-error{color:var(--danger);font-size:12px;font-weight:600;margin-top:10px;display:none}.wrap{max-width:1180px;margin:0 auto;padding:20px 20px 80px}.corte-bar{position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#641024,var(--wine),#641024);border-bottom:2px solid var(--gold);color:#FFFFFF;font-family:'JetBrains Mono',monospace;font-size:11px;padding:9px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.12)}.corte-bar b{color:var(--gold)}.btn-print{background:var(--gold);color:#FFFFFF;border:none;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-radius:100px;cursor:pointer;transition:background 0.2s}.hero{padding:24px 0;border-bottom:1px solid var(--line);margin-bottom:24px}.logo-header{height:52px;max-width:200px;object-fit:contain;margin-bottom:14px;display:block;filter:drop-shadow(0px 2px 6px rgba(0,0,0,0.08))}.eyebrow{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:10.5px;color:var(--wine);font-weight:700;margin:0 0 6px}h1{font-family:'Fraunces',serif;font-weight:700;font-size:32px;line-height:1.2;margin:0 0 8px;color:var(--text)}h1 em{font-style:italic;color:var(--wine)}.hero-sub{color:var(--muted);font-size:14px;font-weight:600;margin:0 0 16px;letter-spacing:0.5px}.corte-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--wine);background:var(--card);border:1px solid var(--line);padding:6px 14px;border-radius:100px;box-shadow:0 2px 6px rgba(0,0,0,0.03)}.corte-pill b{color:var(--gold-dim)}.control-grid{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:28px}.ctrl-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px;display:inline-flex;align-items:center;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,0.02)}.ctrl-title{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--wine);font-weight:700;margin:0}.toggle-group{display:inline-flex;background:var(--card-hi);border:1px solid var(--line);border-radius:100px;padding:3px;flex-wrap:wrap}.toggle-btn{border:none;background:transparent;color:var(--muted);font-family:'Inter';font-weight:600;font-size:12px;padding:8px 14px;border-radius:100px;cursor:pointer;transition:all 0.2s ease}.toggle-btn.active{background:var(--wine);color:#FFFFFF;box-shadow:0 2px 8px rgba(140,29,64,0.3)}.section-box{margin-bottom:34px}.sec-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin:0 0 2px 0;color:var(--text)}.sec-sub{color:var(--muted);font-size:12.5px;margin:0 0 16px 0;display:block}.kpis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}.kpi-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;border-left:4px solid var(--gold);box-shadow:0 2px 10px rgba(0,0,0,0.03)}.kpi-card.neg{border-left-color:var(--warn)}.kpi-card.accent{border-left-color:var(--wine);background:var(--card-hi)}.kpi-title{font-family:'JetBrains Mono',monospace;font-size:9.5px;text-transform:uppercase;color:var(--muted);font-weight:700}.kpi-value{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--text);margin:5px 0 2px}.kpi-sub{font-size:10.5px;color:var(--muted)}.kpi-card.pos .kpi-value{color:var(--good)}.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 4px 15px rgba(0,0,0,0.03)}table{width:100%;border-collapse:collapse;min-width:1050px}th{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--wine);padding:12px 14px;text-align:right;border-bottom:2px solid var(--line);background:var(--card-hi);font-weight:700}th:first-child{text-align:left}td{padding:12px 14px;font-size:12px;text-align:right;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;color:var(--text)}td:first-child{text-align:left;font-family:'Inter';font-weight:600}tr.total-row td{background:var(--wine-bg);font-weight:700;color:var(--wine);border-top:2px solid var(--wine)}th.block-start,td.block-start{border-left:1px dashed rgba(140,29,64,0.3)!important}.badge{font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;padding:3px 7px;border-radius:100px;text-transform:uppercase;display:inline-block}.badge.meta{background:var(--good-bg);color:var(--good);border:1px solid var(--good)}.badge.obs{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn)}footer{text-align:center;color:var(--muted);font-size:11px;padding-top:24px;font-family:'JetBrains Mono',monospace}@media print{@page{size:legal landscape;margin:10mm}html,body{background:#FFFFFF!important;zoom:0.85;margin:0;padding:0;height:auto;overflow:visible}*{-webkit-print-color-adjust:exact!important;color-adjust:exact!important}body::before{display:none}.auth-overlay,.corte-bar,.control-grid,footer{display:none!important}.wrap{padding:0!important;margin:0 auto!important;max-width:100%!important;width:100%!important}.hero{padding:0;margin-bottom:12px;border-bottom:none}.logo-header{height:35px;margin-bottom:6px}h1{font-size:22px;margin-bottom:2px}.hero-sub{font-size:13px;margin-bottom:8px}.corte-pill{margin-bottom:8px;padding:4px 10px;font-size:11px}.section-box{margin-bottom:12px;page-break-inside:avoid}.sec-title{font-size:16px;margin-bottom:2px}.sec-sub{font-size:11px;margin-bottom:8px}.kpis-grid{display:flex!important;gap:10px;margin-bottom:15px}.kpi-card{flex:1;padding:10px;border-radius:8px}.kpi-title{font-size:9px}.kpi-value{font-size:16px;margin:4px 0 2px}.kpi-sub{font-size:9px}.tbl-wrap{border:1px solid #EAEAEA;box-shadow:none;border-radius:8px;overflow:visible!important}table{width:100%!important;min-width:100%!important;max-width:100%!important;table-layout:auto}th,td{padding:8px 6px!important;font-size:11px!important;white-space:nowrap!important}th{font-size:10px!important}td:first-child{white-space:normal!important;min-width:100px}tr{page-break-inside:avoid}}</style></head><body><div class="auth-overlay" id="authOverlay"><div class="auth-card"><img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';"><h2 class="auth-title">Automercado Luz</h2><p class="auth-sub">Ingrese la clave para acceder al seguimiento ejecutivo de presupuesto.</p><input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)"><button class="auth-btn" onclick="checkAuth()">Ingresar al Dashboard</button><div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div></div></div><div id="mainContent" style="display:none;"><div class="corte-bar"><span>◆ SEGUIMIENTO LUZ · 18 DE OCTUBRE DE 2026</span><button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button></div><div class="wrap"><section class="hero"><img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';"><p class="eyebrow">Automercado Luz</p><h1>Seguimiento <em>presupuesto</em></h1><p class="hero-sub">Visión 360° - Valor $, Unidades y Costo Promedio (Base PPTO Aprobada)</p><div class="corte-pill">◆ Corte al <b>18 de octubre, 2026</b></div></section><div class="control-grid"><div class="ctrl-box"><span class="ctrl-title">Filtrar Zona Comercial</span><div class="toggle-group" id="groupZone"><button class="toggle-btn active" onclick="setZone('todas', this)">Todas</button><button class="toggle-btn" onclick="setZone('este', this)">Zona Este</button><button class="toggle-btn" onclick="setZone('oeste', this)">Zona Oeste</button></div></div></div><div class="section-box"><h2 class="sec-title">Resumen del mes</h2><span class="sec-sub">Totales consolidados a la fecha de corte</span><div class="kpis-grid" id="kpiGrid"></div></div><div class="section-box"><h2 class="sec-title">Vs. Mes Anterior</h2><span class="sec-sub">Comparativa de ritmo de ventas (promedio diario efectivo)</span><div class="kpis-grid" id="vsGrid"></div></div><div class="section-box"><h2 class="sec-title">Detalle completo (360°)</h2><span class="sec-sub">Presupuestos redistribuidos con reglas y topes manuales</span><div class="tbl-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div></div></div>
-<script>
-const SECRET_KEY = "Luz2026";
-const EXPECTED_PCT = 58.06;
-const DAYS_OCT_ELAPSED = 18;
-const DAYS_SEP_TOTAL = 30;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Octubre 2026 - Reporte PDF (Corte 18/10)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans p-4 md:p-8">
 
-const data = [
-  {"n":"Carlota","zone":"este","vp":1041480,"vc":633483,"vpct":60.83,"vproy":1090998,"vdiff":49518,"up":384886,"uc":238699,"upct":62.02,"uproy":411093,"udiff":26207,"sep_vc":1006138,"sep_uc":387572},
-  {"n":"Chacao","zone":"oeste","vp":556875,"vc":340103,"vpct":61.07,"vproy":585733,"vdiff":28858,"up":250180,"uc":149539,"upct":59.77,"uproy":257539,"udiff":7359,"sep_vc":534284,"sep_uc":238746},
-  {"n":"Dos Caminos","zone":"oeste","vp":321750,"vc":190467,"vpct":59.2,"vproy":328026,"vdiff":6276,"up":148657,"uc":83365,"upct":56.08,"uproy":143573,"udiff":-5084,"sep_vc":299673,"sep_uc":131923},
-  {"n":"Florida","zone":"oeste","vp":680625,"vc":426740,"vpct":62.7,"vproy":734941,"vdiff":54316,"up":269255,"uc":174522,"upct":64.82,"uproy":300566,"udiff":31311,"sep_vc":654795,"sep_uc":275077},
-  {"n":"Llanito","zone":"este","vp":447975,"vc":280702,"vpct":62.66,"vproy":483431,"vdiff":35456,"up":190436,"uc":119314,"upct":62.65,"uproy":205485,"udiff":15049,"sep_vc":441295,"sep_uc":190117},
-  {"n":"Luz Quick Rest","zone":"oeste","vp":190575,"vc":110234,"vpct":57.84,"vproy":189847,"vdiff":-728,"up":88348,"uc":50835,"upct":57.54,"uproy":87549,"udiff":-799,"sep_vc":173457,"sep_uc":79416},
-  {"n":"Marques","zone":"este","vp":153945,"vc":89390,"vpct":58.07,"vproy":153949,"vdiff":4,"up":71718,"uc":39540,"upct":55.13,"uproy":68097,"udiff":-3621,"sep_vc":142595,"sep_uc":64476},
-  {"n":"Pedregal","zone":"oeste","vp":351450,"vc":195952,"vpct":55.76,"vproy":337473,"vdiff":-13977,"up":160401,"uc":87767,"upct":54.72,"uproy":151154,"udiff":-9247,"sep_vc":317417,"sep_uc":142438},
-  {"n":"San Antonio","zone":"este","vp":554400,"vc":341895,"vpct":61.67,"vproy":588819,"vdiff":34419,"up":233011,"uc":135118,"upct":57.99,"uproy":232703,"udiff":-308,"sep_vc":512288,"sep_uc":207168},
-  {"n":"Urbina","zone":"este","vp":650925,"vc":398365,"vpct":61.2,"vproy":686073,"vdiff":35148,"up":283108,"uc":162544,"upct":57.41,"uproy":279937,"udiff":-3171,"sep_vc":596917,"sep_uc":250018}
-];
+    <div class="max-w-7xl mx-auto mb-4 flex justify-end" data-html2canvas-ignore>
+        <button onclick="descargarPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            Descargar PDF (Oficio Horizontal)
+        </button>
+    </div>
 
-let zone='todas';
-function checkAuth(){const p=document.getElementById('passInput').value;if(p===SECRET_KEY){sessionStorage.setItem('luz_authenticated','true');unlockDashboard();}else{document.getElementById('authError').style.display='block';}}
-function handleKeyPress(e){if(e.key==='Enter')checkAuth();}
-function unlockDashboard(){document.getElementById('authOverlay').style.display='none';document.getElementById('mainContent').style.display='block';renderAll();}
-function fmt(n,d=0){return (n||0).toLocaleString('es-VE',{minimumFractionDigits:d,maximumFractionDigits:d});}
-function fmtSigned(n,d=0){return ((n||0)>=0?'+':'')+fmt(n,d);}
-function getFilteredData(){return zone==='todas'?data:data.filter(d=>d.zone===zone);}
-function getTotals(list){let vp=0,vc=0,vproy=0,vdiff=0,up=0,uc=0,uproy=0,udiff=0,sep_vc=0,sep_uc=0;list.forEach(d=>{vp+=d.vp;vc+=d.vc;vproy+=d.vproy;vdiff+=d.vdiff;up+=d.up;uc+=d.uc;uproy+=d.uproy;udiff+=d.udiff;sep_vc+=d.sep_vc;sep_uc+=d.sep_uc;});const costoPromedio=uc>0?(vc/uc):0;const costoPromedioPpto=up>0?(vp/up):0;return{vp,vc,vproy,vdiff,up,uc,uproy,udiff,costoPromedio,costoPromedioPpto,sep_vc,sep_uc};}
-function renderKPIs(){const t=getTotals(getFilteredData());const vpct=t.vp>0?(t.vc/t.vp*100):0;const upct=t.up>0?(t.uc/t.up*100):0;document.getElementById('kpiGrid').innerHTML=`<div class="kpi-card"><div class="kpi-title">Ventas Cumplidas</div><div class="kpi-value">$${fmt(t.vc)}</div><div class="kpi-sub">${vpct.toFixed(2).replace('.',',')}% de la meta</div></div><div class="kpi-card"><div class="kpi-title">Unidades Cumplidas</div><div class="kpi-value">${fmt(t.uc)} u</div><div class="kpi-sub">${upct.toFixed(2).replace('.',',')}% de la meta</div></div><div class="kpi-card accent"><div class="kpi-title">Costo Promedio</div><div class="kpi-value">$${fmt(t.costoPromedio,2)}</div><div class="kpi-sub">Ppto base: $${fmt(t.costoPromedioPpto,2)}</div></div><div class="kpi-card"><div class="kpi-title">Proyección Cierre ($)</div><div class="kpi-value">$${fmt(t.vproy)}</div><div class="kpi-sub">${t.vproy>=t.vp?'Cierra sobre ppto':'Cierra bajo ppto'}</div></div><div class="kpi-card ${t.vdiff<0?'neg':''}"><div class="kpi-title">Diferencia Proyectada</div><div class="kpi-value">$${fmtSigned(t.vdiff)}</div><div class="kpi-sub">${t.vdiff<0?'Brecha a final de mes':'Superávit consolidado'}</div></div><div class="kpi-card"><div class="kpi-title">Valla Día ${DAYS_OCT_ELAPSED}</div><div class="kpi-value">${EXPECTED_PCT.toFixed(2).replace('.',',')}%</div><div class="kpi-sub">Meta teórica hoy</div></div>`;}
-function renderVsMesAnterior(){const t=getTotals(getFilteredData());const avgValSep=t.sep_vc/DAYS_SEP_TOTAL;const avgUniSep=t.sep_uc/DAYS_SEP_TOTAL;const avgValOct=t.vc/DAYS_OCT_ELAPSED;const avgUniOct=t.uc/DAYS_OCT_ELAPSED;const valGrowth=avgValSep>0?((avgValOct/avgValSep)-1)*100:0;const uniGrowth=avgUniSep>0?((avgUniOct/avgUniSep)-1)*100:0;document.getElementById('vsGrid').innerHTML=`<div class="kpi-card"><div class="kpi-title">Promedio Diario ($)</div><div class="kpi-value">$${fmt(avgValOct)}</div><div class="kpi-sub">Sep: $${fmt(avgValSep)} / día</div></div><div class="kpi-card ${valGrowth>=0?'pos':'neg'}"><div class="kpi-title">Crecimiento Valor</div><div class="kpi-value">${fmtSigned(valGrowth,2)}%</div><div class="kpi-sub">Ritmo facturación vs Sep</div></div><div class="kpi-card"><div class="kpi-title">Promedio Diario (Unid.)</div><div class="kpi-value">${fmt(avgUniOct)} u</div><div class="kpi-sub">Sep: ${fmt(avgUniSep)} u / día</div></div><div class="kpi-card ${uniGrowth>=0?'pos':'neg'}"><div class="kpi-title">Crecimiento Volumen</div><div class="kpi-value">${fmtSigned(uniGrowth,2)}%</div><div class="kpi-sub">Ritmo unidades vs Sep</div></div>`;}
-function renderTable(){const filtered=getFilteredData();document.getElementById('tableHead').innerHTML=`<tr><th>Sucursal</th><th style="text-align:center;">Estatus</th><th class="block-start">Ppto. $</th><th>Cump. $</th><th>% Val.</th><th class="block-start">Ppto. U.</th><th>Cump. U.</th><th>% Unid.</th><th class="block-start">C. Prom. Real</th><th>C. Prom. Ppto</th><th>Var. Costo</th></tr>`;const rows=filtered.map(d=>{const cpReal=d.uc>0?(d.vc/d.uc):0;const cpPpto=d.up>0?(d.vp/d.up):0;const varCosto=cpReal-cpPpto;const badge=d.vpct>=EXPECTED_PCT?'<span class="badge meta">Meta</span>':'<span class="badge obs">Obs.</span>';return`<tr><td>${d.n}</td><td style="text-align:center;">${badge}</td><td class="block-start" style="color:var(--muted);">$${fmt(d.vp)}</td><td>$${fmt(d.vc)}</td><td style="font-weight:700;">${d.vpct.toFixed(2).replace('.',',')}%</td><td class="block-start" style="color:var(--muted);">${fmt(d.up)}</td><td>${fmt(d.uc)}</td><td style="font-weight:700;">${d.upct.toFixed(2).replace('.',',')}%</td><td class="block-start">$${fmt(cpReal,2)}</td><td style="color:var(--muted);">$${fmt(cpPpto,2)}</td><td style="color:${varCosto>=0?'var(--good)':'var(--warn)'};">$${fmtSigned(varCosto,2)}</td></tr>`;}).join('');const t=getTotals(filtered);const varCostoT=t.costoPromedio-t.costoPromedioPpto;const pctValorT=t.vp>0?(t.vc/t.vp*100):0;const pctUnidT=t.up>0?(t.uc/t.up*100):0;const totalRow=`<tr class="total-row"><td>TOTAL CONSOLIDADO</td><td style="text-align:center;"><span class="badge ${pctValorT>=EXPECTED_PCT?'meta':'obs'}">Global</span></td><td class="block-start">$${fmt(t.vp)}</td><td>$${fmt(t.vc)}</td><td>${pctValorT.toFixed(2).replace('.',',')}%</td><td class="block-start">${fmt(t.up)}</td><td>${fmt(t.uc)}</td><td>${pctUnidT.toFixed(2).replace('.',',')}%</td><td class="block-start">$${fmt(t.costoPromedio,2)}</td><td>$${fmt(t.costoPromedioPpto,2)}</td><td style="color:${varCostoT>=0?'var(--good)':'var(--warn)'};">$${fmtSigned(varCostoT,2)}</td></tr>`;document.getElementById('tableBody').innerHTML=rows+totalRow;}
-function renderAll(){renderKPIs();renderVsMesAnterior();renderTable();}
-function setZone(z,btn){zone=z;document.querySelectorAll('#groupZone .toggle-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderAll();}
-if(sessionStorage.getItem('luz_authenticated')==='true'){unlockDashboard();}
-</script>
-</body>
-</html>
+    <div id="reporte-pdf" class="max-w-7xl mx-auto bg-gray-100 p-2">
+        
+        <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-sm mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-xl md:text-2xl font-black tracking-tight uppercase">📊 Identificación de productos en puerta</h1>
+                <p class="text-slate-300 text-sm mt-1">Gestión de Operaciones • Ciclo Octubre 2026 (Corte al 18/10)</p>
+            </div>
+            <div class="flex gap-2">
+                <span class="bg-blue-900 border border-blue-700 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-blue-300">VOLUMEN DE EVENTOS</span>
+                <span class="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-white">MIXTO (PCP + RILUZ)</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-5 rounded-xl border-l-4 border-blue-600">
+                <span class="text-[10px] font-bold text-gray-400 uppercase">🚨 Total Eventos</span>
+                <span class="text-3xl font-black text-gray-800 block mt-1">58 Ev.</span>
+                <span class="text-[9px] text-gray-500">Del 01 al 18 de Octubre</span>
+            </div>
+            <div class="bg-white p-5 rounded-xl border-l-4 border-red-500">
+                <span class="text-[10px] font-bold text-gray-400 uppercase">📈 Sucursales Críticas</span>
+                <span class="text-3xl font-black text-red-600 block mt-1">14 Ev.</span>
+                <span class="text-[9px] text-gray-500">La Carlota y El Pedregal</span>
+            </div>
+            <div class="bg-white p-5 rounded-xl border-l-4 border-amber-500">
+                <span class="text-[10px] font-bold text-gray-400 uppercase">📍 Fugas Masivas</span>
+                <span class="text-3xl font-black text-amber-600 block mt-1">4 Ev.</span>
+                <span class="text-[9px] text-gray-500">Omisiones de 5+ unidades</span>
+            </div>
+            <div class="bg-white p-5 rounded-xl border-l-4 border-green-600">
+                <span class="text-[10px] font-bold text-gray-400 uppercase">📉 Promedio Diario</span>
+                <span class="text-3xl font-black text-green-600 block mt-1">3.2</span>
+                <span class="text-[9px] text-gray-500">Eventos por día</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white p-5 rounded-2xl">
+                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">🏢 Eventos por Sucursal</h3>
+                <div class="w-full flex items-end justify-between h-[150px] pt-4 px-2 border-b border-l border-gray-300">
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-red-600 mb-1">14</span><div class="w-6 bg-red-600 rounded-t-sm" style="height: 120px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">CAR</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-800 mb-1">14</span><div class="w-6 bg-slate-700 rounded-t-sm" style="height: 120px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">PED</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-800 mb-1">10</span><div class="w-6 bg-slate-700 rounded-t-sm" style="height: 85px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">CHA</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-600 mb-1">5</span><div class="w-6 bg-slate-500 rounded-t-sm" style="height: 42px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">2CA</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-600 mb-1">4</span><div class="w-6 bg-slate-500 rounded-t-sm" style="height: 34px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">LUZ</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">URB</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">FLO</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">SAN</span></div>
+                    <div class="flex flex-col items-center w-8 group"><span class="text-[10px] font-bold text-slate-500 mb-1">2</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 17px;"></div><span class="text-[9px] font-bold mt-2 text-gray-600">MAR</span></div>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl">
+                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">📉 Progresión de Identificación</h3>
+                <div class="relative h-[150px] w-full border-b border-l border-gray-300">
+                    <svg class="w-full h-full" viewBox="0 0 300 150" preserveAspectRatio="none">
+                        <polyline fill="none" stroke="#334155" stroke-width="3" points="40,80 150,20 260,60" />
+                        <circle cx="40" cy="80" r="5" fill="#3b82f6" /><text x="40" y="65" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">13</text>
+                        <circle cx="150" cy="20" r="5" fill="#ef4444" /><text x="150" y="10" text-anchor="middle" font-size="10" font-weight="bold" fill="#ef4444">24</text>
+                        <circle cx="260" cy="60" r="5" fill="#3b82f6" /><text x="260" y="45" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">21</text>
+                    </svg>
+                    <div class="absolute bottom-[-22px] left-0 right-0 flex justify-between text-[8px] font-black text-gray-500 px-6">
+                        <span>01 al 04 Oct</span><span>05 al 11 Oct</span><span>12 al 18 Oct</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl mb-6">
+            <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">📋 Consolidado Departamental</h3>
+            <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase font-bold border-b border-slate-200">
+                        <th class="p-2">Sucursal</th><th class="p-2 text-center">01-04 Oct</th><th class="p-2 text-center">05-11 Oct</th><th class="p-2 text-center bg-blue-50 text-blue-800">12-18 Oct</th><th class="p-2 text-right font-black">Acumulado</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-xs">
+                    <tr><td class="p-2 font-semibold">La Carlota (CAR)</td><td class="p-2 text-center font-bold text-amber-600">6</td><td class="p-2 text-center font-bold text-amber-600">6</td><td class="p-2 text-center bg-blue-50 font-bold text-amber-600">2</td><td class="p-2 text-right font-black">14</td></tr>
+                    <tr><td class="p-2 font-semibold">El Pedregal (PED)</td><td class="p-2 text-center font-bold">4</td><td class="p-2 text-center font-black text-red-600">7</td><td class="p-2 text-center bg-blue-50 font-bold">3</td><td class="p-2 text-right font-black">14</td></tr>
+                    <tr><td class="p-2 font-semibold">Chacao (CHA)</td><td class="p-2 text-center">0</td><td class="p-2 text-center font-bold">3</td><td class="p-2 text-center bg-blue-50 font-black text-red-600">7</td><td class="p-2 text-right font-black">10</td></tr>
+                    <tr><td class="p-2 font-semibold">Dos Caminos (2CA)</td><td class="p-2 text-center font-bold">3</td><td class="p-2 text-center font-bold">1</td><td class="p-2 text-center bg-blue-50 font-bold text-amber-600">1</td><td class="p-2 text-right font-black">5</td></tr>
+                    <tr><td class="p-2 font-semibold">Luzquick (LUZ)</td><td class="p-2 text-center">0</td><td class="p-2 text-center">1</td><td class="p-2 text-center bg-blue-50 font-bold">3</td><td class="p-2 text-right font-black">4</td></tr>
+                    <tr><td class="p-2 font-semibold">La Florida (FLO)</td><td class="p-2 text-center">0</td><td class="p-2 text-center font-bold">2</td><td class="p-2 text-center bg-blue-50">1</td><td class="p-2 text-right font-black">3</td></tr>
+                    <tr><td class="p-2 font-semibold">La Urbina (URB)</td><td class="p-2 text-center">1</td><td class="p-2 text-center font-bold">2</td><td class="p-2 text-center bg-blue-50">0</td><td class="p-2 text-right font-black">3</td></tr>
+                    <tr><td class="p-2 font-semibold">San Antonio (SAN)</td><td class="p-2 text-center">0</td><td class="p-2 text-center">1</td><td class="p-2 text-center bg-blue-50 font-bold text-amber-600">2</td><td class="p-2 text-right font-black">3</td></tr>
+                    <tr><td class="p-2 font-semibold">El Marqués (MAR)</td><td class="p-2 text-center">0</td><td class="p-2 text-center font-bold">2</td><td class="p-2 text-center bg-blue-50">0</td><td class="p-2 text-right font-black">2</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-slate-800 text-white font-black text-xs border-t-2 border-slate-900">
+                        <td class="p-2 uppercase">TOTAL EVENTOS</td><td class="p-2 text-center">13</td><td class="p-2 text-center">24</td><td class="p-2 text-center bg-blue-900">21</td><td class="p-2 text-right">58</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl mb-6 border-l-4 border-indigo-500 html2pdf__page-break">
+            <h3 class="text-xs font-bold text-indigo-700 uppercase mb-4">🔍 Detalle Operativo (01 al 11 Octubre)</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-[9px] border-collapse">
+                    <thead class="bg-slate-100">
+                        <tr class="text-slate-500 uppercase font-bold border-b border-slate-200">
+                            <th class="p-2">Fecha</th><th class="p-2">Sucursal</th><th class="p-2">Cajero(a)</th><th class="p-2">Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                        <tr><td class="p-2">01/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Karina Waldrop</td><td class="p-2">Toallitas Humedas (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">01/10</td><td class="p-2 font-semibold">La Urbina</td><td class="p-2 text-amber-600 font-bold">Lorgelys Mendez</td><td class="p-2">Cartón de Huevos (Omisión)</td></tr>
+                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Yaneth</td><td class="p-2">Zanahoria KG (Omisión)</td></tr>
+                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2 text-red-600">Liz</td><td class="p-2">Pechuga de pollo / Muslos (Cruce de Código)</td></tr>
+                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Oriana</td><td class="p-2">Bolsas con logo (Omisión de 4 unidades)</td></tr>
+                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2 text-red-600">Liz</td><td class="p-2">Naranjas (Omisión)</td></tr>
+                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600 font-bold">Angela Rosario</td><td class="p-2">Huevos Purolomo (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Deisy Aguilar</td><td class="p-2">Carne Molida (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">02/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600 font-bold">Angela Rosario</td><td class="p-2 text-red-600 font-bold">Cerveza Zulia (Fuga masiva 30 und)</td></tr>
+                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Aracelis</td><td class="p-2">Manzana Royal / Tomate Perita (Cruce de Código)</td></tr>
+                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">El Marqués</td><td class="p-2">Gregori Ovalles</td><td class="p-2">2 ½ cartón de huevos (Factura solo 1)</td></tr>
+                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Darelis Herrera</td><td class="p-2">Cebollín / Ajo Porro (Cruce de Código)</td></tr>
+                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Kelvin Ramirez</td><td class="p-2">Bandeja de Muslo (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600 font-bold">Michelle Gomez</td><td class="p-2">Cartón de Huevos (Omisión)</td></tr>
+                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Yuneidy Araque</td><td class="p-2">Plátano (Omisión)</td></tr>
+                        <tr><td class="p-2">03/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600 font-bold">Kelvin Ramirez</td><td class="p-2">½ Cartón de huevos (Omisión)</td></tr>
+                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">La Florida</td><td class="p-2 text-red-600">Clara</td><td class="p-2">Leche Upaca (Lleva 1, facturan 4)</td></tr>
+                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">La Florida</td><td class="p-2 text-red-600">Clara</td><td class="p-2">Tortilla Bimbo (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Liz</td><td class="p-2">Pan (Ticket reutilizado / Cobro Erróneo)</td></tr>
+                        <tr><td class="p-2">05/10</td><td class="p-2 font-semibold">La Urbina</td><td class="p-2 text-amber-600">Francis Villalba</td><td class="p-2">Durazno / Tomate Perita (Cruce de Código)</td></tr>
+                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Oriana</td><td class="p-2">Tomates / Cebolla (Cruce de Código - Omisión)</td></tr>
+                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Carly</td><td class="p-2">Aceite Vatel (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">Luzquick</td><td class="p-2">Francis</td><td class="p-2">Mayonesa Kraft (Cruce con Flips)</td></tr>
+                        <tr><td class="p-2">06/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Greicy Diaz</td><td class="p-2">Bolsa de Hielo (Omisión)</td></tr>
+                        <tr><td class="p-2 text-red-600">07/10</td><td class="p-2 font-semibold text-red-600">El Pedregal</td><td class="p-2 text-red-600 font-bold">Yulexy</td><td class="p-2 text-red-600 font-bold">Pollo entero (Fuga de 1 pollo - Jefa en caja)</td></tr>
+                        <tr><td class="p-2">07/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Katherin</td><td class="p-2">Pan Francés / Canilla (Cruce)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Katerine</td><td class="p-2">Cambures / Plátano (Cruce de Código)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">El Pedregal</td><td class="p-2">Dariana</td><td class="p-2">Jugo Yusty Naranja (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Florida</td><td class="p-2">Hilary</td><td class="p-2">Bolsas (Omisión de 2 unidades)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Marta</td><td class="p-2">Lechosa (Omisión)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">Dos Caminos</td><td class="p-2 text-amber-600">Fabiana Marcano</td><td class="p-2 text-red-600 font-bold">Cerveza Zulia (Sobrefacturación 12 und)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Andreina Rivas</td><td class="p-2">Aguacate / Cebolla (Cruce de Código)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Karianny Gutierrez</td><td class="p-2">Cartón de Huevos (Omisión)</td></tr>
+                        <tr><td class="p-2">08/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Yolimar Rodriguez</td><td class="p-2">Sardina Willinger (Fuga de 2 unidades)</td></tr>
+                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">Chacao</td><td class="p-2">Carly</td><td class="p-2">Plátanos / Cambur Guineo (Cruce)</td></tr>
+                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">El Marqués</td><td class="p-2">Gregori Ovalles</td><td class="p-2">Cheese Tris (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">El Marqués</td><td class="p-2">Gregori Ovalles</td><td class="p-2">Tomate de árbol / Tomate Perita (Cruce)</td></tr>
+                        <tr><td class="p-2">09/10</td><td class="p-2 font-semibold">La Carlota</td><td class="p-2 text-amber-600">Deisy Aguilar</td><td class="p-2">Refresco Coca-Cola 1L (Sobrefacturación)</td></tr>
+                        <tr><td class="p-2">10/10</td><td class
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Octubre 2026 - PDF</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans p-4 md:p-8">
+    <div class="max-w-7xl mx-auto mb-4 flex justify-end" data-html2canvas-ignore>
+        <button onclick="descargarPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            Descargar PDF (Oficio Horizontal)
+        </button>
+    </div>
+    <div id="reporte-pdf" class="max-w-7xl mx-auto bg-gray-100 p-2">
+        <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-sm mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl md:text-2xl font-black tracking-tight uppercase">📊 Productos en puerta no facturados</h1>
+                <p class="text-slate-300 text-sm mt-1">Gestión de Operaciones • Ciclo Octubre 2026 (Corte al 18/10)</p>
+            </div>
+            <div class="flex gap-2">
+                <span class="bg-blue-900 border border-blue-700 px-3 py-1.5 rounded-xl text-xs font-bold text-blue-300">VOLUMEN DE EVENTOS</span>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-5 rounded-xl border-l-4 border-blue-600"><span class="text-[10px] font-bold text-gray-400 uppercase">🚨 Total Eventos</span><span class="text-3xl font-black text-gray-800 block mt-1">58 Ev.</span></div>
+            <div class="bg-white p-5 rounded-xl border-l-4 border-red-500"><span class="text-[10px] font-bold text-gray-400 uppercase">📈 Sucursales Críticas</span><span class="text-3xl font-black text-red-600 block mt-1">14 Ev.</span><span class="text-[9px] text-gray-500">Carlota y Pedregal</span></div>
+            <div class="bg-white p-5 rounded-xl border-l-4 border-amber-500"><span class="text-[10px] font-bold text-gray-400 uppercase">📍 Fugas Masivas</span><span class="text-3xl font-black text-amber-600 block mt-1">4 Ev.</span><span class="text-[9px] text-gray-500">Omisiones 5+ unidades</span></div>
+            <div class="bg-white p-5 rounded-xl border-l-4 border-green-600"><span class="text-[10px] font-bold text-gray-400 uppercase">📉 Promedio Diario</span><span class="text-3xl font-black text-green-600 block mt-1">3.2</span></div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white p-5 rounded-2xl">
+                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">🏢 Eventos por Sucursal</h3>
+                <div class="w-full flex items-end justify-between h-[150px] pt-4 px-2 border-b border-l border-gray-300">
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-red-600 mb-1">14</span><div class="w-6 bg-red-600 rounded-t-sm" style="height: 120px;"></div><span class="text-[9px] font-bold mt-2">CAR</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-800 mb-1">14</span><div class="w-6 bg-slate-700 rounded-t-sm" style="height: 120px;"></div><span class="text-[9px] font-bold mt-2">PED</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-800 mb-1">10</span><div class="w-6 bg-slate-700 rounded-t-sm" style="height: 85px;"></div><span class="text-[9px] font-bold mt-2">CHA</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-600 mb-1">5</span><div class="w-6 bg-slate-500 rounded-t-sm" style="height: 42px;"></div><span class="text-[9px] font-bold mt-2">2CA</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-600 mb-1">4</span><div class="w-6 bg-slate-500 rounded-t-sm" style="height: 34px;"></div><span class="text-[9px] font-bold mt-2">LUZ</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2">URB</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2">FLO</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-500 mb-1">3</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 25px;"></div><span class="text-[9px] font-bold mt-2">SAN</span></div>
+                    <div class="flex flex-col items-center w-8"><span class="text-[10px] font-bold text-slate-500 mb-1">2</span><div class="w-6 bg-slate-400 rounded-t-sm" style="height: 17px;"></div><span class="text-[9px] font-bold mt-2">MAR</span></div>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl">
+                <h3 class="text-xs font-bold text-gray-500 uppercase mb-4">📉 Progresión Octubre</h3>
+                <div class="relative h-[150px] w-full border-b border-l border-gray-300">
+                    <svg class="w-full h-full" viewBox="0 0 300 150" preserveAspectRatio="none"><polyline fill="none" stroke="#334155" stroke-width="3" points="40,80 150,20 260,60" /><circle cx="40" cy="80" r="5" fill="#3b82f6" /><text x="40" y="65" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">13</text><circle cx="150" cy="20" r="5" fill="#ef4444" /><text x="150" y="10" text-anchor="middle" font-size="10" font-weight="bold" fill="#ef4444">24</text><circle cx="260" cy="60" r="5" fill="#3b82f6" /><text x="260" y="45" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">21</text></svg>
+                    <div class="absolute bottom-[-22px] left-0 right-0 flex justify-between text-[8px] font-black text-gray-500 px-6"><span>01-04 Oct</span><span>05-11 Oct</span><span>12-18 Oct</span></div>
+                </div>
+            </div>
+        </div>
