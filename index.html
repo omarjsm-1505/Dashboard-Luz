@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Luz · Análisis Marginal Oct/Sep</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"><style>:root{--bg:#F8F6F2;--card:#FFFFFF;--card-hi:#F3EFEA;--line:rgba(140,29,64,0.12);--wine:#8C1D40;--wine-light:#B4213F;--wine-bg:rgba(140,29,64,0.06);--gold:#C59B27;--gold-dim:#8A6D1B;--text:#2B2627;--muted:#6E6366;--good:#2E7D32;--good-bg:rgba(46,125,50,0.1);--warn:#D97A46;--danger:#C14646}*{box-sizing:border-box}body{margin:0;background-color:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(to bottom,rgba(248,246,242,0.92),rgba(248,246,242,0.97)),url('1275044.jpg');background-repeat:no-repeat;background-position:center center;background-size:550px auto;opacity:0.6;z-index:-1;pointer-events:none}.auth-overlay{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}.auth-card{background:var(--card);border:1px solid var(--line);padding:36px 28px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(140,29,64,0.08);max-width:380px;width:100%}.auth-logo{height:48px;margin-bottom:16px;object-fit:contain}.auth-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--text);margin:0 0 6px}.auth-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px}.auth-input{width:100%;padding:12px 16px;margin-bottom:12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--card-hi);color:var(--text);outline:none;transition:border-color 0.2s}.auth-input:focus{border-color:var(--wine)}.auth-btn{width:100%;padding:12px;background:var(--wine);color:#FFFFFF;border:none;border-radius:10px;font-family:'Inter';font-weight:700;font-size:14px;cursor:pointer;transition:background 0.2s}.auth-btn:hover{background:var(--wine-light)}.auth-error{color:var(--danger);font-size:12px;font-weight:600;margin-top:10px;display:none}.wrap{max-width:1180px;margin:0 auto;padding:20px 20px 80px}.corte-bar{position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#18181b,#27272a,#18181b);border-bottom:2px solid var(--gold);color:#FFFFFF;font-family:'JetBrains Mono',monospace;font-size:11px;padding:9px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.12)}.corte-bar b{color:var(--gold)}.btn-print{background:var(--gold);color:#FFFFFF;border:none;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-radius:100px;cursor:pointer;transition:background 0.2s}.hero{padding:24px 0;border-bottom:1px solid var(--line);margin-bottom:24px}.logo-header{height:52px;max-width:200px;object-fit:contain;margin-bottom:14px;display:block;filter:drop-shadow(0px 2px 6px rgba(0,0,0,0.08))}.eyebrow{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:10.5px;color:var(--wine);font-weight:700;margin:0 0 6px}h1{font-family:'Fraunces',serif;font-weight:700;font-size:32px;line-height:1.2;margin:0 0 8px;color:var(--text)}h1 em{font-style:italic;color:var(--wine)}.hero-sub{color:var(--muted);font-size:14px;font-weight:600;margin:0 0 16px;letter-spacing:0.5px}.section-box{margin-bottom:34px}.sec-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin:0 0 2px 0;color:var(--text)}.sec-sub{color:var(--muted);font-size:12.5px;margin:0 0 16px 0;display:block}.kpis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px}.kpi-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;border-left:4px solid var(--wine);box-shadow:0 2px 10px rgba(0,0,0,0.03)}.kpi-card.pos{border-left-color:var(--good);background:var(--good-bg)}.kpi-title{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:700}.kpi-value{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--text);margin:5px 0 2px}.kpi-sub{font-size:11px;color:var(--muted);font-weight:600}.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 4px 15px rgba(0,0,0,0.03)}table{width:100%;border-collapse:collapse;min-width:1050px}th{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--text);padding:12px 14px;text-align:right;border-bottom:2px solid var(--line);background:var(--card-hi);font-weight:700}th:first-child{text-align:left}td{padding:12px 14px;font-size:12px;text-align:right;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;color:var(--text)}td:first-child{text-align:left;font-family:'Inter';font-weight:600}tr.total-row td{background:var(--wine-bg);font-weight:700;color:var(--wine);border-top:2px solid var(--wine)}.val-pos{color:var(--good);font-weight:700}.val-neg{color:var(--danger);font-weight:700}th.block-start,td.block-start{border-left:1px dashed rgba(140,29,64,0.3)!important}@media print{@page{size:legal landscape;margin:10mm}html,body{background:#FFFFFF!important;zoom:0.85;margin:0;padding:0;height:auto;overflow:visible}*{-webkit-print-color-adjust:exact!important;color-adjust:exact!important}body::before,.auth-overlay,.corte-bar{display:none!important}.wrap{padding:0!important;margin:0 auto!important;max-width:100%!important;width:100%!important}.hero{padding:0;margin-bottom:12px;border-bottom:none}.logo-header{height:35px;margin-bottom:6px}h1{font-size:22px;margin-bottom:2px}.kpis-grid{display:flex!important;gap:10px;margin-bottom:15px}.kpi-card{flex:1;padding:10px;border-radius:8px}.tbl-wrap{border:1px solid #EAEAEA;box-shadow:none;border-radius:8px;overflow:visible!important}table{width:100%!important;min-width:100%!important;table-layout:auto}th,td{padding:8px 6px!important;font-size:11px!important;white-space:nowrap!important}tr{page-break-inside:avoid}}</style></head><body><div class="auth-overlay" id="authOverlay"><div class="auth-card"><img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';"><h2 class="auth-title">Análisis Marginal</h2><p class="auth-sub">Ingrese la clave ejecutiva para acceder a la comparativa de crecimiento.</p><input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)"><button class="auth-btn" onclick="checkAuth()">Ver Reporte</button><div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div></div></div><div id="mainContent" style="display:none;"><div class="corte-bar"><span>◆ CRECIMIENTO ORGÁNICO · OCTUBRE VS SEPTIEMBRE 2026</span><button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button></div><div class="wrap"><section class="hero"><img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';"><p class="eyebrow">Automercado Luz</p><h1>Análisis <em>Marginal</em> de Cierre</h1><p class="hero-sub">Comparativa de Crecimiento: Final Octubre vs. Final Septiembre</p></section><div class="section-box"><h2 class="sec-title">Highlights del Crecimiento</h2><span class="sec-sub">Métricas clave de aceleración comercial en la red</span><div class="kpis-grid" id="kpiGrid"></div></div><div class="section-box"><h2 class="sec-title">Comparativa por Sucursal</h2><span class="sec-sub">Ordenado por impacto de crecimiento marginal en dólares (Mayor a Menor)</span><div class="tbl-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div></div></div>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Luz · Análisis Marginal Oct/Sep</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"><style>:root{--bg:#F8F6F2;--card:#FFFFFF;--card-hi:#F3EFEA;--line:rgba(140,29,64,0.12);--wine:#8C1D40;--wine-light:#B4213F;--wine-bg:rgba(140,29,64,0.06);--gold:#C59B27;--gold-dim:#8A6D1B;--text:#2B2627;--muted:#6E6366;--good:#2E7D32;--good-bg:rgba(46,125,50,0.1);--warn:#D97A46;--danger:#C14646}*{box-sizing:border-box}body{margin:0;background-color:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(to bottom,rgba(248,246,242,0.92),rgba(248,246,242,0.97)),url('1275044.jpg');background-repeat:no-repeat;background-position:center center;background-size:550px auto;opacity:0.6;z-index:-1;pointer-events:none}.auth-overlay{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}.auth-card{background:var(--card);border:1px solid var(--line);padding:36px 28px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(140,29,64,0.08);max-width:380px;width:100%}.auth-logo{height:48px;margin-bottom:16px;object-fit:contain}.auth-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--text);margin:0 0 6px}.auth-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px}.auth-input{width:100%;padding:12px 16px;margin-bottom:12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--card-hi);color:var(--text);outline:none;transition:border-color 0.2s}.auth-input:focus{border-color:var(--wine)}.auth-btn{width:100%;padding:12px;background:var(--wine);color:#FFFFFF;border:none;border-radius:10px;font-family:'Inter';font-weight:700;font-size:14px;cursor:pointer;transition:background 0.2s}.auth-btn:hover{background:var(--wine-light)}.auth-error{color:var(--danger);font-size:12px;font-weight:600;margin-top:10px;display:none}.wrap{max-width:1180px;margin:0 auto;padding:20px 20px 80px}.corte-bar{position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#18181b,#27272a,#18181b);border-bottom:2px solid var(--gold);color:#FFFFFF;font-family:'JetBrains Mono',monospace;font-size:11px;padding:9px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.12)}.corte-bar b{color:var(--gold)}.btn-print{background:var(--gold);color:#FFFFFF;border:none;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-radius:100px;cursor:pointer;transition:background 0.2s}.hero{padding:24px 0;border-bottom:1px solid var(--line);margin-bottom:24px}.logo-header{height:52px;max-width:200px;object-fit:contain;margin-bottom:14px;display:block;filter:drop-shadow(0px 2px 6px rgba(0,0,0,0.08))}.eyebrow{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:10.5px;color:var(--wine);font-weight:700;margin:0 0 6px}h1{font-family:'Fraunces',serif;font-weight:700;font-size:32px;line-height:1.2;margin:0 0 8px;color:var(--text)}h1 em{font-style:italic;color:var(--wine)}.hero-sub{color:var(--muted);font-size:14px;font-weight:600;margin:0 0 16px;letter-spacing:0.5px}.section-box{margin-bottom:34px}.sec-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin:0 0 2px 0;color:var(--text)}.sec-sub{color:var(--muted);font-size:12.5px;margin:0 0 16px 0;display:block}.kpis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px}.kpi-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;border-left:4px solid var(--wine);box-shadow:0 2px 10px rgba(0,0,0,0.03)}.kpi-card.pos{border-left-color:var(--good);background:var(--good-bg)}.kpi-title{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:700}.kpi-value{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--text);margin:5px 0 2px}.kpi-sub{font-size:11px;color:var(--muted);font-weight:600}.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 4px 15px rgba(0,0,0,0.03)}table{width:100%;border-collapse:collapse;min-width:1050px}th{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--text);padding:12px 14px;text-align:right;border-bottom:2px solid var(--line);background:var(--card-hi);font-weight:700}th:first-child{text-align:left}td{padding:12px 14px;font-size:12px;text-align:right;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;color:var(--text)}td:first-child{text-align:left;font-family:'Inter';font-weight:600}tr.total-row td{background:var(--wine-bg);font-weight:700;color:var(--wine);border-top:2px solid var(--wine)}.val-pos{color:var(--good);font-weight:700}.val-neg{color:var(--danger);font-weight:700}th.block-start,td.block-start{border-left:1px dashed rgba(140,29,64,0.3)!important}@media print{@page{size:legal landscape;margin:10mm}html,body{background:#FFFFFF!important;zoom:0.85;margin:0;padding:0;height:auto;overflow:visible}*{-webkit-print-color-adjust:exact!important;color-adjust:exact!important}body::before,.auth-overlay,.corte-bar{display:none!important}.wrap{padding:0!important;margin:0 auto!important;max-width:100%!important;width:100%!important}.hero{padding:0;margin-bottom:12px;border-bottom:none}.logo-header{height:35px;margin-bottom:6px}h1{font-size:22px;margin-bottom:2px}.kpis-grid{display:flex!important;gap:10px;margin-bottom:15px}.kpi-card{flex:1;padding:10px;border-radius:8px}.tbl-wrap{border:1px solid #EAEAEA;box-shadow:none;border-radius:8px;overflow:visible!important}table{width:100%!important;min-width:100%!important;table-layout:auto}th,td{padding:8px 6px!important;font-size:11px!important;white-space:nowrap!important}tr{page-break-inside:avoid}}</style></head><body><div class="auth-overlay" id="authOverlay"><div class="auth-card"><img src="1275044.jpg" alt="Luz" class="auth-logo" onerror="this.style.display='none';"><h2 class="auth-title">Análisis Marginal</h2><p class="auth-sub">Ingrese la clave ejecutiva para acceder a la comparativa de crecimiento.</p><input type="password" id="passInput" class="auth-input" placeholder="Clave de acceso" onkeypress="handleKeyPress(event)"><button class="auth-btn" onclick="checkAuth()">Ver Reporte</button><div class="auth-error" id="authError">Clave incorrecta. Intente de nuevo.</div></div></div><div id="mainContent" style="display:none;"><div class="corte-bar"><span>◆ CRECIMIENTO ORGÁNICO DIARIO · OCTUBRE VS SEPTIEMBRE 2026</span><button class="btn-print" onclick="window.print()">🖨️ Exportar / Imprimir</button></div><div class="wrap"><section class="hero"><img src="1275044.jpg" alt="Luz" class="logo-header" onerror="this.style.display='none';"><p class="eyebrow">Automercado Luz</p><h1>Análisis <em>Marginal</em> de Cierre</h1><p class="hero-sub">Comparativa de Rendimiento (Basado en Promedio Diario Efectivo)</p></section><div class="section-box"><h2 class="sec-title">Highlights del Crecimiento</h2><span class="sec-sub">Métricas clave de aceleración comercial en la red</span><div class="kpis-grid" id="kpiGrid"></div></div><div class="section-box"><h2 class="sec-title">Comparativa por Sucursal (Promedio Diario)</h2><span class="sec-sub">Normalizado para absorber la diferencia de días calendario</span><div class="tbl-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div></div></div>
 <script>
 const SECRET_KEY = "Luz2026";
+const DAYS_SEP = 30;
+const DAYS_OCT = 31;
 const data = [
   {"n":"Urbina", "s_v":596917, "o_v":682219, "s_u":250018, "o_u":276950},
   {"n":"San Antonio", "s_v":512288, "o_v":590012, "s_u":207168, "o_u":232559},
@@ -26,49 +28,60 @@ function renderAll(){
   document.getElementById('tableHead').innerHTML = `
     <tr>
       <th>Sucursal</th>
-      <th class="block-start">Cierre Sep ($)</th>
-      <th>Cierre Oct ($)</th>
-      <th>Margen ($)</th>
+      <th class="block-start">Prom. Sep ($/día)</th>
+      <th>Prom. Oct ($/día)</th>
+      <th>Margen Diario</th>
       <th>Crec. %</th>
-      <th class="block-start">Unidades Sep</th>
-      <th>Unidades Oct</th>
-      <th>Margen (u)</th>
+      <th class="block-start">Prom. Sep (u/día)</th>
+      <th>Prom. Oct (u/día)</th>
+      <th>Margen Diario (u)</th>
       <th>Crec. %</th>
     </tr>`;
     
   let rows = data.map(d => {
     tot_sv+=d.s_v; tot_ov+=d.o_v; tot_su+=d.s_u; tot_ou+=d.o_u;
-    const diff_v = d.o_v - d.s_v;
-    const pct_v = (diff_v / d.s_v) * 100;
-    const diff_u = d.o_u - d.s_u;
-    const pct_u = (diff_u / d.s_u) * 100;
+    
+    const sv_day = d.s_v / DAYS_SEP;
+    const ov_day = d.o_v / DAYS_OCT;
+    const diff_v = ov_day - sv_day;
+    const pct_v = (diff_v / sv_day) * 100;
+    
+    const su_day = d.s_u / DAYS_SEP;
+    const ou_day = d.o_u / DAYS_OCT;
+    const diff_u = ou_day - su_day;
+    const pct_u = (diff_u / su_day) * 100;
     
     return `<tr>
       <td>${d.n}</td>
-      <td class="block-start" style="color:var(--muted)">$${fmt(d.s_v)}</td>
-      <td style="font-weight:700">$${fmt(d.o_v)}</td>
+      <td class="block-start" style="color:var(--muted)">$${fmt(sv_day)}</td>
+      <td style="font-weight:700">$${fmt(ov_day)}</td>
       <td class="${diff_v>=0?'val-pos':'val-neg'}">$${fmtSign(diff_v)}</td>
       <td class="${pct_v>=0?'val-pos':'val-neg'}">${fmtSign(pct_v,2)}%</td>
-      <td class="block-start" style="color:var(--muted)">${fmt(d.s_u)}</td>
-      <td style="font-weight:700">${fmt(d.o_u)}</td>
+      <td class="block-start" style="color:var(--muted)">${fmt(su_day)}</td>
+      <td style="font-weight:700">${fmt(ou_day)}</td>
       <td class="${diff_u>=0?'val-pos':'val-neg'}">${fmtSign(diff_u)}</td>
       <td class="${pct_u>=0?'val-pos':'val-neg'}">${fmtSign(pct_u,2)}%</td>
     </tr>`;
   }).join('');
   
-  const diff_tot_v = tot_ov - tot_sv;
-  const pct_tot_v = (diff_tot_v / tot_sv) * 100;
-  const diff_tot_u = tot_ou - tot_su;
-  const pct_tot_u = (diff_tot_u / tot_su) * 100;
+  const sv_tot_day = tot_sv / DAYS_SEP;
+  const ov_tot_day = tot_ov / DAYS_OCT;
+  const diff_tot_v = ov_tot_day - sv_tot_day;
+  const pct_tot_v = (diff_tot_v / sv_tot_day) * 100;
+  
+  const su_tot_day = tot_su / DAYS_SEP;
+  const ou_tot_day = tot_ou / DAYS_OCT;
+  const diff_tot_u = ou_tot_day - su_tot_day;
+  const pct_tot_u = (diff_tot_u / su_tot_day) * 100;
 
   const totalRow = `<tr class="total-row">
     <td>TOTAL RED</td>
-    <td class="block-start">$${fmt(tot_sv)}</td>
-    <td>$${fmt(tot_ov)}</td>
+    <td class="block-start">$${fmt(sv_tot_day)}</td>
+    <td>$${fmt(ov_tot_day)}</td>
     <td class="${diff_tot_v>=0?'val-pos':'val-neg'}">$${fmtSign(diff_tot_v)}</td>
     <td class="${pct_tot_v>=0?'val-pos':'val-neg'}">${fmtSign(pct_tot_v,2)}%</td>
-    <td class="block-start">${fmt(tot_su)}</td>
-    <td>${fmt(tot_ou)}</td>
+    <td class="block-start">${fmt(su_tot_day)}</td>
+    <td>${fmt(ou_tot_day)}</td>
     <td class="${diff_tot_u>=0?'val-pos':'val-neg'}">${fmtSign(diff_tot_u)}</td>
     <td class="${pct_tot_u>=0?'val-pos':'val-neg'}">${fmtSign(pct_tot_u,2)}%</td>
   </tr>`;
@@ -77,24 +90,24 @@ function renderAll(){
 
   document.getElementById('kpiGrid').innerHTML = `
     <div class="kpi-card pos">
-      <div class="kpi-title">Nueva Inyección de Capital</div>
+      <div class="kpi-title">Nueva Inyección (Dólares/Día)</div>
       <div class="kpi-value">$${fmtSign(diff_tot_v)}</div>
-      <div class="kpi-sub">Crecimiento total en valor vs. Septiembre</div>
+      <div class="kpi-sub">Crecimiento real normalizado diario</div>
     </div>
     <div class="kpi-card pos">
       <div class="kpi-title">Crecimiento Relativo (Red)</div>
       <div class="kpi-value">${fmtSign(pct_tot_v,2)}%</div>
-      <div class="kpi-sub">Mejora consolidada en toda la cadena</div>
+      <div class="kpi-sub">Mejora consolidada frente a Sep</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Top Crecimiento Absoluto</div>
       <div class="kpi-value">Urbina</div>
-      <div class="kpi-sub">+$85.302 agregados a la facturación</div>
+      <div class="kpi-sub">+$2.110 diarios extra generados</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Top Crecimiento Porcentual</div>
       <div class="kpi-value">San Antonio</div>
-      <div class="kpi-sub">+15,17% de mejora operativa local</div>
+      <div class="kpi-sub">+11,46% de mejora operativa local</div>
     </div>
   `;
 }
